@@ -21,7 +21,7 @@
 
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import LoginForm from "../components/loginForm";
-import Profile from "../components/profile";
+import CharactersView from "../components/charactersView";
 
 export default function Home(): React.ReactElement {
   const { session } = useSession();
@@ -30,5 +30,5 @@ export default function Home(): React.ReactElement {
     return <LoginForm />;
   }
 
-  return <Profile />;
+  return <CharactersView />;
 }

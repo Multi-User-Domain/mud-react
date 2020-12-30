@@ -1,25 +1,3 @@
-This is an example project to demonstrate using the Inrupt Solid React SDK to build a web application, using [Next.js](https://nextjs.org/) and typescript.
-The example project is a sample application for editing user profile. You can play with the application at [https://solid-ui-react-example.docs.inrupt.com/](https://solid-ui-react-example.docs.inrupt.com/).
-
-
-## Getting Started
-
-To modify the application:
-
-1. Clone the repo.
-2. Run the development server:
-
-   ```bash
-    npm ci && npm run dev
-    # or
-    yarn dev
-   ```
-
-3. Open [http://localhost:3000](http://localhost:3000) with your browser.
-
-4. You can start editing the source files.  The application auto-updates as you edit the source files in `pages` and `components` folders.
-
-See also the [Sample Application Documentation](https://docs.inrupt.com/developer-tools/javascript/react-sdk/application/).
 
 ## Learn More
 
