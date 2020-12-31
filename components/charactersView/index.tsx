@@ -22,6 +22,8 @@ import CharacterTable from "../characterTable";
 const charactersDataSet = "https://calum.inrupt.net/public/collections/characters.ttl";
 
 export default function CharactersView(): React.ReactElement {
+    const [editing, setEditing] = useState(false);
+
     return (
         <Container fixed>
             <Box style={{ marginBottom: 16, textAlign: "right" }}>
@@ -38,8 +40,17 @@ export default function CharactersView(): React.ReactElement {
                     Characters
                     </Typography>
 
-                    <CharacterTable />
+                    <CharacterTable edit={editing}/>
                 </CardContent>
+                <CardActions>
+                    <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => setEditing(!editing)}
+                    >
+                    Toggle Edit
+                    </Button>
+                </CardActions>
                 </Card>
             </DatasetProvider>
         </Container>
