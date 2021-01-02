@@ -1,6 +1,16 @@
 import { useState } from "react";
 
+import { FOAF } from "@inrupt/lit-generated-vocab-common";
+
 import {
+  getSolidDataset,
+  getStringNoLocale,
+  getThing,
+  getUrl
+} from "@inrupt/solid-client";
+
+import {
+  useSession,
   DatasetProvider,
   LogoutButton,
 } from "@inrupt/solid-ui-react";
@@ -18,11 +28,28 @@ import {
 
 import CharacterTable from "../characterTable";
 
-//TODO: get this from somewhere... store on my profile card?
-const charactersDataSet = "https://calum.inrupt.net/public/collections/characters.ttl";
+// TODO: this is better defined in a LIT
+const accountPredicate = 'https://calum.inrupt.net/public/voc/mudchar.ttl#Account';
+const charactersListPredicate = 'https://calum.inrupt.net/public/voc/mudchar.ttl#CharactersList';
 
 export default function CharactersView(): React.ReactElement {
     const [editing, setEditing] = useState(false);
+    const { session, fetch } = useSession();
+    const { webId } = session.info;
+    const [ charactersDataSetLocation, setCharactersDataLocation ] = useState(null);
+
+    //TODO: account should be provided by a context, fetched at login
+    getSolidDataset(webId).then((profileDataSet) => {
+        const profileThing = getThing(profileDataSet, webId);
+        const accountUrl = getUrl(profileThing, FOAF.account);
+        getSolidDataset(accountUrl).then((accountDataSet) => {
+            const accountThing = getThing(accountDataSet, accountUrl);
+            //get the character list dataset from the account
+            setCharactersDataLocation(getStringNoLocale(accountThing, charactersListPredicate));
+        });
+    });
+
+    if(!charactersDataSetLocation) return <h3>loading..</h3>;
 
     return (
         <Container fixed>
@@ -33,7 +60,7 @@ export default function CharactersView(): React.ReactElement {
                 </Button>
                 </LogoutButton>
             </Box>
-            <DatasetProvider datasetUrl={charactersDataSet}>
+            <DatasetProvider datasetUrl={charactersDataSetLocation}>
                 <Card style={{ maxWidth: 480 }}>
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="h3">
