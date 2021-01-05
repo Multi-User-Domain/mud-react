@@ -48,8 +48,6 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
       };
 
     const addCharacter = async () => {
-        //TODO: create the collection and save to the user's profile, if need be
-
         // creates a new character Thing, sets properties to it
         let newCharacter = setUrl(createThing(), RDF.type, characterRDFType);
         newCharacter = setUrl(newCharacter, ownerPredicate, webId);

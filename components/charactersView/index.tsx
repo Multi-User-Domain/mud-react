@@ -30,11 +30,11 @@ import CharacterTable from "../characterTable";
 
 // TODO: this is better defined in a LIT
 const accountPredicate = 'https://calum.inrupt.net/public/voc/mudchar.ttl#Account';
-const charactersListPredicate = 'https://calum.inrupt.net/public/voc/mudchar.ttl#CharactersList';
+const charactersListPredicate = 'https://calum.inrupt.net/public/voc/mudchar.ttl#CharacterList';
 
 export default function CharactersView(): React.ReactElement {
     const [editing, setEditing] = useState(false);
-    const { session, fetch } = useSession();
+    const { session } = useSession();
     const { webId } = session.info;
     const [ charactersDataSetLocation, setCharactersDataLocation ] = useState(null);
 

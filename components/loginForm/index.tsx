@@ -24,6 +24,7 @@ import { LoginButton } from "@inrupt/solid-ui-react";
 import { Button, TextField, FormGroup, Container } from "@material-ui/core";
 
 export default function LoginForm(): React.ReactElement {
+  // TODO: these are better placed in a configuration file
   const [idp, setIdp] = useState("https://inrupt.net");
   const [currentUrl, setCurrentUrl] = useState("https://localhost:3000");
 
