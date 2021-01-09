@@ -25,11 +25,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import styles from "./characterTable.module.css";
-
-// TODO: this is better defined in a LIT
-const characterRDFType: string = 'https://calum.inrupt.net/public/voc/mudchar.ttl#Character';
-const ownerPredicate: string = 'https://calum.inrupt.net/public/voc/mudchar.ttl#ownedBy';
-const namePredicate: string = 'https://calum.inrupt.net/public/voc/mudchar.ttl#name';
+import { MUD } from "../../lib/MUD";
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
@@ -50,9 +46,9 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
 
     const addCharacter = async () => {
         // creates a new character Thing, sets properties to it
-        let newCharacter = setUrl(createThing(), RDF.type, characterRDFType);
-        newCharacter = setUrl(newCharacter, ownerPredicate, webId);
-        newCharacter = setStringUnlocalized(newCharacter, namePredicate, newCharName);
+        let newCharacter = setUrl(createThing(), RDF.type, MUD.characterRDFType);
+        newCharacter = setUrl(newCharacter, MUD.ownerPredicate, webId);
+        newCharacter = setStringUnlocalized(newCharacter, MUD.namePredicate, newCharName);
         const dataSetWithCharacter = setThing(
             dataset,
             newCharacter
@@ -91,12 +87,12 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     return (
     <>
     <Table things={characterData}>
-        <TableColumn property={ownerPredicate} header="Owner" dataType="url" body={({ value }) => (
+        <TableColumn property={MUD.ownerPredicate} header="Owner" dataType="url" body={({ value }) => (
             <CombinedDataProvider datasetUrl={value} thingUrl={value}>
                 <Text property={VCARD.fn.value} />
             </CombinedDataProvider>
           )} />
-        <TableColumn property={namePredicate} header="Name" />
+        <TableColumn property={MUD.namePredicate} header="Name" />
     </Table>
     {editContent}
     </>

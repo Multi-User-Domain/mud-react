@@ -16,14 +16,12 @@ import {
   SolidDataset
 } from "@inrupt/solid-client";
 
+import { MUD } from "../../MUD";
+
 export interface IMudAccountInfo {
     charactersDataSet: SolidDataset;
     characters: [Thing];
 }
-
-// TODO: this is better defined in a LIT
-const accountPredicate = 'https://calum.inrupt.net/public/voc/mudchar.ttl#Account';
-const charactersListPredicate = 'https://calum.inrupt.net/public/voc/mudchar.ttl#CharacterList';
 
 export const MudAccountContext = createContext<IMudAccountInfo>({characters: null, charactersDataSet: null});
 
@@ -57,7 +55,7 @@ export const MudAccountProvider = ({
             const accountThing = getThing(accountDataSet, accountUrl);
 
             //get the character list dataset from the account
-            const charactersDataSetLocation =getStringNoLocale(accountThing, charactersListPredicate);
+            const charactersDataSetLocation =getStringNoLocale(accountThing, MUD.charactersListPredicate);
             getSolidDataset(charactersDataSetLocation).then((charactersDataSet) => {
                 setCharactersDataSet(charactersDataSet);
                 setCharacters(getCharacters(charactersDataSet));
