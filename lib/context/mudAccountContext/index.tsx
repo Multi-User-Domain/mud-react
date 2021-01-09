@@ -1,7 +1,9 @@
 import {
     ReactElement,
     createContext,
-    useState
+    useState,
+    useEffect,
+    useRef
 } from 'react';
 
 import { FOAF } from "@inrupt/lit-generated-vocab-common";
@@ -44,24 +46,32 @@ export const MudAccountProvider = ({
         return ret
     };
 
-    // following the Web-ID gives us the authenticated user's profile card, which we can use to find an associated mud account
-    // TODO: handle case that this information does not exist
-    getSolidDataset(webId).then((profileDataSet) => {
-        const profileThing = getThing(profileDataSet, webId);
-        const accountUrl = getUrl(profileThing, FOAF.account);
+    useEffect(() => {
+        // following the Web-ID gives us the authenticated user's profile card, which we can use to find an associated mud account
+        // TODO: handle case that this information does not exist
+        getSolidDataset(webId).then((profileDataSet) => {
+            const profileThing = getThing(profileDataSet, webId);
+            const accountUrl = getUrl(profileThing, FOAF.account);
 
-        // get MUD:Account from the user's profile card
-        getSolidDataset(accountUrl).then((accountDataSet) => {
-            const accountThing = getThing(accountDataSet, accountUrl);
+            // get MUD:Account from the user's profile card
+            getSolidDataset(accountUrl).then((accountDataSet) => {
+                const accountThing = getThing(accountDataSet, accountUrl);
 
-            //get the character list dataset from the account
-            const charactersDataSetLocation =getStringNoLocale(accountThing, MUD.charactersListPredicate);
-            getSolidDataset(charactersDataSetLocation).then((charactersDataSet) => {
-                setCharactersDataSet(charactersDataSet);
-                setCharacters(getCharacters(charactersDataSet));
+                //get the character list dataset from the account
+                const charactersDataSetLocation =getStringNoLocale(accountThing, MUD.charactersListPredicate);
+                getSolidDataset(charactersDataSetLocation).then((charactersDataSet) => {
+                    setCharactersDataSet(charactersDataSet);
+                    setCharacters(getCharacters(charactersDataSet));
+                }).catch((error) => {
+                    console.log(error)
+                });
+            }).catch((error) => {
+                console.log(error)
             });
+        }).catch((error) => {
+            console.log(error)
         });
-    });
+    }, []);
 
     return(
         <MudAccountContext.Provider
