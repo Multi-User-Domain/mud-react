@@ -1,7 +1,6 @@
 import { useState, useContext } from 'react';
 import { VCARD, RDF } from "@inrupt/lit-generated-vocab-common";
 import {
-    getThingAll,
     saveSolidDatasetAt,
     getFetchedFrom,
     setThing,
@@ -17,6 +16,7 @@ import {
     TableColumn,
     useSession
 } from "@inrupt/solid-ui-react";
+import useMudAccount from '../../lib/hooks/useMudAccount';
 import {
     Box,
     Button,
@@ -37,6 +37,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     const [ newCharName, setNewCharName] = useState("");
     const { session, fetch } = useSession();
     const { webId } = session.info;
+    const { characters } = useMudAccount();
 
     const saveHandler = async (newThing, datasetToUpdate) => {
         const savedDataset = await saveSolidDatasetAt(
@@ -59,23 +60,16 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
         await saveHandler(newCharacter, dataSetWithCharacter);
     };
 
-    /**
-     * @returns All Things from a given dataset if they are of type mudchar:Character
-     */
-    const getCharacters = () => {
-        let ret = [];
-        getThingAll(dataset).forEach((thing) => {
-            //TODO: filter out Things which are not characters
-            ret.push({
-                dataset: dataset,
-                thing: thing
-            });
-        });
-        return ret
-    };
+    if (!dataset || !characters) return <div>loading...</div>;
 
-    if (!dataset) return <div>loading...</div>;
-    let characters = getCharacters();
+    //convert list of characters from context into a list of Things that the Table component is happy with
+    let characterData = [];
+    characters.forEach((thing) => {
+      characterData.push({
+        dataset: dataset,
+        thing: thing
+      });
+    });
 
     let editContent = null
     if (edit) editContent = (
@@ -96,7 +90,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     
     return (
     <>
-    <Table things={characters}>
+    <Table things={characterData}>
         <TableColumn property={ownerPredicate} header="Owner" dataType="url" body={({ value }) => (
             <CombinedDataProvider datasetUrl={value} thingUrl={value}>
                 <Text property={VCARD.fn.value} />
