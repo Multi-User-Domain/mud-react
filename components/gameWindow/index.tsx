@@ -2,18 +2,31 @@ import {useState} from "react";
 
 import {
     Box,
-    Container
+    Container,
+    BottomNavigation,
+    BottomNavigationAction
 } from "@material-ui/core";
 
 import CharactersView from "../charactersView";
+import WorldView from "../worldView";
 import styles from "./gameWindow.module.css";
 
 export default function GameWindow(): React.ReactElement {
-  const [activeView, setActiveView] = useState("characters");
-
-  let view = <CharactersView />
+  const [activeView, setActiveView] = useState("world");
+  const [view, setView] = useState(null);
   
-  //TODO: switch in the selected activeView
+  const viewChanged = (event, newValue) => {
+    switch(newValue) {
+        case "world":
+            setView(<WorldView />);
+            break;
+        case "characters":
+            setView(<CharactersView />);
+            break;
+    }
+
+    setActiveView(newValue);
+  }
 
   return (
       <Container fixed>
@@ -21,7 +34,14 @@ export default function GameWindow(): React.ReactElement {
             {view}
           </Box>
           <Box>
-              <h2>TODO: view selector menu</h2>
+            <BottomNavigation
+                value={activeView}
+                onChange={viewChanged}
+                showLabels
+                >
+                <BottomNavigationAction label="World" value="world" />
+                <BottomNavigationAction label="Characters" value="characters"/>
+            </BottomNavigation>
           </Box>
       </Container>
   );
