@@ -1,7 +1,7 @@
 import { useSession } from "@inrupt/solid-ui-react/dist";
 import { MudAccountProvider } from "../lib/context/mudAccountContext";
 import LoginForm from "../components/loginForm";
-import CharactersView from "../components/charactersView";
+import GameWindow from "../components/gameWindow";
 
 export default function Home(): React.ReactElement {
   const { session } = useSession();
@@ -13,7 +13,7 @@ export default function Home(): React.ReactElement {
 
   return (
     <MudAccountProvider webId={webId}>
-      <CharactersView />
+      <GameWindow />
     </MudAccountProvider>
     );
 }
