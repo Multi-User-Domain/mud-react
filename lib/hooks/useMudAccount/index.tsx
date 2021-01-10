@@ -3,18 +3,20 @@ import {
 } from 'react';
 
 import {
-  IMudAccountInfo,
+  IMudAccountContext,
   MudAccountContext
 } from '../../context/mudAccountContext';
 
-export default function useMudAccount() : IMudAccountInfo {
+export default function useMudAccount() : IMudAccountContext {
   const {
-    charactersDataSet,
-    characters
+    characterDataSet,
+    characters,
+    addCharacter
   } = useContext(MudAccountContext);
 
   return {
-    charactersDataSet,
-    characters
+    characterDataSet,
+    characters,
+    addCharacter
   };
 }
