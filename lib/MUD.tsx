@@ -3,6 +3,5 @@ export const MUD = {
     charactersListPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#CharacterList',
     
     characterRDFType: 'https://calum.inrupt.net/public/voc/mud.ttl#Character',
-    ownerPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#ownedBy',
-    namePredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#name'
+    ownerPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#ownedBy'
 }

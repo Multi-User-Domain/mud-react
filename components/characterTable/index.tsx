@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { VCARD, RDF } from "@inrupt/lit-generated-vocab-common";
+import { VCARD, RDF, FOAF } from "@inrupt/lit-generated-vocab-common";
 import {
     saveSolidDatasetAt,
     getFetchedFrom,
@@ -48,7 +48,8 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
         // creates a new character Thing, sets properties to it
         let newCharacter = setUrl(createThing(), RDF.type, MUD.characterRDFType);
         newCharacter = setUrl(newCharacter, MUD.ownerPredicate, webId);
-        newCharacter = setStringUnlocalized(newCharacter, MUD.namePredicate, newCharName);
+        newCharacter = setStringUnlocalized(newCharacter, VCARD.fn, newCharName);
+        newCharacter = setStringUnlocalized(newCharacter, FOAF.name, newCharName);
         const dataSetWithCharacter = setThing(
             dataset,
             newCharacter
@@ -92,7 +93,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
                 <Text property={VCARD.fn.value} />
             </CombinedDataProvider>
           )} />
-        <TableColumn property={MUD.namePredicate} header="Name" />
+        <TableColumn property={VCARD.fn} header="Name" />
     </Table>
     {editContent}
     </>
