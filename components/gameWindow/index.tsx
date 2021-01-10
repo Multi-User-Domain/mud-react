@@ -7,7 +7,7 @@ import {
     BottomNavigationAction
 } from "@material-ui/core";
 
-import CharactersView from "../charactersView";
+import CharacterView from "../characterView";
 import WorldView from "../worldView";
 import styles from "./gameWindow.module.css";
 
@@ -21,7 +21,7 @@ export default function GameWindow(): React.ReactElement {
             setView(<WorldView />);
             break;
         case "characters":
-            setView(<CharactersView />);
+            setView(<CharacterView />);
             break;
     }
 

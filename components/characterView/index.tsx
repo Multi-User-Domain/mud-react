@@ -17,7 +17,7 @@ import {
 
 import CharacterTable from "../characterTable";
 
-export default function CharactersView(): React.ReactElement {
+export default function CharacterView(): React.ReactElement {
     const [editing, setEditing] = useState(false);
 
     return (
