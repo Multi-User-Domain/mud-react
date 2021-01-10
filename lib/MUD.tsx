@@ -1,8 +1,8 @@
 export const MUD = {
-    accountPredicate: 'https://calum.inrupt.net/public/voc/mudchar.ttl#Account',
-    charactersListPredicate: 'https://calum.inrupt.net/public/voc/mudchar.ttl#CharacterList',
+    accountPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#Account',
+    charactersListPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#CharacterList',
     
-    characterRDFType: 'https://calum.inrupt.net/public/voc/mudchar.ttl#Character',
-    ownerPredicate: 'https://calum.inrupt.net/public/voc/mudchar.ttl#ownedBy',
-    namePredicate: 'https://calum.inrupt.net/public/voc/mudchar.ttl#name'
+    characterRDFType: 'https://calum.inrupt.net/public/voc/mud.ttl#Character',
+    ownerPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#ownedBy',
+    namePredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#name'
 }

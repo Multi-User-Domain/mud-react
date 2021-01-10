@@ -35,7 +35,7 @@ export const MudAccountProvider = ({
     const [ characters, setCharacters ] = useState(null);
 
     /**
-     * @returns All Things from a given dataset if they are of type mudchar:Character
+     * @returns All Things from a given dataset if they are of type mud:Character
      */
     const getCharacters = (dataset) => {
         let ret = [];
