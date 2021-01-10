@@ -2,10 +2,15 @@ import {useState} from "react";
 
 import {
     Box,
+    Button,
     Container,
     BottomNavigation,
     BottomNavigationAction
 } from "@material-ui/core";
+
+import {
+  LogoutButton,
+} from "@inrupt/solid-ui-react";
 
 import CharacterView from "../characterView";
 import WorldView from "../worldView";
@@ -13,7 +18,7 @@ import styles from "./gameWindow.module.css";
 
 export default function GameWindow(): React.ReactElement {
   const [activeView, setActiveView] = useState("world");
-  const [view, setView] = useState(null);
+  const [view, setView] = useState(<WorldView />);
   
   const viewChanged = (event, newValue) => {
     switch(newValue) {
@@ -30,6 +35,13 @@ export default function GameWindow(): React.ReactElement {
 
   return (
       <Container fixed>
+          <Box style={{ marginBottom: 16, textAlign: "right" }}>
+            <LogoutButton>
+            <Button variant="contained" color="primary">
+                Log&nbsp;out
+            </Button>
+            </LogoutButton>
+          </Box>
           <Box className={styles.view}>
             {view}
           </Box>

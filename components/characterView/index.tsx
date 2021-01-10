@@ -1,10 +1,6 @@
 import { useState } from "react";
 
 import {
-  LogoutButton,
-} from "@inrupt/solid-ui-react";
-
-import {
   Box,
   Button,
   Card,
@@ -22,13 +18,6 @@ export default function CharacterView(): React.ReactElement {
 
     return (
         <Container fixed>
-            <Box style={{ marginBottom: 16, textAlign: "right" }}>
-                <LogoutButton>
-                <Button variant="contained" color="primary">
-                    Log&nbsp;out
-                </Button>
-                </LogoutButton>
-            </Box>
             <Card style={{ maxWidth: 480 }}>
             <CardContent>
                 <Typography gutterBottom variant="h6" component="h3">
