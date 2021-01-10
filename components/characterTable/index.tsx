@@ -1,20 +1,10 @@
-import { useState, useContext } from 'react';
-import { VCARD, RDF, FOAF } from "@inrupt/lit-generated-vocab-common";
-import {
-    saveSolidDatasetAt,
-    getFetchedFrom,
-    setThing,
-    createThing,
-    setUrl,
-    setStringUnlocalized
-} from "@inrupt/solid-client";
+import { useState } from 'react';
+import { VCARD } from "@inrupt/lit-generated-vocab-common";
 import {
     CombinedDataProvider,
-    DatasetContext,
     Text,
     Table,
     TableColumn,
-    useSession
 } from "@inrupt/solid-ui-react";
 import useMudAccount from '../../lib/hooks/useMudAccount';
 import {
@@ -29,44 +19,19 @@ import { MUD } from "../../lib/MUD";
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
-    const { dataset, setDataset } = useContext(DatasetContext);
     const [ newCharName, setNewCharName] = useState("");
-    const { session, fetch } = useSession();
-    const { webId } = session.info;
-    const { characters } = useMudAccount();
+    const { characterDataSet, characters, addCharacter } = useMudAccount();
 
-    const saveHandler = async (newThing, datasetToUpdate) => {
-        const savedDataset = await saveSolidDatasetAt(
-          getFetchedFrom(datasetToUpdate),
-          setThing(datasetToUpdate, newThing),
-          { fetch }
-        );
-        setDataset(savedDataset);
-      };
+    const onCharacterAdd = () => {
+      addCharacter(newCharName);
+    }
 
-    const addCharacter = async () => {
-        // creates a new character Thing, sets properties to it
-        let newCharacter = setUrl(createThing(), RDF.type, MUD.characterRDFType);
-        newCharacter = setUrl(newCharacter, MUD.ownerPredicate, webId);
-        newCharacter = setStringUnlocalized(newCharacter, VCARD.fn, newCharName);
-        newCharacter = setStringUnlocalized(newCharacter, FOAF.name, newCharName);
-        const dataSetWithCharacter = setThing(
-            dataset,
-            newCharacter
-        );
-        await saveHandler(newCharacter, dataSetWithCharacter);
-    };
+    if (!characterDataSet || !characters) return <div>loading...</div>;
 
-    if (!dataset || !characters) return <div>loading...</div>;
-
-    //convert list of characters from context into a list of Things that the Table component is happy with
-    let characterData = [];
-    characters.forEach((thing) => {
-      characterData.push({
-        dataset: dataset,
-        thing: thing
-      });
-    });
+    const characterThings = characters.map((thing) => ({
+      dataset: characterDataSet,
+      thing: thing,
+    }));
 
     let editContent = null
     if (edit) editContent = (
@@ -78,7 +43,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
             value={newCharName}
             onChange={(e) => setNewCharName(e.target.value)}
           />
-          <Button color="primary" onClick={addCharacter}>
+          <Button color="primary" onClick={onCharacterAdd}>
             Add
           </Button>
         </Box>
@@ -87,7 +52,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     
     return (
     <>
-    <Table things={characterData}>
+    <Table things={characterThings}>
         <TableColumn property={MUD.ownerPredicate} header="Owner" dataType="url" body={({ value }) => (
             <CombinedDataProvider datasetUrl={value} thingUrl={value}>
                 <Text property={VCARD.fn.value} />
