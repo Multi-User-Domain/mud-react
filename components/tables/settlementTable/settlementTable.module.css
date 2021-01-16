@@ -1,1 +1,5 @@
 @import "../tables.css";
+
+.settlementRow {
+    cursor: pointer;
+}

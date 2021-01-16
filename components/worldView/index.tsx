@@ -11,7 +11,6 @@ import {
 import SettlementTable from '../tables/settlementTable';
 
 export default function WorldView(): React.ReactElement {
-    const [ selectedSettlement, setSelectedSettlement ] = useState(null);
     const [ view, setView ] = useState(<SettlementTable />);
     
     return (
