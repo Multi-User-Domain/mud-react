@@ -2,16 +2,16 @@ import {HTMLAttributes, useState, useEffect} from "react";
 
 import {
     Thing,
-    getUrl,
     getUrlAll,
     getThing,
     getStringNoLocale,
-    getStringNoLocaleAll
 } from "@inrupt/solid-client";
 
 import {
     Table,
-    TableColumn
+    TableColumn,
+    CombinedDataProvider,
+    Text
 } from "@inrupt/solid-ui-react";
 
 import {
@@ -56,6 +56,11 @@ export default function BuildingTable(
                 </Typography>
                 <Table things={buildingThings}>
                     <TableColumn property={VCARD.fn} header="Name" />
+                    <TableColumn property={MUD.ownerPredicate} header="Owner" dataType="url" body={({ value }) => (
+                        <CombinedDataProvider datasetUrl={value} thingUrl={value}>
+                            <Text property={VCARD.fn.value} />
+                        </CombinedDataProvider>
+                    )} />
                 </Table>
                 </>
             );
