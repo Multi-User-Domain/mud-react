@@ -20,7 +20,8 @@ import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
 import { MUD } from "../../../lib/MUD";
 
 import styles from "./settlementTable.module.css";
-import useMudWorld from '../../../lib/hooks/useMudWorld';
+import useMudWorld from "../../../lib/hooks/useMudWorld";
+import BuildingTable from "../buildingTable";
 
 export default function SettlementTable(): React.ReactElement {
     const { settlementDataSet, settlements } = useMudWorld();
@@ -39,11 +40,15 @@ export default function SettlementTable(): React.ReactElement {
         };
     }
 
+    const clearSettlementSelected = () => {
+        setSelectedSettlement(null);
+    }
+
     if (!settlementDataSet || !settlements) return <div>loading...</div>;
 
     if (selectedSettlement) {
         return (
-            <h2>Selected</h2>
+            <BuildingTable settlement={selectedSettlement} goBack={clearSettlementSelected} />
         );
     }
 
