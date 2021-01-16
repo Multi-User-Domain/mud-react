@@ -1,0 +1,7 @@
+@import "../tables.css";
+  
+.newCharacterFields {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}

@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import CharacterTable from "../characterTable";
+import CharacterTable from "../tables/characterTable";
 
 export default function CharacterView(): React.ReactElement {
     const [editing, setEditing] = useState(false);

@@ -7,9 +7,3 @@
 .table tr td:last-child {
     text-align: right;
 }
-  
-.newCharacterFields {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-}

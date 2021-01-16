@@ -6,7 +6,7 @@ import {
     Table,
     TableColumn,
 } from "@inrupt/solid-ui-react";
-import useMudAccount from '../../lib/hooks/useMudAccount';
+import useMudAccount from '../../../lib/hooks/useMudAccount';
 import {
     Box,
     Button,
@@ -15,7 +15,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import styles from "./characterTable.module.css";
-import { MUD } from "../../lib/MUD";
+import { MUD } from "../../../lib/MUD";
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
