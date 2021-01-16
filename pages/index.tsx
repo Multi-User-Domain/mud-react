@@ -1,4 +1,5 @@
 import { useSession } from "@inrupt/solid-ui-react/dist";
+import { MudWorldProvider } from "../lib/context/mudWorldContext";
 import { MudAccountProvider } from "../lib/context/mudAccountContext";
 import LoginForm from "../components/loginForm";
 import GameWindow from "../components/gameWindow";
@@ -12,8 +13,11 @@ export default function Home(): React.ReactElement {
   }
 
   return (
-    <MudAccountProvider webId={webId}>
-      <GameWindow />
-    </MudAccountProvider>
+    //TODO: select the worldWebId from a WorldFinder component
+    <MudWorldProvider worldWebId="http://localhost:8080/">
+      <MudAccountProvider webId={webId}>
+        <GameWindow />
+      </MudAccountProvider>
+    </MudWorldProvider>
     );
 }
