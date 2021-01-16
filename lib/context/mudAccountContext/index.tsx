@@ -84,7 +84,7 @@ export const MudAccountProvider = ({
                 const charactersDataSetLocation = getStringNoLocale(accountThing, MUD.charactersListPredicate);
                 getSolidDataset(charactersDataSetLocation).then((dataset) => {
                     setCharacterDataSet(dataset);
-                    setCharacters(getFilteredThings(dataset));
+                    setCharacters(getFilteredThings(dataset, MUD.characterRDFType));
                 });
             });
         });
