@@ -13,7 +13,6 @@ import {
   getSolidDataset,
   getStringNoLocale,
   getThing,
-  getThingAll,
   getUrl,
   saveSolidDatasetAt,
   getFetchedFrom,
@@ -25,6 +24,7 @@ import {
 
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
+import { getFilteredThings } from "../../utils";
 import { MUD } from "../../MUD";
 
 export interface IMudAccountContext {
@@ -42,18 +42,6 @@ export const MudAccountProvider = ({
     const { fetch } = useSession();
     const [ characterDataSet, setCharacterDataSet ] = useState(null);
     const [ characters, setCharacters ] = useState(null);
-
-    /**
-     * @returns All Things from a given dataset if they are of type mud:Character
-     */
-    const getCharacters = (dataset) => {
-        let ret = [];
-        getThingAll(dataset).forEach((thing) => {
-            //TODO: filter out Things which are not characters
-            ret.push(thing);
-        });
-        return ret
-    };
 
     const saveDataset = async (newThing, datasetToUpdate) => {
         const savedDataset = await saveSolidDatasetAt(
@@ -96,7 +84,7 @@ export const MudAccountProvider = ({
                 const charactersDataSetLocation = getStringNoLocale(accountThing, MUD.charactersListPredicate);
                 getSolidDataset(charactersDataSetLocation).then((dataset) => {
                     setCharacterDataSet(dataset);
-                    setCharacters(getCharacters(dataset));
+                    setCharacters(getFilteredThings(dataset));
                 });
             });
         });
