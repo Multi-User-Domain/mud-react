@@ -15,11 +15,12 @@ import { MUD, MUDAPI } from "../../MUD";
 import { getFilteredThings } from "../../utils";
 
 export interface IMudWorldContext {
+    worldWebId: string;
     settlements: [Thing];
     settlementDataSet: SolidDataset;
 }
 
-export const MudWorldContext = createContext<IMudWorldContext>({settlements: null, settlementDataSet: null});
+export const MudWorldContext = createContext<IMudWorldContext>({worldWebId: null, settlements: null, settlementDataSet: null});
 
 export const MudWorldProvider = ({
     worldWebId,
@@ -39,6 +40,7 @@ export const MudWorldProvider = ({
     return(
         <MudWorldContext.Provider
             value={{
+                worldWebId,
                 settlementDataSet,
                 settlements
             }}

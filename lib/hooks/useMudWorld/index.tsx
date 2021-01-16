@@ -9,11 +9,13 @@ import {
   
   export default function useMudAccount() : IMudWorldContext {
     const {
+        worldWebId,
         settlementDataSet,
         settlements
     } = useContext(MudWorldContext);
   
     return {
+        worldWebId,
         settlementDataSet,
         settlements
     };
