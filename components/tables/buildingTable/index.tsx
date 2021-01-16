@@ -1,27 +1,68 @@
-import {HTMLAttributes, useState} from "react";
+import {HTMLAttributes, useState, useEffect} from "react";
 
 import {
     Thing,
-    SolidDataset
+    getUrl,
+    getUrlAll,
+    getThing,
+    getStringNoLocale,
+    getStringNoLocaleAll
 } from "@inrupt/solid-client";
 
 import {
     Table,
-    TableColumn,
+    TableColumn
 } from "@inrupt/solid-ui-react";
 
 import {
   Box,
-  Button
+  Button,
+  Typography
 } from "@material-ui/core";
 
 import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
 import { MUD } from "../../../lib/MUD";
+import useMudWorld from "../../../lib/hooks/useMudWorld";
 
 import styles from "./buildingTable.module.css";
 
 export default function BuildingTable(
     {settlement, goBack} : {settlement: Thing, goBack: () => void}): React.ReactElement {
+
+    const [ buildingThings, setBuildingThings ] = useState(null);
+    const { settlementDataSet } = useMudWorld();
+
+    //pull in the buildings from the parameterised settlement
+    useEffect(() => {
+        const buildingUrls = getUrlAll(settlement, MUD.hasBuildingPredicate);
+        let buildingArr = [];
+        buildingUrls.forEach((url) => {
+            buildingArr.push({
+                dataset: settlementDataSet,
+                thing: getThing(settlementDataSet, url)
+            });
+        });
+        setBuildingThings(buildingArr);
+    }, []);
+
+    let tableContent = <h3>Loading...</h3>;
+
+    if(buildingThings) {
+        if(buildingThings.length > 0) {
+            tableContent = (
+                <>
+                <Typography gutterBottom variant="h6" component="h3">
+                    {getStringNoLocale(settlement, VCARD.fn)}
+                </Typography>
+                <Table things={buildingThings}>
+                    <TableColumn property={VCARD.fn} header="Name" />
+                </Table>
+                </>
+            );
+        }
+
+        else tableContent = <h3>This Settlement is empty!</h3>;
+    }
 
     return (
     <>
@@ -31,7 +72,7 @@ export default function BuildingTable(
             </Button>
         </Box>
         <Box>
-            <h2>Selected a Settlement</h2>
+            {tableContent}
         </Box>
     </>
     );

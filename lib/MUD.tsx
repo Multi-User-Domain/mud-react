@@ -7,10 +7,10 @@ export const MUD = {
 
     settlementRDFType: 'https://calum.inrupt.net/public/voc/mud.ttl#Settlement',
     populationPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#population',
+    hasBuildingPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#hasBuilding',
 }
 
 // TODO: https://github.com/calummackervoy/mud-react/issues/4
 export const MUDAPI = {
-    settlementsPath: 'mud/settlements/',
-    buildingsPath: 'mud/settlements/buildings/'
+    settlementsPath: 'mud/settlements/'
 }
