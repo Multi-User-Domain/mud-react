@@ -29,6 +29,7 @@ export default function WorldView(): React.ReactElement {
             <Box>
                 <Table things={settlementThings}>
                     <TableColumn property={VCARD.fn} header="Name" />
+                    <TableColumn property={MUD.populationPredicate} header="Population" />
                 </Table>
             </Box>
         </Container>
