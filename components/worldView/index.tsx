@@ -1,37 +1,26 @@
-import {
-    Table,
-    TableColumn,
-} from "@inrupt/solid-ui-react";
+import {useState} from 'react';
 
 import {
-  Container,
-  Box
-} from "@material-ui/core";
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+  } from "@material-ui/core";
 
-import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
-import { MUD } from "../../lib/MUD";
-
-import useMudWorld from '../../lib/hooks/useMudWorld';
+import SettlementTable from '../tables/settlementTable';
 
 export default function WorldView(): React.ReactElement {
-    const { settlementDataSet, settlements } = useMudWorld();
-
-    if (!settlementDataSet || !settlements) return <div>loading...</div>;
-
-    const settlementThings = settlements.map((thing) => ({
-      dataset: settlementDataSet,
-      thing: thing,
-    }));
-
-    // TODO: write a generic table component for Characters & Settlements to share
+    const [ selectedSettlement, setSelectedSettlement ] = useState(null);
+    const [ view, setView ] = useState(<SettlementTable />);
+    
     return (
         <Container fixed>
-            <Box>
-                <Table things={settlementThings}>
-                    <TableColumn property={VCARD.fn} header="Name" />
-                    <TableColumn property={MUD.populationPredicate} header="Population" />
-                </Table>
-            </Box>
+            <Card style={{ maxWidth: 480 }}>
+            <CardContent>
+                {view}
+            </CardContent>
+            </Card>
         </Container>
     );
 }
