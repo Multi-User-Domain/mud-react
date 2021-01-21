@@ -57,8 +57,6 @@ export default function SettlementTable(): React.ReactElement {
       thing: thing,
     }));
 
-    console.log(VCARD.fn);
-
     return (
     <>
     <Typography gutterBottom variant="h6" component="h3">

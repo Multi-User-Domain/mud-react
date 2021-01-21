@@ -1,10 +1,12 @@
-import {HTMLAttributes, useState, useEffect} from "react";
+import {HTMLAttributes, useState, useEffect, ReactElement} from "react";
 
 import {
     Thing,
+    SolidDataset,
     getUrlAll,
     getThing,
     getStringNoLocale,
+    getUrl,
 } from "@inrupt/solid-client";
 
 import {
@@ -16,13 +18,19 @@ import {
 
 import {
   Box,
-  Button,
   Typography
 } from "@material-ui/core";
+
+import {
+    Button,
+    useDisclosure
+} from "@chakra-ui/react";
 
 import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
 import { MUD } from "../../../lib/MUD";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
+
+import SimpleModal from "../../modals/simpleModal";
 
 import styles from "./buildingTable.module.css";
 
@@ -31,6 +39,38 @@ export default function BuildingTable(
 
     const [ buildingThings, setBuildingThings ] = useState(null);
     const { settlementDataSet } = useMudWorld();
+    //modal management
+    // TODO: modularise this by creating a BuildingModal component
+    const [ modalHeader, setModalHeader ] = useState(null);
+    const [ modalBody, setModalBody ] = useState(null);
+    //const [ displayModal, setDisplayModal ] = useState(true);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const onRowSelect = (event) => {
+        const selectedIndex = event.target.parentElement.rowIndex - 1;
+        const buildingThing = buildingThings[selectedIndex].thing;
+
+        //build modal
+        setModalHeader(<h3>{getStringNoLocale(buildingThing, VCARD.fn)}</h3>);
+        const imageUrl = getUrl(buildingThing, MUD.primaryImageContent);
+        let image = null;
+        if(imageUrl) image = <img src={image}></img>
+        setModalBody(
+            <>
+            {image}
+            <p>{getStringNoLocale(buildingThing, MUD.primaryTextContent)}</p>
+            </>
+        );
+        onOpen();
+        console.log(modalBody);
+    }
+
+    const getRowProps = (row, rowThing: Thing, rowDataset: SolidDataset) : HTMLAttributes<HTMLTableRowElement> => {
+        return {
+            onClick: onRowSelect,
+            className: `${styles.buildingRow}`
+        };
+    }
 
     //pull in the buildings from the parameterised settlement
     useEffect(() => {
@@ -54,7 +94,7 @@ export default function BuildingTable(
                 <Typography gutterBottom variant="h6" component="h3">
                     {getStringNoLocale(settlement, VCARD.fn)}
                 </Typography>
-                <Table things={buildingThings}>
+                <Table things={buildingThings} getRowProps={getRowProps}>
                     <TableColumn property={VCARD.fn} header="Name" />
                     <TableColumn property={MUD.owner} header="Owner" dataType="url" body={({ value }) => (
                         <CombinedDataProvider datasetUrl={value} thingUrl={value}>
@@ -79,6 +119,7 @@ export default function BuildingTable(
         <Box>
             {tableContent}
         </Box>
+        <SimpleModal header={modalHeader} body={modalBody} footer={<Button onClick={onClose}>Close</Button>} isOpen={isOpen} onClose={onClose} />
     </>
     );
 }
