@@ -11,6 +11,9 @@ export const MUD = {
     Settlement: 'https://calum.inrupt.net/public/voc/mud.ttl#Settlement',
     population: 'https://calum.inrupt.net/public/voc/mud.ttl#population',
     hasBuilding: 'https://calum.inrupt.net/public/voc/mud.ttl#hasBuilding',
+
+    primaryTextContent: 'https://calum.inrupt.net/public/voc/mud.ttl#primaryTextContent',
+    primaryImageContent: 'https://calum.inrupt.net/public/voc/mud.ttl#primaryImageContent',
 }
 
 // TODO: https://github.com/calummackervoy/mud-react/issues/4
