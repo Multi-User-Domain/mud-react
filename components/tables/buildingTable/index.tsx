@@ -54,7 +54,7 @@ export default function BuildingTable(
         setModalHeader(<h3>{getStringNoLocale(buildingThing, VCARD.fn)}</h3>);
         const imageUrl = getUrl(buildingThing, MUD.primaryImageContent);
         let image = null;
-        if(imageUrl) image = <img src={image}></img>
+        if(imageUrl) image = <img src={imageUrl}></img>
         setModalBody(
             <>
             {image}
