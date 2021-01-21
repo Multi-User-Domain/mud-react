@@ -34,7 +34,7 @@ export default function BuildingTable(
 
     //pull in the buildings from the parameterised settlement
     useEffect(() => {
-        const buildingUrls = getUrlAll(settlement, MUD.hasBuildingPredicate);
+        const buildingUrls = getUrlAll(settlement, MUD.hasBuilding);
         let buildingArr = [];
         buildingUrls.forEach((url) => {
             buildingArr.push({
@@ -56,7 +56,7 @@ export default function BuildingTable(
                 </Typography>
                 <Table things={buildingThings}>
                     <TableColumn property={VCARD.fn} header="Name" />
-                    <TableColumn property={MUD.ownerPredicate} header="Owner" dataType="url" body={({ value }) => (
+                    <TableColumn property={MUD.owner} header="Owner" dataType="url" body={({ value }) => (
                         <CombinedDataProvider datasetUrl={value} thingUrl={value}>
                             <Text property={VCARD.fn.value} />
                         </CombinedDataProvider>

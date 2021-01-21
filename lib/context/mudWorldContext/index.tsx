@@ -33,7 +33,7 @@ export const MudWorldProvider = ({
         const URL = worldWebId + MUDAPI.settlementsPath;
         getSolidDataset(URL).then((dataset) => {
             setSettlementDataSet(dataset);
-            setSettlements(getFilteredThings(dataset, MUD.settlementRDFType));
+            setSettlements(getFilteredThings(dataset, MUD.Settlement));
         });
     }, []);
 

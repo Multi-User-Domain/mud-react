@@ -1,13 +1,16 @@
-export const MUD = {
-    accountPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#Account',
-    charactersListPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#CharacterList',
-    
-    characterRDFType: 'https://calum.inrupt.net/public/voc/mud.ttl#Character',
-    ownerPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#ownedBy',
 
-    settlementRDFType: 'https://calum.inrupt.net/public/voc/mud.ttl#Settlement',
-    populationPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#population',
-    hasBuildingPredicate: 'https://calum.inrupt.net/public/voc/mud.ttl#hasBuilding',
+
+// LIT naming convention: "Class" (uppercase), "property" (lowercase)
+export const MUD = {
+    account: 'https://calum.inrupt.net/public/voc/mud.ttl#Account',
+    charactersList: 'https://calum.inrupt.net/public/voc/mud.ttl#CharacterList',
+    
+    Character: 'https://calum.inrupt.net/public/voc/mud.ttl#Character',
+    owner: 'https://calum.inrupt.net/public/voc/mud.ttl#ownedBy',
+
+    Settlement: 'https://calum.inrupt.net/public/voc/mud.ttl#Settlement',
+    population: 'https://calum.inrupt.net/public/voc/mud.ttl#population',
+    hasBuilding: 'https://calum.inrupt.net/public/voc/mud.ttl#hasBuilding',
 }
 
 // TODO: https://github.com/calummackervoy/mud-react/issues/4

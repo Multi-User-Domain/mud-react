@@ -57,8 +57,8 @@ export const MudAccountProvider = ({
     */
     const addCharacter = async (newCharName: string) => {
         // creates a new character Thing, sets properties to it
-        let newCharacter = setUrl(createThing(), RDF.type, MUD.characterRDFType);
-        newCharacter = setUrl(newCharacter, MUD.ownerPredicate, webId);
+        let newCharacter = setUrl(createThing(), RDF.type, MUD.Character);
+        newCharacter = setUrl(newCharacter, MUD.owner, webId);
         newCharacter = setStringUnlocalized(newCharacter, VCARD.fn, newCharName);
         newCharacter = setStringUnlocalized(newCharacter, FOAF.name, newCharName);
         const dataSetWithCharacter = setThing(
@@ -81,10 +81,10 @@ export const MudAccountProvider = ({
                 const accountThing = getThing(accountDataSet, accountUrl);
 
                 //get the character list dataset from the account
-                const charactersDataSetLocation = getStringNoLocale(accountThing, MUD.charactersListPredicate);
+                const charactersDataSetLocation = getStringNoLocale(accountThing, MUD.charactersList);
                 getSolidDataset(charactersDataSetLocation).then((dataset) => {
                     setCharacterDataSet(dataset);
-                    setCharacters(getFilteredThings(dataset, MUD.characterRDFType));
+                    setCharacters(getFilteredThings(dataset, MUD.Character));
                 });
             });
         });

@@ -57,6 +57,8 @@ export default function SettlementTable(): React.ReactElement {
       thing: thing,
     }));
 
+    console.log(VCARD.fn);
+
     return (
     <>
     <Typography gutterBottom variant="h6" component="h3">
@@ -64,7 +66,7 @@ export default function SettlementTable(): React.ReactElement {
     </Typography>
     <Table things={settlementThings} getRowProps={getRowProps}>
         <TableColumn property={VCARD.fn} header="Name" />
-        <TableColumn property={MUD.populationPredicate} header="Population" />
+        <TableColumn property={MUD.population} header="Population" />
     </Table>
     </>
     );
