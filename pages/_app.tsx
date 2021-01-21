@@ -20,6 +20,7 @@
  */
 
 import { SessionProvider } from "@inrupt/solid-ui-react";
+import { ChakraProvider } from "@chakra-ui/react"
 
 /* eslint react/jsx-props-no-spreading: 0 */
 
@@ -32,8 +33,10 @@ export default function App(props: IApp): React.ReactElement {
   const { Component, pageProps } = props;
 
   return (
-    <SessionProvider sessionId="react-sdk-example-project">
-      <Component {...pageProps} />
-    </SessionProvider>
+    <ChakraProvider>
+      <SessionProvider sessionId="react-sdk-example-project">
+        <Component {...pageProps} />
+      </SessionProvider>
+    </ChakraProvider>
   );
 }
