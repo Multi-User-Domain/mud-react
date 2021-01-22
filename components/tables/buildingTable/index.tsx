@@ -1,4 +1,4 @@
-import {HTMLAttributes, useState, useEffect, ReactElement} from "react";
+import {HTMLAttributes, useState, useEffect} from "react";
 
 import {
     Thing,
@@ -6,7 +6,6 @@ import {
     getUrlAll,
     getThing,
     getStringNoLocale,
-    getUrl,
 } from "@inrupt/solid-client";
 
 import {
@@ -30,7 +29,7 @@ import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
 import { MUD } from "../../../lib/MUD";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 
-import SimpleModal from "../../modals/simpleModal";
+import DescriptionModal from "../../modals/descriptionModal";
 
 import styles from "./buildingTable.module.css";
 
@@ -39,30 +38,13 @@ export default function BuildingTable(
 
     const [ buildingThings, setBuildingThings ] = useState(null);
     const { settlementDataSet } = useMudWorld();
-    //modal management
-    // TODO: modularise this by creating a BuildingModal component
-    const [ modalHeader, setModalHeader ] = useState(null);
-    const [ modalBody, setModalBody ] = useState(null);
-    //const [ displayModal, setDisplayModal ] = useState(true);
+    const [ selectedBuilding, setSelectedBuilding ] = useState<Thing>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const onRowSelect = (event) => {
         const selectedIndex = event.target.parentElement.rowIndex - 1;
-        const buildingThing = buildingThings[selectedIndex].thing;
-
-        //build modal
-        setModalHeader(<h3>{getStringNoLocale(buildingThing, VCARD.fn)}</h3>);
-        const imageUrl = getUrl(buildingThing, MUD.primaryImageContent);
-        let image = null;
-        if(imageUrl) image = <img src={imageUrl}></img>
-        setModalBody(
-            <>
-            {image}
-            <p>{getStringNoLocale(buildingThing, MUD.primaryTextContent)}</p>
-            </>
-        );
+        setSelectedBuilding(buildingThings[selectedIndex].thing);
         onOpen();
-        console.log(modalBody);
     }
 
     const getRowProps = (row, rowThing: Thing, rowDataset: SolidDataset) : HTMLAttributes<HTMLTableRowElement> => {
@@ -119,7 +101,8 @@ export default function BuildingTable(
         <Box>
             {tableContent}
         </Box>
-        <SimpleModal header={modalHeader} body={modalBody} footer={<Button onClick={onClose}>Close</Button>} isOpen={isOpen} onClose={onClose} />
+
+        <DescriptionModal thing={selectedBuilding} isOpen={isOpen} onClose={onClose} />
     </>
     );
 }
