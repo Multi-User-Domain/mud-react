@@ -30,7 +30,6 @@ export default function DescriptionModal(
     if(headerProperty == null) headerProperty = VCARD.fn;
 
     //body content
-    console.log(thing);
     const imageUrl = getUrl(thing, MUD.primaryImageContent);
     let image = null;
     if(imageUrl) image = <img src={imageUrl}></img>
