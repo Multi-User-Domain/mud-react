@@ -7,6 +7,7 @@ import useTerminalFeed from "../../lib/hooks/useTerminalFeed";
 import styles from "./terminal.module.css";
 
 import { WindupChildren } from "windups";
+import VisuallyHidden from "@reach/visually-hidden";
 
 export default function Terminal(): React.ReactElement {
     const {messages} = useTerminalFeed();
@@ -16,11 +17,17 @@ export default function Terminal(): React.ReactElement {
         messagesDisplayed.push(<li className={styles.message}>{message}</li>)
     }
 
+    const messageFeed = <ul className={styles.messageFeed}>{messagesDisplayed}</ul>;
+
+    // we duplicate it to display content differently visually and when accessing via screen reader
     return (
         <Container>
-            <WindupChildren>
-                <ul className={styles.messageFeed}>{messagesDisplayed}</ul>
-            </WindupChildren>
+            <VisuallyHidden>{messageFeed}</VisuallyHidden>
+            <div aria-hidden>
+                <WindupChildren>
+                    {messageFeed}
+                </WindupChildren>
+            </div>
         </Container>
     )
 }
