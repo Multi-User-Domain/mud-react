@@ -6,6 +6,8 @@ import {
 import useTerminalFeed from "../../lib/hooks/useTerminalFeed";
 import styles from "./terminal.module.css";
 
+import { WindupChildren } from "windups";
+
 export default function Terminal(): React.ReactElement {
     const {messages} = useTerminalFeed();
     const messagesDisplayed = []; //messages, but rendered
@@ -16,7 +18,9 @@ export default function Terminal(): React.ReactElement {
 
     return (
         <Container>
-            <ul className={styles.messageFeed}>{messagesDisplayed}</ul>
+            <WindupChildren>
+                <ul className={styles.messageFeed}>{messagesDisplayed}</ul>
+            </WindupChildren>
         </Container>
     )
 }
