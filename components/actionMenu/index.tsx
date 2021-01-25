@@ -10,10 +10,7 @@ import {
     DrawerBody,
     DrawerOverlay,
     DrawerContent,
-    DrawerCloseButton, } from "@chakra-ui/react"
-
-import CharacterView from "../characterView";
-import WorldView from "../worldView";
+    DrawerCloseButton, } from "@chakra-ui/react";
 
 export default function ActionMenu({isOpen, onClose=null} : {isOpen: boolean, onClose: () => void}): React.ReactElement {
   return (
@@ -25,16 +22,16 @@ export default function ActionMenu({isOpen, onClose=null} : {isOpen: boolean, on
                 <DrawerBody>
                     <Tabs isFitted>
                         <TabList>
-                        <Tab>Settlements</Tab>
-                        <Tab>Characters</Tab>
+                        <Tab>Placeholder</Tab>
+                        <Tab>Placeholder</Tab>
                         </TabList>
                     
                         <TabPanels>
                         <TabPanel>
-                            <WorldView />
+                            <p>Placeholder</p>
                         </TabPanel>
                         <TabPanel>
-                            <CharacterView />
+                            <p>Placeholder</p>
                         </TabPanel>
                         </TabPanels>
                     </Tabs>

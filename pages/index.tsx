@@ -17,6 +17,7 @@ import { TerminalFeedProvider } from "../lib/context/terminalFeedContext";
 import LoginForm from "../components/loginForm";
 import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
+import GameWindow from "../components/gameWindow";
 
 export default function Home(): React.ReactElement {
   const { session } = useSession();
@@ -48,6 +49,9 @@ export default function Home(): React.ReactElement {
       <MudAccountProvider webId={webId}>
         <TerminalFeedProvider>
           {header}
+          <Container style={{marginBottom: "20px"}}>
+            <GameWindow />
+          </Container>
           <Container>
             <Terminal />
           </Container>
