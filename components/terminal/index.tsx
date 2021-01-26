@@ -11,21 +11,26 @@ import VisuallyHidden from "@reach/visually-hidden";
 
 export default function Terminal(): React.ReactElement {
     const {messages} = useTerminalFeed();
-    const messagesDisplayed = []; //messages, but rendered
+    const messagesRead = []; //messages already read (no update)
+    const messagesUnread = [];
 
     for(let message of messages) {
-        messagesDisplayed.push(<li className={styles.message}>{message}</li>)
+        const comp = <li className={styles.message}>{message.content}</li>;
+        if(message.read) messagesRead.push(comp);
+        else {
+            messagesUnread.push(comp);
+            message.read = true;
+        }
     }
-
-    const messageFeed = <ul className={styles.messageFeed}>{messagesDisplayed}</ul>;
 
     // we duplicate it to display content differently visually and when accessing via screen reader
     return (
         <Container>
-            <VisuallyHidden>{messageFeed}</VisuallyHidden>
+            <VisuallyHidden><ul className={styles.messageFeed}>{messagesRead}{messagesUnread}</ul></VisuallyHidden>
             <div aria-hidden>
+                <ul className={styles.messageFeed}>{messagesRead}</ul>
                 <WindupChildren>
-                    {messageFeed}
+                    <ul className={styles.messageFeed}>{messagesUnread}</ul>
                 </WindupChildren>
             </div>
         </Container>

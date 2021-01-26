@@ -29,22 +29,20 @@ import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
 import { MUD } from "../../../lib/MUD";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 
-import DescriptionModal from "../../modals/descriptionModal";
-
 import styles from "./buildingTable.module.css";
+import useTerminalFeed from "../../../lib/hooks/useTerminalFeed";
 
 export default function BuildingTable(
     {settlement, goBack} : {settlement: Thing, goBack: () => void}): React.ReactElement {
 
     const [ buildingThings, setBuildingThings ] = useState(null);
     const { settlementDataSet } = useMudWorld();
-    const [ selectedBuilding, setSelectedBuilding ] = useState<Thing>(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { describeThing } = useTerminalFeed();
 
     const onRowSelect = (event) => {
+        //log to Terminal feed the building description
         const selectedIndex = event.target.parentElement.rowIndex - 1;
-        setSelectedBuilding(buildingThings[selectedIndex].thing);
-        onOpen();
+        describeThing(buildingThings[selectedIndex].thing);
     }
 
     const getRowProps = (row, rowThing: Thing, rowDataset: SolidDataset) : HTMLAttributes<HTMLTableRowElement> => {
@@ -101,8 +99,6 @@ export default function BuildingTable(
         <Box>
             {tableContent}
         </Box>
-
-        <DescriptionModal thing={selectedBuilding} isOpen={isOpen} onClose={onClose} />
     </>
     );
 }
