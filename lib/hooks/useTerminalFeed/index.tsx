@@ -10,12 +10,14 @@ import {
   export default function useTerminalFeed() : ITerminalFeedContext {
     const {
       messages,
-      addMessage
+      addMessage,
+      describeThing
     } = useContext(TerminalFeedContext);
   
     return {
         messages,
-        addMessage
+        addMessage,
+        describeThing
     };
   }
   
