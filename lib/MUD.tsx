@@ -18,5 +18,7 @@ export const MUD = {
 
 // TODO: https://github.com/calummackervoy/mud-react/issues/4
 export const MUDAPI = {
-    settlementsPath: 'mud/settlements/'
+    settlementsPath: 'mud/settlements/',
+    
+    contentPath: 'mud/content/'
 }
