@@ -18,6 +18,7 @@ import { getContentRequest } from "../../utils";
 import useMudWorld from "../../hooks/useMudWorld";
 
 export interface ITerminalMessage {
+    id: string;
     read?: boolean;
     content: string | React.ReactElement;
 }
@@ -37,20 +38,18 @@ export const TerminalFeedProvider = ({
     const { worldWebId } = useMudWorld();
     const [ recentUris, setRecentUris] = useState([]);
 
-    // a method for adding a string directly
-    const addMessage = (content: string | React.ReactElement) : void => {
-        let message: ITerminalMessage = {
-            read: false,
-            content: content
-        };
-        setMessages(messages.concat(message));
-    }
-
     const getITerminalMessage = (content: string | React.ReactElement) : ITerminalMessage => {
         return {
+            id: Math.random().toString(36).substr(2, 9),
             read: false,
             content: content
         };
+    }
+
+    // a method for adding a string directly
+    const addMessage = (content: string | React.ReactElement) : void => {
+        let message: ITerminalMessage = getITerminalMessage(content);
+        setMessages(messages.concat(message));
     }
 
     /**
@@ -67,12 +66,10 @@ export const TerminalFeedProvider = ({
         let newMessages: ITerminalMessage[] = [];
 
         if(imageUrl && !recentUris.includes(uri)) {
-            console.log(imageUrl);
             newMessages.push(getITerminalMessage(<img src={imageUrl}></img>));
         }
 
         const msg = (getStringNoLocale(thing, VCARD.fn) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
-        console.log(msg);
         if(msg.length > 3) {
             newMessages.push(getITerminalMessage(msg));
         }
