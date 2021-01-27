@@ -9581,9 +9581,9 @@ which@^2.0.1, which@^2.0.2:
     isexe "^2.0.0"
 
 windups@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/windups/-/windups-1.1.5.tgz#e3492de397a778d82b440169970cf477767461d1"
-  integrity sha512-eaIuE+s2duyQ9IYCDqp4yMQtsOIoTJjmlZkWYWdY4DMwO5BWu5njO1QDUNFAnXtblU2XoyXI84rLaEagndGJeA==
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/windups/-/windups-1.1.6.tgz#054a030a8dcd28b303306e65182dc5d341288b0f"
+  integrity sha512-tT/NnmtbWS7GRaQMol+jhShumOBgJvwWNO2MIUoYky6YP5yOpyQW4vdz6DwrJig3Ndz7YNxay/PAUaylAujYug==
   dependencies:
     break-styled-lines "^1.2.1"
 
