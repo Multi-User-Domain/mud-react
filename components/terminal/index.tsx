@@ -10,8 +10,10 @@ import { WindupChildren } from "windups";
 import VisuallyHidden from "@reach/visually-hidden";
 import { ITerminalMessage } from "../../lib/context/terminalFeedContext";
 
-export function TerminalMessage({message} : {message: ITerminalMessage}) : React.ReactElement {
-    return <li className={styles.message}>{message.content}</li>;
+export function TerminalMessage({message, children} : {message: ITerminalMessage, children: any}) : React.ReactElement {
+    return (
+        <li className={styles.message}>{children}</li>
+    );
 }
 
 export default function Terminal(): React.ReactElement {
@@ -20,7 +22,7 @@ export default function Terminal(): React.ReactElement {
     const messagesUnread = [];
 
     for(let message of messages) {
-        const comp = <TerminalMessage message={message} key={message.id}/>;
+        const comp = <TerminalMessage message={message} key={message.id}>{message.content}</TerminalMessage>;
         if(message.read) messagesRead.push(comp);
         else {
             messagesUnread.push(comp);
