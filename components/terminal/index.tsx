@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import { 
     Container } from "@chakra-ui/react"
@@ -6,9 +6,10 @@ import {
 import useTerminalFeed from "../../lib/hooks/useTerminalFeed";
 import styles from "./terminal.module.css";
 
-import { WindupChildren } from "windups";
+import { WindupChildren, OnChar } from "windups";
 import VisuallyHidden from "@reach/visually-hidden";
 import { ITerminalMessage } from "../../lib/context/terminalFeedContext";
+import { useRef } from "react";
 
 export function TerminalMessage({message, children} : {message: ITerminalMessage, children: any}) : React.ReactElement {
     return (
@@ -18,6 +19,7 @@ export function TerminalMessage({message, children} : {message: ITerminalMessage
 
 export default function Terminal(): React.ReactElement {
     const {messages} = useTerminalFeed();
+    const messagesEnd = useRef(null);
     const messagesRead = []; //messages already read (no update)
     const messagesUnread = [];
 
@@ -30,6 +32,14 @@ export default function Terminal(): React.ReactElement {
         }
     }
 
+    const scrollToBottom = () => {
+        messagesEnd.current?.scrollIntoView({ behavior: "smooth" });
+    }
+
+    useEffect(() => {
+        scrollToBottom();
+    });
+
     // we duplicate it to display content differently visually and when accessing via screen reader
     return (
         <Container>
@@ -37,8 +47,11 @@ export default function Terminal(): React.ReactElement {
             <div aria-hidden className={styles.messageFeed}>
                 <ul>{messagesRead}</ul>
                 <WindupChildren>
-                    <ul>{messagesUnread}</ul>
+                    <OnChar fn={scrollToBottom}>
+                        <ul>{messagesUnread}</ul>
+                    </OnChar>
                 </WindupChildren>
+                <div style={{ float:"left", clear: "both"}} ref={messagesEnd}></div>
             </div>
         </Container>
     )
