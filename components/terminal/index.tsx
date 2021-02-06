@@ -34,10 +34,10 @@ export default function Terminal(): React.ReactElement {
     return (
         <Container>
             <VisuallyHidden><ul className={styles.messageFeed}>{messagesRead}{messagesUnread}</ul></VisuallyHidden>
-            <div aria-hidden>
-                <ul className={styles.messageFeed}>{messagesRead}</ul>
+            <div aria-hidden className={styles.messageFeed}>
+                <ul>{messagesRead}</ul>
                 <WindupChildren>
-                    <ul className={styles.messageFeed}>{messagesUnread}</ul>
+                    <ul>{messagesUnread}</ul>
                 </WindupChildren>
             </div>
         </Container>

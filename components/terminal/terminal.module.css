@@ -1,4 +1,9 @@
 .messageFeed {
+    overflow: scroll;
+    height: 60vh;
+}
+
+.messageFeed > ul {
     list-style: none;
 }
 
