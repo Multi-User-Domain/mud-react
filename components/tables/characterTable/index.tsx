@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { VCARD } from "@inrupt/lit-generated-vocab-common";
-import { getStringNoLocale } from '@inrupt/solid-client';
+import { FOAF, VCARD } from "@inrupt/lit-generated-vocab-common";
+import { getStringNoLocale, getUrl } from '@inrupt/solid-client';
 import useMudAccount from '../../../lib/hooks/useMudAccount';
-import { Grid, GridItem, Box, Button, Input } from "@chakra-ui/react"
+import { Grid, GridItem, Box, Button, Input, Center, Text } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
 
@@ -17,18 +17,28 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
 
     if (!characterDataSet || !characters) return <div>loading...</div>;
 
-    const characterThings = characters.map((thing) => ({
-      dataset: characterDataSet,
-      thing: thing,
-    }));
-
+    //building Character Rows elements
     const characterRows = [];
     for(let i = 0; i < characters.length; i++) {
+      const imageUrl = getUrl(characters[i], FOAF.depiction);
+      let image = null;
+      if(imageUrl) image = <img src={imageUrl}></img>;
+      //TODO: display default character profile image
+
       characterRows.push(
-        <Grid templateColumns="repeat(5, 1fr)" gap={1} key={i} className={styles.characterRow}>
-          <GridItem w="100%" colSpan={1} bg="blue.500" className={styles.characterField}>Picture</GridItem>
-          <GridItem w="100%" colSpan={2} bg="blue.500" className={styles.characterField}>{getStringNoLocale(characters[i], VCARD.fn)}</GridItem>
-          <GridItem w="100%" colSpan={1} bg="blue.500" className={styles.characterField}>Buttons</GridItem>
+        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} key={i} className={styles.characterRow}>
+
+          <GridItem w="100px" h="100px" colSpan={1} className={styles.profilePic}>
+            {image}
+          </GridItem>
+
+          <GridItem w="100%" colSpan={2} className={styles.characterField}>
+            <Center h="100%"><Text>{getStringNoLocale(characters[i], VCARD.fn)}</Text></Center>
+          </GridItem>
+          
+          <GridItem w="100%" colSpan={1} colEnd={6} bg="blue.500" className={styles.characterField}>
+            <Center h="100%"><Text>Buttons</Text></Center>
+          </GridItem>
         </Grid>
       );
     }
