@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { VCARD } from "@inrupt/lit-generated-vocab-common";
-import {
-    CombinedDataProvider,
-    Text,
-    Table,
-    TableColumn,
-} from "@inrupt/solid-ui-react";
+import { getStringNoLocale } from '@inrupt/solid-client';
 import useMudAccount from '../../../lib/hooks/useMudAccount';
 import { Grid, GridItem, Box, Button, Input } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
@@ -27,6 +22,17 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
       thing: thing,
     }));
 
+    const characterRows = [];
+    for(let i = 0; i < characters.length; i++) {
+      characterRows.push(
+        <Grid templateColumns="repeat(5, 1fr)" gap={1} key={i} className={styles.characterRow}>
+          <GridItem w="100%" colSpan={1} bg="blue.500" className={styles.characterField}>Picture</GridItem>
+          <GridItem w="100%" colSpan={2} bg="blue.500" className={styles.characterField}>{getStringNoLocale(characters[i], VCARD.fn)}</GridItem>
+          <GridItem w="100%" colSpan={1} bg="blue.500" className={styles.characterField}>Buttons</GridItem>
+        </Grid>
+      );
+    }
+
     let editContent = null
     if (edit) editContent = (
         <>
@@ -46,14 +52,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     
     return (
     <>
-    <Table things={characterThings}>
-        <TableColumn property={MUD.owner} header="Owner" dataType="url" body={({ value }) => (
-            <CombinedDataProvider datasetUrl={value} thingUrl={value}>
-                <Text property={VCARD.fn.value} />
-            </CombinedDataProvider>
-          )} />
-        <TableColumn property={VCARD.fn} header="Name" />
-    </Table>
+    {characterRows}
     {editContent}
     </>
     );

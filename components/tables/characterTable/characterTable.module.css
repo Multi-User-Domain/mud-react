@@ -5,3 +5,12 @@
     align-items: baseline;
     justify-content: space-between;
 }
+
+.characterRow {
+    margin-bottom: 10px;
+}
+
+.characterField {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
