@@ -7,13 +7,7 @@ import {
     TableColumn,
 } from "@inrupt/solid-ui-react";
 import useMudAccount from '../../../lib/hooks/useMudAccount';
-import {
-    Box,
-    Button,
-    MenuItem,
-    TextField,
-    Typography,
-} from "@material-ui/core";
+import { Grid, GridItem, Box, Button, Input } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
 
@@ -36,9 +30,9 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     let editContent = null
     if (edit) editContent = (
         <>
-        <Typography gutterBottom>Add New Character</Typography>
+        <h3>Add New Character</h3>
         <Box className={styles.newCharacterFields}>
-          <TextField
+          <Input
             label="Name"
             value={newCharName}
             onChange={(e) => setNewCharName(e.target.value)}
