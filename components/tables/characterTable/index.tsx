@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FOAF, VCARD } from "@inrupt/lit-generated-vocab-common";
 import { getStringNoLocale, getUrl } from '@inrupt/solid-client';
 import useMudAccount from '../../../lib/hooks/useMudAccount';
-import { Grid, GridItem, Box, Button, Input, Center, Text } from "@chakra-ui/react"
+import { Grid, GridItem, Box, Button, Input, Center, Text, Circle } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
 
@@ -23,7 +23,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
       const imageUrl = getUrl(characters[i], FOAF.depiction);
       let image = null;
       if(imageUrl) image = <img src={imageUrl}></img>;
-      //TODO: display default character profile image
+      else image = <Center h="100%"><Circle bg="tomato" w="20px" h="20px"></Circle></Center>;
 
       characterRows.push(
         <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} key={i} className={styles.characterRow}>
