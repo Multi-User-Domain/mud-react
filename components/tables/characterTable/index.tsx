@@ -1,39 +1,47 @@
 import { useState } from 'react';
-import { FOAF, VCARD } from "@inrupt/lit-generated-vocab-common";
-import { getStringNoLocale, getUrl } from '@inrupt/solid-client';
 import useMudAccount from '../../../lib/hooks/useMudAccount';
-import { Grid, GridItem, Box, Button, Input, Center, Text, Circle } from "@chakra-ui/react"
+import { Grid, GridItem, Box, Button, Input, Center, Text, useDisclosure } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
-import { getThingName } from '../../../lib/utils';
+import { getThingName, getThingDepiction } from '../../../lib/utils';
+import CharacterProfile from '../../characterProfile';
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
     const [ newCharName, setNewCharName] = useState("");
     const { characterDataSet, characters, addCharacter } = useMudAccount();
+    const [ selectedCharacter, setSelectedCharacter ] = useState(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const onCharacterAdd = () => {
       addCharacter(newCharName);
+    }
+
+    const selectCharacter = (i: number): void => {
+      //const i = event.target.getAttribute("dataIndex");
+      console.log(i);
+      if(characters == null || i < 0 || characters.length <= i) return;
+
+      setSelectedCharacter(characters[i]);
+      onOpen();
     }
 
     if (!characterDataSet || !characters) return <div>loading...</div>;
 
     //building Character Rows elements
     const characterRows = [];
+
     for(let i = 0; i < characters.length; i++) {
-      const imageUrl = getUrl(characters[i], FOAF.depiction);
-      let image = null;
-      if(imageUrl) image = <img src={imageUrl}></img>;
-      else image = <Center h="100%"><Circle bg="tomato" w="20px" h="20px"></Circle></Center>;
+      const image = getThingDepiction(characters[i]);
 
       characterRows.push(
         <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} key={i} className={styles.characterRow}>
-
           <GridItem w="100px" h="100px" colSpan={1} className={styles.profilePic}>
             {image}
           </GridItem>
 
-          <GridItem w="100%" colSpan={2} className={styles.characterField}>
+          <GridItem w="100%" colSpan={2} className={styles.characterField} 
+              tag="a" onClick={() => selectCharacter(i)} style={{ cursor: "pointer" }}>
             <Center h="100%"><Text>{getThingName(characters[i])}</Text></Center>
           </GridItem>
           
@@ -63,6 +71,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     
     return (
     <>
+    <CharacterProfile character={selectedCharacter} isOpen={isOpen} onClose={onClose} />
     {characterRows}
     {editContent}
     </>
