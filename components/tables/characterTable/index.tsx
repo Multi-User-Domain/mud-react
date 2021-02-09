@@ -5,6 +5,7 @@ import useMudAccount from '../../../lib/hooks/useMudAccount';
 import { Grid, GridItem, Box, Button, Input, Center, Text, Circle } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
+import { getThingName } from '../../../lib/utils';
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
@@ -33,7 +34,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
           </GridItem>
 
           <GridItem w="100%" colSpan={2} className={styles.characterField}>
-            <Center h="100%"><Text>{getStringNoLocale(characters[i], VCARD.fn)}</Text></Center>
+            <Center h="100%"><Text>{getThingName(characters[i])}</Text></Center>
           </GridItem>
           
           <GridItem w="100%" colSpan={1} colEnd={6} bg="blue.500" className={styles.characterField}>

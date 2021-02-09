@@ -5,7 +5,6 @@ import {
     SolidDataset,
     getUrlAll,
     getThing,
-    getStringNoLocale,
 } from "@inrupt/solid-client";
 
 import {
@@ -21,16 +20,16 @@ import {
 } from "@material-ui/core";
 
 import {
-    Button,
-    useDisclosure
+    Button
 } from "@chakra-ui/react";
 
-import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
+import { VCARD } from "@inrupt/lit-generated-vocab-common";
 import { MUD } from "../../../lib/MUD";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 
 import styles from "./buildingTable.module.css";
 import useTerminalFeed from "../../../lib/hooks/useTerminalFeed";
+import { getThingName } from "../../../lib/utils";
 
 export default function BuildingTable(
     {settlement, goBack} : {settlement: Thing, goBack: () => void}): React.ReactElement {
@@ -72,7 +71,7 @@ export default function BuildingTable(
             tableContent = (
                 <>
                 <Typography gutterBottom variant="h6" component="h3">
-                    {getStringNoLocale(settlement, VCARD.fn)}
+                    {getThingName(settlement)}
                 </Typography>
                 <Table things={buildingThings} getRowProps={getRowProps}>
                     <TableColumn property={VCARD.fn} header="Name" />

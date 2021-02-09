@@ -11,10 +11,9 @@ import {
     useState,
     useEffect
 } from 'react';
-import { VCARD } from "@inrupt/lit-generated-vocab-common";
 import { MUD, MUDAPI } from "../../MUD";
 
-import { getContentRequest } from "../../utils";
+import { getContentRequest, getThingName } from "../../utils";
 import useMudWorld from "../../hooks/useMudWorld";
 
 export interface ITerminalMessage {
@@ -69,7 +68,7 @@ export const TerminalFeedProvider = ({
             newMessages.push(getITerminalMessage(<img src={imageUrl}></img>));
         }
 
-        const msg = (getStringNoLocale(thing, VCARD.fn) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
+        const msg = (getThingName(thing) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
         if(msg.length > 3) {
             newMessages.push(getITerminalMessage(msg));
         }
