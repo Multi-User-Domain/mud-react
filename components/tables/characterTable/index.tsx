@@ -5,6 +5,30 @@ import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
 import { getThingName, getThingDepiction } from '../../../lib/utils';
 import CharacterProfile from '../../characterProfile';
+import { Thing } from '@inrupt/solid-client';
+
+function CharacterRow({character, i, selectCharacter} : {character: Thing, i: number, selectCharacter: (number) => void}): React.ReactElement {  
+  const onCharacterSelect = (event) => {
+    selectCharacter(i);
+  }
+  
+  return (
+  <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} className={styles.characterRow}>
+    <GridItem w="100px" h="100px" colSpan={1} className={styles.profilePic}
+        tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
+      {getThingDepiction(character)}
+    </GridItem>
+
+    <GridItem w="100%" colSpan={2} className={styles.characterField} 
+        tag="a" onClick={() => selectCharacter(i)} style={{ cursor: "pointer" }}>
+      <Center h="100%"><Text>{getThingName(character)}</Text></Center>
+    </GridItem>
+    
+    <GridItem w="100%" colSpan={1} colEnd={6} bg="blue.500" className={styles.characterField}>
+      <Center h="100%"><Text>Buttons</Text></Center>
+    </GridItem>
+  </Grid>);
+}
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
@@ -18,8 +42,6 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     }
 
     const selectCharacter = (i: number): void => {
-      //const i = event.target.getAttribute("dataIndex");
-      console.log(i);
       if(characters == null || i < 0 || characters.length <= i) return;
 
       setSelectedCharacter(characters[i]);
@@ -32,24 +54,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     const characterRows = [];
 
     for(let i = 0; i < characters.length; i++) {
-      const image = getThingDepiction(characters[i]);
-
-      characterRows.push(
-        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} key={i} className={styles.characterRow}>
-          <GridItem w="100px" h="100px" colSpan={1} className={styles.profilePic}>
-            {image}
-          </GridItem>
-
-          <GridItem w="100%" colSpan={2} className={styles.characterField} 
-              tag="a" onClick={() => selectCharacter(i)} style={{ cursor: "pointer" }}>
-            <Center h="100%"><Text>{getThingName(characters[i])}</Text></Center>
-          </GridItem>
-          
-          <GridItem w="100%" colSpan={1} colEnd={6} bg="blue.500" className={styles.characterField}>
-            <Center h="100%"><Text>Buttons</Text></Center>
-          </GridItem>
-        </Grid>
-      );
+      characterRows.push(<CharacterRow character={characters[i]} i={i} key={i} selectCharacter={selectCharacter} />);
     }
 
     let editContent = null
