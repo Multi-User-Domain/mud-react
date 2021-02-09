@@ -11,6 +11,7 @@ import {
     Center, } from "@chakra-ui/react";
 import { Thing } from "@inrupt/solid-client";
 import { getThingName, getThingDepiction } from "../../lib/utils";
+import styles from "./characterProfile.module.css";
 
 export default function CharacterProfile(
     {character, isOpen, onClose=null} : {character: Thing, isOpen: boolean, onClose: () => void}): React.ReactElement {
@@ -25,12 +26,12 @@ export default function CharacterProfile(
 
                 <DrawerBody>
                     <Container>
-                        <Box w="100%">
+                        <Box w="100%" className={styles.profileImage}>
                             <Center>
                                 {getThingDepiction(character)}
                             </Center>
                         </Box>
-                        <Box w="100%">
+                        <Box w="100%" className={styles.profileName}>
                             <Center><h1>{getThingName(character)}</h1></Center>
                         </Box>
                         <hr/>
