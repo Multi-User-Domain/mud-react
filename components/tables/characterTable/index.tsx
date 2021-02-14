@@ -20,7 +20,7 @@ function CharacterRow({character, i, selectCharacter} : {character: Thing, i: nu
     </GridItem>
 
     <GridItem w="100%" colSpan={2} className={styles.characterField} 
-        tag="a" onClick={() => selectCharacter(i)} style={{ cursor: "pointer" }}>
+        tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
       <Center h="100%"><Text>{getThingName(character)}</Text></Center>
     </GridItem>
     
