@@ -1,8 +1,4 @@
-import { Container, Circle, Center } from "@chakra-ui/react"
-import styles from "./terminal.module.css";
-
-import { WindupChildren, OnChar } from "windups";
-import VisuallyHidden from "@reach/visually-hidden";
+import { Image, Circle, Center } from "@chakra-ui/react"
 import { Thing, getUrl } from "@inrupt/solid-client";
 import { FOAF } from "@inrupt/lit-generated-vocab-common";
 
@@ -11,10 +7,10 @@ import { FOAF } from "@inrupt/lit-generated-vocab-common";
  * renders a default icon if the property is not present
  */
 
-export default function ThingDepiction({thing} : {thing: Thing}): React.ReactElement {
+export default function ThingDepiction({thing, ...childrenProps}): React.ReactElement {
 
     const imageUrl = getUrl(thing, FOAF.depiction);
 
-    if(imageUrl) return <img src={imageUrl}></img>;
-    return <Center h="100%"><Circle bg="tomato" w="20px" h="20px"></Circle></Center>;
+    if(imageUrl) return <Image src={imageUrl} {...childrenProps}></Image>;
+    return <Center h="100%"><Circle bg="tomato" w="20px" h="20px" {...childrenProps}></Circle></Center>;
 }
