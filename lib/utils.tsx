@@ -7,8 +7,6 @@ import {
 
 import {RDF, VCARD, FOAF} from "@inrupt/lit-generated-vocab-common";
 
-import {Circle, Center} from "@chakra-ui/react";
-
 import axios from 'axios';
 
 /**
@@ -35,16 +33,6 @@ export const getThingName = (thing: Thing): string => {
         if(name != null) return name;
     }
     return null;
-}
-
-/**
- * @returns a ReactElement, either an img with the FOAF.depcition stored on the Thing, or a placeholder icon
- */
-export const getThingDepiction = (thing: Thing) : React.ReactElement => {
-    const imageUrl = getUrl(thing, FOAF.depiction);
-
-    if(imageUrl) return <img src={imageUrl}></img>;
-    return <Center h="100%"><Circle bg="tomato" w="20px" h="20px"></Circle></Center>;
 }
 
 /**

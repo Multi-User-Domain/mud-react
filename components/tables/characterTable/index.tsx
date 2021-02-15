@@ -3,7 +3,8 @@ import useMudAccount from '../../../lib/hooks/useMudAccount';
 import { Grid, GridItem, Box, Button, Input, Center, Text, useDisclosure } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
-import { getThingName, getThingDepiction } from '../../../lib/utils';
+import { getThingName } from '../../../lib/utils';
+import ThingDepiction from "../../thingDepiction";
 import CharacterProfile from '../../characterProfile';
 import { Thing } from '@inrupt/solid-client';
 
@@ -16,7 +17,7 @@ function CharacterRow({character, i, selectCharacter} : {character: Thing, i: nu
   <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} className={styles.characterRow}>
     <GridItem w="100px" h="100px" colSpan={1} className={styles.profilePic}
         tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
-      {getThingDepiction(character)}
+      <ThingDepiction thing={character} />
     </GridItem>
 
     <GridItem w="100%" colSpan={2} className={styles.characterField} 

@@ -10,7 +10,8 @@ import {
     DrawerCloseButton,
     Center, } from "@chakra-ui/react";
 import { Thing } from "@inrupt/solid-client";
-import { getThingName, getThingDepiction } from "../../lib/utils";
+import { getThingName } from "../../lib/utils";
+import ThingDepiction from "../thingDepiction";
 import styles from "./characterProfile.module.css";
 
 export default function CharacterProfile(
@@ -28,7 +29,7 @@ export default function CharacterProfile(
                     <Container>
                         <Box w="100%" className={styles.profileImage}>
                             <Center>
-                                {getThingDepiction(character)}
+                                <ThingDepiction thing={character} />
                             </Center>
                         </Box>
                         <Box w="100%" className={styles.profileName}>
