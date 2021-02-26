@@ -11,7 +11,7 @@ import {
 
 import useMudWorld from "../../hooks/useMudWorld";
 
-import { ITerminalMessage, IPerceptionManager, perceptionManager } from "../../PerceptionManager";
+import { ITerminalMessage, IPerceptionManager } from "../../PerceptionManager";
 
 export interface ITerminalFeedContext {
     messages: ITerminalMessage[];
@@ -27,7 +27,8 @@ export interface ITerminalFeedProvider {
 export const TerminalFeedContext = createContext<ITerminalFeedContext>({messages: null});
 
 export const TerminalFeedProvider = ({
-    children
+    children,
+    perceptionManager
 }: ITerminalFeedProvider): ReactElement => {
     const { worldWebId } = useMudWorld();
     const [ messages, setMessages ] = useState<ITerminalMessage[]>([]);

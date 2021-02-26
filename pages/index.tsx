@@ -11,6 +11,7 @@ import {
   LogoutButton,
 } from "@inrupt/solid-ui-react";
 
+import { perceptionManager } from "../lib/PerceptionManager";
 import { MudWorldProvider } from "../lib/context/mudWorldContext";
 import { MudAccountProvider } from "../lib/context/mudAccountContext";
 import { TerminalFeedProvider } from "../lib/context/terminalFeedContext";
@@ -47,7 +48,7 @@ export default function Home(): React.ReactElement {
     //TODO: select the worldWebId from a WorldFinder component
     <MudWorldProvider worldWebId="http://localhost:8080/">
       <MudAccountProvider webId={webId}>
-        <TerminalFeedProvider>
+        <TerminalFeedProvider perceptionManager={perceptionManager}>
           {header}
           <Container style={{marginBottom: "20px"}}>
             <GameWindow />
