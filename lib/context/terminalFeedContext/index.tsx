@@ -1,27 +1,17 @@
 import { 
-    Thing,
-    getStringNoLocale,
-    getUrl, 
-    asUrl,
-    ThingPersisted
+    Thing
 } from '@inrupt/solid-client';
 import {
+    ReactNode,
     ReactElement,
     createContext,
     useState,
     useEffect
 } from 'react';
-import { VCARD } from "@inrupt/lit-generated-vocab-common";
-import { MUD, MUDAPI } from "../../MUD";
 
-import { getContentRequest } from "../../utils";
 import useMudWorld from "../../hooks/useMudWorld";
 
-export interface ITerminalMessage {
-    id: string;
-    read?: boolean;
-    content: string | React.ReactElement;
-}
+import { ITerminalMessage, IPerceptionManager, perceptionManager } from "../../PerceptionManager";
 
 export interface ITerminalFeedContext {
     messages: ITerminalMessage[];
@@ -29,61 +19,37 @@ export interface ITerminalFeedContext {
     describeThing?: (Thing) => void;
 }
 
+export interface ITerminalFeedProvider {
+    children: ReactNode;
+    perceptionManager: IPerceptionManager;
+};
+
 export const TerminalFeedContext = createContext<ITerminalFeedContext>({messages: null});
 
 export const TerminalFeedProvider = ({
     children
-}): ReactElement => {
-    const [ messages, setMessages ] = useState<ITerminalMessage[]>([]);
+}: ITerminalFeedProvider): ReactElement => {
     const { worldWebId } = useMudWorld();
-    const [ recentUris, setRecentUris] = useState([]);
-
-    const getITerminalMessage = (content: string | React.ReactElement) : ITerminalMessage => {
-        return {
-            id: Math.random().toString(36).substr(2, 9),
-            read: false,
-            content: content
-        };
-    }
+    const [ messages, setMessages ] = useState<ITerminalMessage[]>([]);
 
     // a method for adding a string directly
     const addMessage = (content: string | React.ReactElement) : void => {
-        let message: ITerminalMessage = getITerminalMessage(content);
+        let message: ITerminalMessage = perceptionManager.getITerminalMessage(content);
         setMessages(messages.concat(message));
+    }
+
+    const addMessages = (messages: ITerminalMessage[]) : void => {
+        setMessages(messages.concat(messages));
     }
 
     /**
      * method describes parameterised Thing by adding relevant messages to the feed
      * @param thing: Thing to describe
-     * TODO: manage multiple content servers and try each as a fallback
-     * TODO: possibly make own content enrichment if possible
      */
-    
     const describeThing = (thing: Thing) : void => {
-        // add a fast message with the name and description (and possibly image)
-        const uri = asUrl(thing as ThingPersisted);
-        const imageUrl = getUrl(thing, MUD.primaryImageContent);
-        let newMessages: ITerminalMessage[] = [];
-
-        if(imageUrl && !recentUris.includes(uri)) {
-            newMessages.push(getITerminalMessage(<img src={imageUrl}></img>));
-        }
-
-        const msg = (getStringNoLocale(thing, VCARD.fn) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
-        if(msg.length > 3) {
-            newMessages.push(getITerminalMessage(msg));
-        }
-
-        // search for content online
-        getContentRequest(worldWebId + MUDAPI.contentPath, uri).then((response) => {
-            if(response && response.data != null) {
-                newMessages.push(getITerminalMessage(response.data));
-            }
-            setMessages(messages.concat(newMessages));
+        perceptionManager.describeThing(worldWebId, thing).then((messages) => {
+            addMessages(messages);
         });
-
-        // remember previous descriptions and don't repeat
-        setRecentUris(recentUris.concat(uri));
     }
 
     useEffect(() => {
