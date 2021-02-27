@@ -9,7 +9,7 @@ import {
 
 import { VCARD } from "@inrupt/lit-generated-vocab-common";
 import { MUD, MUDAPI, MUD_CONTENT } from "./MUD";
-import { getContentRequest, parseTurtleToSolidDataset } from "./utils";
+import { getContentRequest, parseTurtleToSolidDataset, getThingName } from "./utils";
 
 /**
  * Perception Manager is responsible for choosing what to display to the user, i.e. for deciding when it has enough content and what
@@ -73,7 +73,7 @@ export const perceptionManager: IPerceptionManager = (() => {
             newMessages.push(getITerminalMessage(<img src={imageUrl}></img>));
         }
 
-        const msg = (getStringNoLocale(thing, VCARD.fn) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
+        const msg = (getThingName(thing) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
         if(msg.length > 3) {
             newMessages.push(getITerminalMessage(msg));
         }

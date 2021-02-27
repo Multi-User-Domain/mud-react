@@ -28,7 +28,7 @@ import { getFilteredThings } from "../../utils";
 import { MUD } from "../../MUD";
 
 export interface IMudAccountContext {
-    characters: [Thing];
+    characters: Thing[];
     characterDataSet: SolidDataset;
     addCharacter?: (string) => void;
 }

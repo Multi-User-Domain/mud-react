@@ -5,10 +5,12 @@ import {
     getSolidDataset,
     getThingAll,
     getUrl,
-    SolidDataset
-} from "@inrupt/solid-client";
+    SolidDataset,
+    Thing,
+    getStringNoLocale
+  } from "@inrupt/solid-client";
 
-import {RDF} from "@inrupt/lit-generated-vocab-common";
+import {RDF, VCARD, FOAF} from "@inrupt/lit-generated-vocab-common";
 
 import axios from 'axios';
 
@@ -78,6 +80,20 @@ export const parseTurtleToSolidDataset = async (turtle: string) : Promise<SolidD
     triples.forEach((triple) => resource.add(triple));
 
     return resource;
+}
+
+/**
+ * checks common name properties on the Thing (VCARD, FOAF) and returns the first it can find
+ * @returns the name of a given Thing, or null if unable to find it
+ */
+export const getThingName = (thing: Thing): string => {
+    const NAME_PROPERTIES = [VCARD.fn, FOAF.name];
+    for(let PROP of NAME_PROPERTIES) {
+        const name = getStringNoLocale(thing, PROP);
+
+        if(name != null) return name;
+    }
+    return null;
 }
 
 /**

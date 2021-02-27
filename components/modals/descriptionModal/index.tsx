@@ -48,7 +48,7 @@ export default function DescriptionModal(
             <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside" size="xl">
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader><h3>{getStringNoLocale(thing, VCARD.fn)}</h3></ModalHeader>
+                <ModalHeader><h3>{getStringNoLocale(thing, headerProperty)}</h3></ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                 {modalBody}

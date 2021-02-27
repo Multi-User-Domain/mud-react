@@ -1,44 +1,69 @@
 import { useState } from 'react';
-import { VCARD } from "@inrupt/lit-generated-vocab-common";
-import {
-    CombinedDataProvider,
-    Text,
-    Table,
-    TableColumn,
-} from "@inrupt/solid-ui-react";
 import useMudAccount from '../../../lib/hooks/useMudAccount';
-import {
-    Box,
-    Button,
-    MenuItem,
-    TextField,
-    Typography,
-} from "@material-ui/core";
+import { Grid, GridItem, Box, Button, Input, Center, Text, useDisclosure } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import { MUD } from "../../../lib/MUD";
+import { getThingName } from '../../../lib/utils';
+import ThingDepiction from "../../thingDepiction";
+import CharacterProfile from '../../characterProfile';
+import { Thing } from '@inrupt/solid-client';
+
+function CharacterRow({character, i, selectCharacter} : {character: Thing, i: number, selectCharacter: (number) => void}): React.ReactElement {  
+  const onCharacterSelect = (event) => {
+    selectCharacter(i);
+  }
+  
+  return (
+  <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} className={styles.characterRow}>
+    <GridItem w="100px" h="100px" colSpan={1} className={styles.profilePic}
+        tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
+      <ThingDepiction thing={character} />
+    </GridItem>
+
+    <GridItem w="100%" colSpan={2} className={styles.characterField} 
+        tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
+      <Center h="100%"><Text>{getThingName(character)}</Text></Center>
+    </GridItem>
+    
+    <GridItem w="100%" colSpan={1} colEnd={6} bg="blue.500" className={styles.characterField}>
+      <Center h="100%"><Text>Buttons</Text></Center>
+    </GridItem>
+  </Grid>);
+}
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
     const [ newCharName, setNewCharName] = useState("");
     const { characterDataSet, characters, addCharacter } = useMudAccount();
+    const [ selectedCharacter, setSelectedCharacter ] = useState(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const onCharacterAdd = () => {
       addCharacter(newCharName);
     }
 
+    const selectCharacter = (i: number): void => {
+      if(characters == null || i < 0 || characters.length <= i) return;
+
+      setSelectedCharacter(characters[i]);
+      onOpen();
+    }
+
     if (!characterDataSet || !characters) return <div>loading...</div>;
 
-    const characterThings = characters.map((thing) => ({
-      dataset: characterDataSet,
-      thing: thing,
-    }));
+    //building Character Rows elements
+    const characterRows = [];
+
+    for(let i = 0; i < characters.length; i++) {
+      characterRows.push(<CharacterRow character={characters[i]} i={i} key={i} selectCharacter={selectCharacter} />);
+    }
 
     let editContent = null
     if (edit) editContent = (
         <>
-        <Typography gutterBottom>Add New Character</Typography>
+        <h3>Add New Character</h3>
         <Box className={styles.newCharacterFields}>
-          <TextField
+          <Input
             label="Name"
             value={newCharName}
             onChange={(e) => setNewCharName(e.target.value)}
@@ -52,14 +77,8 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     
     return (
     <>
-    <Table things={characterThings}>
-        <TableColumn property={MUD.owner} header="Owner" dataType="url" body={({ value }) => (
-            <CombinedDataProvider datasetUrl={value} thingUrl={value}>
-                <Text property={VCARD.fn.value} />
-            </CombinedDataProvider>
-          )} />
-        <TableColumn property={VCARD.fn} header="Name" />
-    </Table>
+    <CharacterProfile character={selectedCharacter} isOpen={isOpen} onClose={onClose} />
+    {characterRows}
     {editContent}
     </>
     );

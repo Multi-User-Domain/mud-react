@@ -8,7 +8,6 @@ import {
     useState,
     useEffect
 } from 'react';
-
 import useMudWorld from "../../hooks/useMudWorld";
 
 import { ITerminalMessage, IPerceptionManager } from "../../PerceptionManager";
