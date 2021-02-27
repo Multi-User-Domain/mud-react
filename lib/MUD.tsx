@@ -1,7 +1,3 @@
-
-
-const MUD_BASE_URL = 'https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mud.ttl';
-
 // LIT naming convention: "Class" (uppercase), "property" (lowercase)
 
 const MUD_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mud.ttl";
