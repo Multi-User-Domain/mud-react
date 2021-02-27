@@ -39,8 +39,8 @@ export const TerminalFeedProvider = ({
         setMessages(messages.concat(message));
     }
 
-    const addMessages = (messages: ITerminalMessage[]) : void => {
-        setMessages(messages.concat(messages));
+    const addMessages = (retMessages: ITerminalMessage[]) : void => {
+        setMessages(messages.concat(retMessages));
     }
 
     /**
