@@ -3,12 +3,13 @@ import {
     getStringNoLocale,
     getUrl, 
     asUrl,
-    ThingPersisted
+    ThingPersisted,
+    getThingAll
 } from '@inrupt/solid-client';
 
 import { VCARD } from "@inrupt/lit-generated-vocab-common";
-import { MUD, MUDAPI } from "./MUD";
-import { getContentRequest } from "./utils";
+import { MUD, MUDAPI, MUD_CONTENT } from "./MUD";
+import { getContentRequest, parseTurtleToSolidDataset } from "./utils";
 
 /**
  * Perception Manager is responsible for choosing what to display to the user, i.e. for deciding when it has enough content and what
@@ -44,6 +45,20 @@ export const perceptionManager: IPerceptionManager = (() => {
         };
     }
 
+    const parseContent = (data) : Promise<string[]> => {
+
+        return parseTurtleToSolidDataset(data).then((dataset) => {
+            let values: string[] = [];
+
+            getThingAll(dataset).forEach((thing) => {
+                const value: string = getStringNoLocale(thing, MUD_CONTENT.sight);
+                if(value) values.push(value);
+            });
+
+            return values;
+        });
+    }
+
     /**
      * method describes parameterised Thing by adding relevant messages to the feed
      * @param thing: Thing to describe
@@ -64,15 +79,22 @@ export const perceptionManager: IPerceptionManager = (() => {
         }
 
         // search for content online
-        return getContentRequest(worldWebId + MUDAPI.contentPath, uri).then((response) => {
+        return new Promise<ITerminalMessage[]>((resolve, reject) => {
+            getContentRequest(worldWebId + MUDAPI.contentPath, uri).then((response) => {
             if(response && response.data != null) {
-                newMessages.push(getITerminalMessage(response.data));
+
+                parseContent(response.data).then((messages) => {
+                    for(let message of messages) {
+                        newMessages.push(getITerminalMessage(message));
+                    }
+
+                    // remember previous descriptions and don't repeat
+                    recentUris.push(uri);
+
+                    return resolve(newMessages);
+                });
             }
-
-            // remember previous descriptions and don't repeat
-            recentUris.push(uri);
-
-            return newMessages;
+        });
         });
     }
 
