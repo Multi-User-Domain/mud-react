@@ -1,8 +1,8 @@
-
-
-const MUD_BASE_URL = 'https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mud.ttl';
-
 // LIT naming convention: "Class" (uppercase), "property" (lowercase)
+
+const MUD_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mud.ttl";
+const MUD_CONTENT_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mudcontent.ttl";
+
 export const MUD = {
     account: MUD_BASE_URL + '#Account',
     charactersList: MUD_BASE_URL + '#CharacterList',
@@ -16,6 +16,11 @@ export const MUD = {
 
     primaryTextContent: MUD_BASE_URL + '#primaryTextContent',
     primaryImageContent: MUD_BASE_URL + '#primaryImageContent',
+}
+
+export const MUD_CONTENT = {
+    content: MUD_CONTENT_BASE_URL + "#content",
+    sight: MUD_CONTENT_BASE_URL + "#sight",
 }
 
 // TODO: https://github.com/calummackervoy/mud-react/issues/4
