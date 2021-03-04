@@ -4,12 +4,13 @@ import { Box, Button, Input, useDisclosure } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
 import Character from "../../character";
 import CharacterProfile from '../../characterProfile';
+import {ThingList} from "../../thingList";
 import { Thing } from '@inrupt/solid-client';
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
     const [ newCharName, setNewCharName] = useState("");
-    const { characterDataSet, characters, addCharacter } = useMudAccount();
+    const { characters, addCharacter } = useMudAccount();
     const [ selectedCharacter, setSelectedCharacter ] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -22,15 +23,6 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
 
       setSelectedCharacter(character);
       onOpen();
-    }
-
-    if (!characterDataSet || !characters) return <div>loading...</div>;
-
-    //building Character Rows elements
-    const characterRows = [];
-
-    for(let i = 0; i < characters.length; i++) {
-      characterRows.push(<Character character={characters[i]} key={i} selectHandler={selectCharacter}/>);
     }
 
     let editContent = null
@@ -53,7 +45,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     return (
     <>
     <CharacterProfile character={selectedCharacter} isOpen={isOpen} onClose={onClose} />
-    {characterRows}
+    <ThingList things={characters} rowComponent={Character} selectThing={selectCharacter} />
     {editContent}
     </>
     );
