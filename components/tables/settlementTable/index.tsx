@@ -6,6 +6,7 @@ import {
 } from "@inrupt/solid-client";
 
 import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
+import { Typography } from "@material-ui/core";
 import { MUD } from "../../../lib/MUD";
 
 import useMudWorld from "../../../lib/hooks/useMudWorld";
@@ -20,7 +21,9 @@ function Settlement({thing, selectHandler} : IRowComponent): React.ReactElement 
     }
 
     return (
-        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} marginBottom="10px" paddingBottom="10px" paddingTop="10px" verticalAlign="middle">
+        <>
+        <hr/>
+        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} marginBottom="10px" paddingTop="10px">
           <GridItem w="100%" colSpan={3} tag="a" onClick={onRowSelect} style={{ cursor: "pointer" }}>
             <Center h="100%"><Text>{getThingName(thing)}</Text></Center>
           </GridItem>
@@ -28,7 +31,9 @@ function Settlement({thing, selectHandler} : IRowComponent): React.ReactElement 
           <GridItem w="100%" colSpan={1} tag="a" onClick={onRowSelect} style={{ cursor: "pointer" }}>
             <Center h="100%"><Text>{getStringNoLocale(thing, MUD.population)}</Text></Center>
           </GridItem>
-        </Grid>);
+        </Grid>
+        </>
+    );
 }
 
 export default function SettlementTable(): React.ReactElement {
@@ -43,10 +48,16 @@ export default function SettlementTable(): React.ReactElement {
     if (!settlements) return <div>loading...</div>;
 
     if (selectedSettlement) {
-        return (
-            <BuildingTable settlement={selectedSettlement} goBack={clearSettlementSelected} />
-        );
+        return <BuildingTable settlement={selectedSettlement} goBack={clearSettlementSelected} />;
     }
 
-    return  <ThingList things={settlements} rowComponent={Settlement} selectThing={(thing: Thing) => {setSelectedSettlement(thing);}} />;
+    return  (
+        <>
+        <Typography gutterBottom variant="h6" component="h3">
+            Settlements
+        </Typography>
+        <ThingList things={settlements} rowComponent={Settlement} selectThing={(thing: Thing) => {setSelectedSettlement(thing);}} />
+        <hr/>
+        </>
+    );
 }

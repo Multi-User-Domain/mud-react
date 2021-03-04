@@ -1,18 +1,12 @@
-import {HTMLAttributes, useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 
 import {
     Thing,
-    SolidDataset,
     getUrlAll,
     getThing,
 } from "@inrupt/solid-client";
 
-import {
-    Table,
-    TableColumn,
-    CombinedDataProvider,
-    Text
-} from "@inrupt/solid-ui-react";
+import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
 
 import {
   Box,
@@ -23,13 +17,29 @@ import {
     Button
 } from "@chakra-ui/react";
 
-import { VCARD } from "@inrupt/lit-generated-vocab-common";
 import { MUD } from "../../../lib/MUD";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 
-import styles from "./buildingTable.module.css";
 import useTerminalFeed from "../../../lib/hooks/useTerminalFeed";
 import { getThingName } from "../../../lib/utils";
+import {ThingList, IRowComponent} from "../../thingList";
+
+function Building({thing, selectHandler} : IRowComponent): React.ReactElement {
+    //row event -> open detail
+    const onRowSelect = (event) => {
+        selectHandler(thing);
+    }
+
+    return (
+        <>
+        <hr/>
+        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} marginBottom="10px" paddingTop="10px">
+          <GridItem w="100%" colSpan={5} tag="a" onClick={onRowSelect} style={{ cursor: "pointer" }}>
+            <Text>{getThingName(thing)}</Text>
+          </GridItem>
+        </Grid>
+        </>);
+}
 
 export default function BuildingTable(
     {settlement, goBack} : {settlement: Thing, goBack: () => void}): React.ReactElement {
@@ -38,29 +48,17 @@ export default function BuildingTable(
     const { settlementDataSet } = useMudWorld();
     const { describeThing } = useTerminalFeed();
 
-    const onRowSelect = (event) => {
+    const selectHandler = (thing: Thing) => {
         //log to Terminal feed the building description
-        const selectedIndex = event.target.parentElement.rowIndex - 1;
-        describeThing(buildingThings[selectedIndex].thing);
-    }
-
-    const getRowProps = (row, rowThing: Thing, rowDataset: SolidDataset) : HTMLAttributes<HTMLTableRowElement> => {
-        return {
-            onClick: onRowSelect,
-            className: `${styles.buildingRow}`
-        };
+        describeThing(thing);
     }
 
     //pull in the buildings from the parameterised settlement
     useEffect(() => {
         const buildingUrls = getUrlAll(settlement, MUD.hasBuilding);
         let buildingArr = [];
-        buildingUrls.forEach((url) => {
-            buildingArr.push({
-                dataset: settlementDataSet,
-                thing: getThing(settlementDataSet, url)
-            });
-        });
+
+        buildingUrls.forEach((url) => buildingArr.push(getThing(settlementDataSet, url)));
         setBuildingThings(buildingArr);
     }, []);
 
@@ -69,19 +67,13 @@ export default function BuildingTable(
     if(buildingThings) {
         if(buildingThings.length > 0) {
             tableContent = (
-                <>
+            <>
                 <Typography gutterBottom variant="h6" component="h3">
                     {getThingName(settlement)}
                 </Typography>
-                <Table things={buildingThings} getRowProps={getRowProps}>
-                    <TableColumn property={VCARD.fn} header="Name" />
-                    <TableColumn property={MUD.owner} header="Owner" dataType="url" body={({ value }) => (
-                        <CombinedDataProvider datasetUrl={value} thingUrl={value}>
-                            <Text property={VCARD.fn.value} />
-                        </CombinedDataProvider>
-                    )} />
-                </Table>
-                </>
+                <ThingList things={buildingThings} rowComponent={Building} selectThing={selectHandler} />
+                <hr/>
+            </>
             );
         }
 
