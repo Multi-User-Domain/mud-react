@@ -1,50 +1,46 @@
-import {HTMLAttributes, useState} from "react";
+import {useState} from "react";
 
 import {
-    Thing,
-    SolidDataset
+    getStringNoLocale,
+    Thing
 } from "@inrupt/solid-client";
 
-import {
-    Table,
-    TableColumn,
-} from "@inrupt/solid-ui-react";
-
-import {
-  Container,
-  Box,
-  Typography
-} from "@material-ui/core";
-
-import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
+import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
 import { MUD } from "../../../lib/MUD";
 
-import styles from "./settlementTable.module.css";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 import BuildingTable from "../buildingTable";
+import {getThingName} from "../../../lib/utils";
+import {ThingList, IRowComponent} from "../../thingList";
 
-export default function SettlementTable(): React.ReactElement {
-    const { settlementDataSet, settlements } = useMudWorld();
-    const [ selectedSettlement, setSelectedSettlement ] = useState(null);
-
+function Settlement({thing, selectHandler} : IRowComponent): React.ReactElement {
     //row event -> open detail
     const onRowSelect = (event) => {
-        const selectedIndex = event.target.parentElement.rowIndex - 1;
-        setSelectedSettlement(settlements[selectedIndex]);
+        selectHandler(thing);
     }
 
-    const getRowProps = (row, rowThing: Thing, rowDataset: SolidDataset) : HTMLAttributes<HTMLTableRowElement> => {
-        return {
-            onClick: onRowSelect,
-            className: `${styles.settlementRow}`
-        };
-    }
+    return (
+        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} marginBottom="10px" paddingBottom="10px" paddingTop="10px" verticalAlign="middle">
+          <GridItem w="100%" colSpan={3} tag="a" onClick={onRowSelect} style={{ cursor: "pointer" }}>
+            <Center h="100%"><Text>{getThingName(thing)}</Text></Center>
+          </GridItem>
+          
+          <GridItem w="100%" colSpan={1} tag="a" onClick={onRowSelect} style={{ cursor: "pointer" }}>
+            <Center h="100%"><Text>{getStringNoLocale(thing, MUD.population)}</Text></Center>
+          </GridItem>
+        </Grid>);
+}
+
+export default function SettlementTable(): React.ReactElement {
+    const { settlements } = useMudWorld();
+    const [ selectedSettlement, setSelectedSettlement ] = useState(null);
+
 
     const clearSettlementSelected = () => {
         setSelectedSettlement(null);
     }
 
-    if (!settlementDataSet || !settlements) return <div>loading...</div>;
+    if (!settlements) return <div>loading...</div>;
 
     if (selectedSettlement) {
         return (
@@ -52,20 +48,5 @@ export default function SettlementTable(): React.ReactElement {
         );
     }
 
-    const settlementThings = settlements.map((thing) => ({
-      dataset: settlementDataSet,
-      thing: thing,
-    }));
-
-    return (
-    <>
-    <Typography gutterBottom variant="h6" component="h3">
-                Settlements
-    </Typography>
-    <Table things={settlementThings} getRowProps={getRowProps}>
-        <TableColumn property={VCARD.fn} header="Name" />
-        <TableColumn property={MUD.population} header="Population" />
-    </Table>
-    </>
-    );
+    return  <ThingList things={settlements} rowComponent={Settlement} selectThing={(thing: Thing) => {setSelectedSettlement(thing);}} />;
 }
