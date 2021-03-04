@@ -8,9 +8,9 @@ import ThingDepiction from "../../thingDepiction";
 import CharacterProfile from '../../characterProfile';
 import { Thing } from '@inrupt/solid-client';
 
-function CharacterRow({character, i, selectCharacter} : {character: Thing, i: number, selectCharacter: (number) => void}): React.ReactElement {  
+function CharacterRow({character, selectCharacter} : {character: Thing, selectCharacter: (Thing) => void}): React.ReactElement {  
   const onCharacterSelect = (event) => {
-    selectCharacter(i);
+    selectCharacter(character);
   }
   
   return (
@@ -42,10 +42,10 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
       addCharacter(newCharName);
     }
 
-    const selectCharacter = (i: number): void => {
-      if(characters == null || i < 0 || characters.length <= i) return;
+    const selectCharacter = (character: Thing): void => {
+      if(character == null) return;
 
-      setSelectedCharacter(characters[i]);
+      setSelectedCharacter(character);
       onOpen();
     }
 
@@ -55,7 +55,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     const characterRows = [];
 
     for(let i = 0; i < characters.length; i++) {
-      characterRows.push(<CharacterRow character={characters[i]} i={i} key={i} selectCharacter={selectCharacter} />);
+      characterRows.push(<CharacterRow character={characters[i]} key={i} selectCharacter={selectCharacter} />);
     }
 
     let editContent = null
