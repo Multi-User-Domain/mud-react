@@ -1,35 +1,10 @@
 import { useState } from 'react';
 import useMudAccount from '../../../lib/hooks/useMudAccount';
-import { Grid, GridItem, Box, Button, Input, Center, Text, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Input, useDisclosure } from "@chakra-ui/react"
 import styles from "./characterTable.module.css";
-import { MUD } from "../../../lib/MUD";
-import { getThingName } from '../../../lib/utils';
-import ThingDepiction from "../../thingDepiction";
+import Character from "../../character";
 import CharacterProfile from '../../characterProfile';
 import { Thing } from '@inrupt/solid-client';
-
-function CharacterRow({character, selectCharacter} : {character: Thing, selectCharacter: (Thing) => void}): React.ReactElement {  
-  const onCharacterSelect = (event) => {
-    selectCharacter(character);
-  }
-  
-  return (
-  <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} className={styles.characterRow}>
-    <GridItem w="100px" h="100px" colSpan={1} className={styles.profilePic}
-        tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
-      <ThingDepiction thing={character} />
-    </GridItem>
-
-    <GridItem w="100%" colSpan={2} className={styles.characterField} 
-        tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
-      <Center h="100%"><Text>{getThingName(character)}</Text></Center>
-    </GridItem>
-    
-    <GridItem w="100%" colSpan={1} colEnd={6} bg="blue.500" className={styles.characterField}>
-      <Center h="100%"><Text>Buttons</Text></Center>
-    </GridItem>
-  </Grid>);
-}
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {
 
@@ -55,7 +30,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     const characterRows = [];
 
     for(let i = 0; i < characters.length; i++) {
-      characterRows.push(<CharacterRow character={characters[i]} key={i} selectCharacter={selectCharacter} />);
+      characterRows.push(<Character character={characters[i]} key={i} selectHandler={selectCharacter}/>);
     }
 
     let editContent = null

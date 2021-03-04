@@ -5,25 +5,3 @@
     align-items: baseline;
     justify-content: space-between;
 }
-
-.characterRow {
-    margin-bottom: 10px;
-}
-
-.characterField, .profilePic {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    vertical-align: middle;
-}
-
-.profilePic {
-    width:100%;
-}
-
-.profilePic > img {
-    height: 100px;
-    width: 100%;
-    display: inline-block;
-    border-radius: 50%;
-    object-fit: cover;
-}
