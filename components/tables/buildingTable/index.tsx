@@ -6,7 +6,7 @@ import {
     getThing,
 } from "@inrupt/solid-client";
 
-import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
+import { Grid, GridItem, Text, useDisclosure } from "@chakra-ui/react";
 
 import {
   Box,
@@ -19,10 +19,13 @@ import {
 
 import { MUD } from "../../../lib/MUD";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
+import useMudAccount from "../../../lib/hooks/useMudAccount";
 
 import useTerminalFeed from "../../../lib/hooks/useTerminalFeed";
 import { getThingName } from "../../../lib/utils";
 import {ThingList, IRowComponent} from "../../thingList";
+import {ThingListModal} from "../../modals/thingListModal";
+import Character from "../../character";
 
 function Building({thing, selectHandler} : IRowComponent): React.ReactElement {
     //row event -> open detail
@@ -45,12 +48,30 @@ export default function BuildingTable(
     {settlement, goBack} : {settlement: Thing, goBack: () => void}): React.ReactElement {
 
     const [ buildingThings, setBuildingThings ] = useState(null);
+    const [ selectedBuilding, setSelectedBuilding ] = useState(null);
     const { settlementDataSet } = useMudWorld();
+    const { characters } = useMudAccount();
     const { describeThing } = useTerminalFeed();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const selectHandler = (thing: Thing) => {
+    /**
+     * Handles the selection of a character in the modal, and schedules a Transit action for that character
+     * @param thing the selected character
+     */
+    const selectCharacter = (thing: Thing) => {
         //log to Terminal feed the building description
-        describeThing(thing);
+        console.log(thing);
+        onClose();
+        describeThing(selectedBuilding);
+    }
+
+    /**
+     * Handles the selection of a building from the list, and opens the modal to select a character to visit
+     * @param thing the selected building
+     */
+    const selectBuilding = (thing: Thing) => {
+        setSelectedBuilding(thing);
+        onOpen();
     }
 
     //pull in the buildings from the parameterised settlement
@@ -71,7 +92,7 @@ export default function BuildingTable(
                 <Typography gutterBottom variant="h6" component="h3">
                     {getThingName(settlement)}
                 </Typography>
-                <ThingList things={buildingThings} rowComponent={Building} selectThing={selectHandler} />
+                <ThingList things={buildingThings} rowComponent={Building} selectThing={selectBuilding} />
                 <hr/>
             </>
             );
@@ -79,6 +100,8 @@ export default function BuildingTable(
 
         else tableContent = <h3>This Settlement is empty!</h3>;
     }
+
+    const headerContent = <Text>Who is going here?</Text>;
 
     return (
     <>
@@ -90,6 +113,7 @@ export default function BuildingTable(
         <Box>
             {tableContent}
         </Box>
+        <ThingListModal things={characters} isOpen={isOpen} headerContent={headerContent} rowComponent={Character} onClose={onClose} selectThing={selectCharacter}/>
     </>
     );
 }
