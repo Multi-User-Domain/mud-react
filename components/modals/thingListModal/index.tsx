@@ -2,10 +2,6 @@
 import { ReactElement } from "react";
 
 import {
-    Thing
-} from "@inrupt/solid-client";
-
-import {
     Modal,
     ModalOverlay,
     ModalContent,
@@ -16,13 +12,10 @@ import {
     Button
 } from "@chakra-ui/react";
 
-import {IRowComponent, ThingList} from "../../thingList";
+import {ThingList, IThingList} from "../../thingList";
 
-interface IThingListModal {
+export interface IThingListModal extends IThingList {
     headerContent?: ReactElement;
-    things: Thing[];
-    rowComponent: ({thing, selectHandler} : IRowComponent) => React.ReactElement;
-    selectThing: (Thing) => void;
     isOpen: boolean;
     onClose: () => void;
 }

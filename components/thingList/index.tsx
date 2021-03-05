@@ -5,11 +5,16 @@ export interface IRowComponent {
     selectHandler: (Thing) => void;
 }
 
+export interface IThingList {
+    things: Thing[];
+    rowComponent: ({thing, selectHandler} : IRowComponent) => React.ReactElement;
+    selectThing: (Thing) => void;
+}
+
 /**
 * A generic component for rendering a list of Things, where the row to render each individual is passed as a prop
 */
-export function ThingList({things, rowComponent, selectThing} : 
-    {things: Thing[], rowComponent: ({thing, selectHandler} : IRowComponent) => React.ReactElement, selectThing: (Thing) => void}) : React.ReactElement {
+export function ThingList({things, rowComponent, selectThing} : IThingList) : React.ReactElement {
     
         if (!things) return <div>loading...</div>;
 
