@@ -19,6 +19,7 @@ import LoginForm from "../components/loginForm";
 import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
 import GameWindow from "../components/gameWindow";
+import { actionManager } from "../lib/ActionManager";
 
 export default function Home(): React.ReactElement {
   const { session } = useSession();
@@ -47,7 +48,7 @@ export default function Home(): React.ReactElement {
   return (
     //TODO: select the worldWebId from a WorldFinder component
     <MudWorldProvider worldWebId="http://localhost:8080/">
-      <MudAccountProvider webId={webId}>
+      <MudAccountProvider webId={webId} actionManager={actionManager}>
         <TerminalFeedProvider perceptionManager={perceptionManager}>
           {header}
           <Container style={{marginBottom: "20px"}}>

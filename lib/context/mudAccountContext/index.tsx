@@ -3,6 +3,7 @@ import {
     createContext,
     useState,
     useEffect,
+    ReactNode
 } from 'react';
 
 import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
@@ -26,19 +27,28 @@ import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import { getFilteredThings } from "../../utils";
 import { MUD } from "../../MUD";
+import { IActionManager, actionManager } from "../../ActionManager";
 
 export interface IMudAccountContext {
     characters: Thing[];
     characterDataSet: SolidDataset;
+    postTransitTask?: (worldWebId: string, subjectThing: Thing, destinationLocatable: Thing) => Promise<any>;
     addCharacter?: (string) => void;
 }
 
 export const MudAccountContext = createContext<IMudAccountContext>({characters: null, characterDataSet: null});
 
+interface IMudAccountProvider {
+    webId: string;
+    actionManager: IActionManager;
+    children: ReactNode;
+};
+
 export const MudAccountProvider = ({
     webId,
+    actionManager,
     children
-}): ReactElement => {
+}: IMudAccountProvider ): ReactElement => {
     const { fetch } = useSession();
     const [ characterDataSet, setCharacterDataSet ] = useState(null);
     const [ characters, setCharacters ] = useState(null);
@@ -51,6 +61,10 @@ export const MudAccountProvider = ({
         );
         setCharacterDataSet(savedDataset);
       };
+
+    const postTransitTask = (worldWebId: string, subjectThing: Thing, destinationLocatable: Thing) : Promise<any> => {
+        return actionManager.postTransitTask(worldWebId, subjectThing, destinationLocatable);
+    }
 
     /**
     * Adds a character to the collection
@@ -95,6 +109,7 @@ export const MudAccountProvider = ({
             value={{
                 characterDataSet,
                 characters,
+                postTransitTask,
                 addCharacter
             }}
         >
