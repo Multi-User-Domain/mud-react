@@ -49,8 +49,8 @@ export default function BuildingTable(
 
     const [ buildingThings, setBuildingThings ] = useState(null);
     const [ selectedBuilding, setSelectedBuilding ] = useState(null);
-    const { settlementDataSet } = useMudWorld();
-    const { characters } = useMudAccount();
+    const { settlementDataSet, worldWebId } = useMudWorld();
+    const { characters, postTransitTask } = useMudAccount();
     const { describeThing } = useTerminalFeed();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -59,9 +59,15 @@ export default function BuildingTable(
      * @param thing the selected character
      */
     const selectCharacter = (thing: Thing) => {
-        //log to Terminal feed the building description
-        console.log(thing);
+        //close the modal
         onClose();
+
+        //schedule the Transit task
+        postTransitTask(worldWebId, thing, selectedBuilding).then((res) => {
+            console.log(res);
+        });
+
+        //log to Terminal feed the building description
         describeThing(selectedBuilding);
     }
 
