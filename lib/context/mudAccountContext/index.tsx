@@ -26,7 +26,7 @@ import {
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import { getFilteredThings } from "../../utils";
-import { MUD } from "../../MUD";
+import { MUD, MUD_CHARACTER } from "../../MUD";
 import { IActionManager, actionManager } from "../../ActionManager";
 
 export interface IMudAccountContext {
@@ -71,7 +71,7 @@ export const MudAccountProvider = ({
     */
     const addCharacter = async (newCharName: string) => {
         // creates a new character Thing, sets properties to it
-        let newCharacter = setUrl(createThing(), RDF.type, MUD.Character);
+        let newCharacter = setUrl(createThing(), RDF.type, MUD_CHARACTER.Character);
         newCharacter = setUrl(newCharacter, MUD.owner, webId);
         newCharacter = setStringUnlocalized(newCharacter, VCARD.fn, newCharName);
         newCharacter = setStringUnlocalized(newCharacter, FOAF.name, newCharName);
@@ -98,7 +98,7 @@ export const MudAccountProvider = ({
                 const charactersDataSetLocation = getStringNoLocale(accountThing, MUD.charactersList);
                 getSolidDataset(charactersDataSetLocation).then((dataset) => {
                     setCharacterDataSet(dataset);
-                    setCharacters(getFilteredThings(dataset, MUD.Character));
+                    setCharacters(getFilteredThings(dataset, MUD_CHARACTER.Character));
                 });
             });
         });
