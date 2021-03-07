@@ -30,8 +30,7 @@ export const MUD_LOGIC = {
 
 // TODO: https://github.com/calummackervoy/mud-react/issues/4
 export const MUDAPI = {
-    settlementsPath: 'mud/settlements/',
-    
+    worldPath: 'mud/world/',
     contentPath: 'mud/content/',
     taskPath: 'mud/act/task/',
 }
