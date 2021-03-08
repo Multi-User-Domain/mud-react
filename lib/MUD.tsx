@@ -3,7 +3,7 @@
 const MUD_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mud.ttl";
 const MUD_CONTENT_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mudcontent.ttl";
 const MUD_LOGIC_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mudlogic.ttl";
-const MUD_CHARACTER_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/character/mudchar.ttl";
+const MUD_CHARACTER_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Domain/vocab/main/mudchar.ttl";
 
 export const MUD = {
     account: MUD_BASE_URL + '#Account',
