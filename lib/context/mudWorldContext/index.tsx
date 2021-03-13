@@ -30,7 +30,7 @@ export const MudWorldProvider = ({
     const [ settlements, setSettlements ] = useState(null);
 
     useEffect(() => {
-        const URL = worldWebId + MUDAPI.settlementsPath;
+        const URL = worldWebId + MUDAPI.worldPath;
         getSolidDataset(URL).then((dataset) => {
             setSettlementDataSet(dataset);
             setSettlements(getFilteredThings(dataset, MUD.Settlement));

@@ -3,6 +3,7 @@ import {
     createContext,
     useState,
     useEffect,
+    ReactNode
 } from 'react';
 
 import { RDF, VCARD, FOAF } from "@inrupt/lit-generated-vocab-common";
@@ -25,20 +26,29 @@ import {
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import { getFilteredThings } from "../../utils";
-import { MUD } from "../../MUD";
+import { MUD, MUD_CHARACTER } from "../../MUD";
+import { IActionManager, actionManager } from "../../ActionManager";
 
 export interface IMudAccountContext {
     characters: Thing[];
     characterDataSet: SolidDataset;
+    postTransitTask?: (worldWebId: string, subjectThing: Thing, destinationLocatable: Thing) => Promise<any>;
     addCharacter?: (string) => void;
 }
 
 export const MudAccountContext = createContext<IMudAccountContext>({characters: null, characterDataSet: null});
 
+interface IMudAccountProvider {
+    webId: string;
+    actionManager: IActionManager;
+    children: ReactNode;
+};
+
 export const MudAccountProvider = ({
     webId,
+    actionManager,
     children
-}): ReactElement => {
+}: IMudAccountProvider ): ReactElement => {
     const { fetch } = useSession();
     const [ characterDataSet, setCharacterDataSet ] = useState(null);
     const [ characters, setCharacters ] = useState(null);
@@ -52,12 +62,16 @@ export const MudAccountProvider = ({
         setCharacterDataSet(savedDataset);
       };
 
+    const postTransitTask = (worldWebId: string, subjectThing: Thing, destinationLocatable: Thing) : Promise<any> => {
+        return actionManager.postTransitTask(worldWebId, subjectThing, destinationLocatable);
+    }
+
     /**
     * Adds a character to the collection
     */
     const addCharacter = async (newCharName: string) => {
         // creates a new character Thing, sets properties to it
-        let newCharacter = setUrl(createThing(), RDF.type, MUD.Character);
+        let newCharacter = setUrl(createThing(), RDF.type, MUD_CHARACTER.Character);
         newCharacter = setUrl(newCharacter, MUD.owner, webId);
         newCharacter = setStringUnlocalized(newCharacter, VCARD.fn, newCharName);
         newCharacter = setStringUnlocalized(newCharacter, FOAF.name, newCharName);
@@ -84,7 +98,7 @@ export const MudAccountProvider = ({
                 const charactersDataSetLocation = getStringNoLocale(accountThing, MUD.charactersList);
                 getSolidDataset(charactersDataSetLocation).then((dataset) => {
                     setCharacterDataSet(dataset);
-                    setCharacters(getFilteredThings(dataset, MUD.Character));
+                    setCharacters(getFilteredThings(dataset, MUD_CHARACTER.Character));
                 });
             });
         });
@@ -95,6 +109,7 @@ export const MudAccountProvider = ({
             value={{
                 characterDataSet,
                 characters,
+                postTransitTask,
                 addCharacter
             }}
         >
