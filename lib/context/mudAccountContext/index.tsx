@@ -27,7 +27,7 @@ import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import { getFilteredThings } from "../../utils";
 import { MUD, MUD_CHARACTER } from "../../MUD";
-import { IActionManager, actionManager } from "../../ActionManager";
+import { IActionManager } from "../../ActionManager";
 
 export interface IMudAccountContext {
     characters: Thing[];
@@ -62,8 +62,20 @@ export const MudAccountProvider = ({
         setCharacterDataSet(savedDataset);
       };
 
+    //TODO: should with agents which are not Characters. Currently uses an implicit assumption that the subject is of the Character Dataset
+    //TODO: should be able to post a transit task to multiple agents at once
     const postTransitTask = (worldWebId: string, subjectThing: Thing, destinationLocatable: Thing) : Promise<any> => {
-        return actionManager.postTransitTask(worldWebId, subjectThing, destinationLocatable);
+        return actionManager.postTransitTask(worldWebId, subjectThing, destinationLocatable).then((response) => {
+
+            if(response) {
+                //set hasTask on the agent conducting it
+                //get the task from the response header
+                subjectThing = setUrl(subjectThing, MUD_CHARACTER.hasTask, response.headers['location']);
+                saveDataset(subjectThing, characterDataSet);
+
+                //TODO: schedule the task completion
+            }
+        });
     }
 
     /**

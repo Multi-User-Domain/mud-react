@@ -63,9 +63,7 @@ export default function BuildingTable(
         onClose();
 
         //schedule the Transit task
-        postTransitTask(worldWebId, thing, selectedBuilding).then((res) => {
-            console.log(res);
-        });
+        postTransitTask(worldWebId, thing, selectedBuilding);
 
         //log to Terminal feed the building description
         describeThing(selectedBuilding);

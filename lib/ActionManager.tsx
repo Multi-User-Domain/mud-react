@@ -42,20 +42,10 @@ export const actionManager: IActionManager = (() => {
         return new Promise<any>((resolve, reject) => {
             //get turtle POST data for transit
             return buildTransitPostData(subjectThing, destinationLocatable).then((postData) => {
-                console.log("built turtle data to send " + postData);
-
+                
                 //make POST request using axios
                 //caller is responsible for handling beginning and endState of the task
-                return postTask(worldWebId, postData, MUD_LOGIC.Transit);
-                /*.then((response) => {
-                    console.log("got response");
-                    if(response && response.data != null) {
-
-                        //set hasTask on the agent conducting it
-                        setBeginState(subjectThing);
-                    }
-                });
-                */
+                postTask(worldWebId, postData, MUD_LOGIC.Transit).then((res) => resolve(res));
             });
         });
     }
