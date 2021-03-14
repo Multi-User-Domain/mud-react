@@ -4,6 +4,7 @@ import {
     Thing,
     getUrlAll,
     getThing,
+    getUrl,
 } from "@inrupt/solid-client";
 
 import { Grid, GridItem, Text, useDisclosure } from "@chakra-ui/react";
@@ -17,7 +18,7 @@ import {
     Button
 } from "@chakra-ui/react";
 
-import { MUD } from "../../../lib/MUD";
+import { MUD, MUD_CHARACTER } from "../../../lib/MUD";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 import useMudAccount from "../../../lib/hooks/useMudAccount";
 
@@ -53,6 +54,15 @@ export default function BuildingTable(
     const { characters, postTransitTask } = useMudAccount();
     const { describeThing } = useTerminalFeed();
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const thingIsIdleFilter = (things: Thing[]): Thing[] => {
+        let ret: Thing[] = [];
+
+        //return all things which do **not** have a task set
+        for(let thing of things) if (!getUrl(thing, MUD_CHARACTER.hasTask)) ret.push(thing);
+
+        return ret;
+    }
 
     /**
      * Handles the selection of a character in the modal, and schedules a Transit action for that character
@@ -117,7 +127,7 @@ export default function BuildingTable(
         <Box>
             {tableContent}
         </Box>
-        <ThingListModal things={characters} isOpen={isOpen} headerContent={headerContent} rowComponent={Character} onClose={onClose} selectThing={selectCharacter}/>
+        <ThingListModal things={characters} filter={thingIsIdleFilter} isOpen={isOpen} headerContent={headerContent} rowComponent={Character} onClose={onClose} selectThing={selectCharacter}/>
     </>
     );
 }
