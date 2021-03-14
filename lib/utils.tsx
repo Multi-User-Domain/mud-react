@@ -4,9 +4,8 @@ import rdfjsDataset from "@rdfjs/dataset";
 
 import {
     createSolidDataset,
-    getSolidDataset,
     getThingAll,
-    getUrl,
+    getUrlAll,
     SolidDataset,
     Thing,
     getStringNoLocale
@@ -22,8 +21,8 @@ import axios from 'axios';
 export const getFilteredThings = (dataset, propertyType) => {
     let ret = [];
     getThingAll(dataset).forEach((thing) => {
-        const TYPE = getUrl(thing, RDF.type);
-        if(propertyType == TYPE) ret.push(thing);
+        const TYPES = getUrlAll(thing, RDF.type);
+        if(TYPES.includes(propertyType)) ret.push(thing);
     });
     return ret
 };

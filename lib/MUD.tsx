@@ -33,6 +33,7 @@ export const MUD_CONTENT = {
 }
 
 export const MUD_LOGIC = {
+    Task: MUD_LOGIC_BASE_URL + "#Task",
     Transit: MUD_LOGIC_BASE_URL + "#Transit",
 }
 
