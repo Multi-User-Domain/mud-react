@@ -24,7 +24,7 @@ export interface IThingListModal extends IThingList {
 * A modal which renders a ThingList in a modal, where the parent defines the handler for a selected element
 * if the ThingListModal should only be closed by making a selection, pass onClose=null
 */
-export function ThingListModal({headerContent=null, things, rowComponent, selectThing, isOpen, onClose=null} : IThingListModal) : React.ReactElement {
+export function ThingListModal({headerContent=null, things, filter=null, rowComponent, selectThing, isOpen, onClose=null} : IThingListModal) : React.ReactElement {
     
         if (!things) return <div>loading...</div>;
 
@@ -39,7 +39,7 @@ export function ThingListModal({headerContent=null, things, rowComponent, select
                 <ModalHeader>{headerContent}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                <ThingList things={things} selectThing={selectThing} rowComponent={rowComponent} />
+                <ThingList things={things} filter={filter} selectThing={selectThing} rowComponent={rowComponent} />
                 </ModalBody>
     
                 <ModalFooter>

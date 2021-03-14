@@ -7,6 +7,7 @@ export interface IRowComponent {
 
 export interface IThingList {
     things: Thing[];
+    filter?: (things: Thing[]) => Thing[];
     rowComponent: ({thing, selectHandler} : IRowComponent) => React.ReactElement;
     selectThing: (Thing) => void;
 }
@@ -14,9 +15,10 @@ export interface IThingList {
 /**
 * A generic component for rendering a list of Things, where the row to render each individual is passed as a prop
 */
-export function ThingList({things, rowComponent, selectThing} : IThingList) : React.ReactElement {
+export function ThingList({things, filter=null, rowComponent, selectThing} : IThingList) : React.ReactElement {
     
         if (!things) return <div>loading...</div>;
+        if(filter != null) things = filter(things);
 
         const rows: React.ReactElement[] = [];
         const Row = rowComponent;
