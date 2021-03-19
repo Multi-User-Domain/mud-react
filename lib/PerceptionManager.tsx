@@ -1,3 +1,5 @@
+import axios, { AxiosResponse } from 'axios';
+
 import { 
     Thing,
     getStringNoLocale,
@@ -34,6 +36,7 @@ export interface ITerminalMessage {
 export interface IPerceptionManager {
     getITerminalMessage: (content: string | React.ReactElement) => ITerminalMessage;
     describeThing: (worldWebId: string, thing: Thing) => Promise<ITerminalMessage[]>;
+    describeScene: (worldWebId: string, things: Thing[]) => Promise<ITerminalMessage[]>;
 };
 
 export const perceptionManager: IPerceptionManager = (() => {
@@ -61,9 +64,18 @@ export const perceptionManager: IPerceptionManager = (() => {
         });
     }
 
+    const buildSceneTurtleData = (things: Thing[]): Promise<string> => {
+        const scene: SolidDataset = createSolidDataset();
+
+        for(let thing of things) {
+            setThing(scene, thing);
+        }
+
+        return triplesToTurtle(Array.from(scene));
+    }
+
     /**
-     * 
-     * @param things 
+     * builds a list of ITerminalMessage objects by getting the primary content data from parameterised things
      */
     const getPrimaryContent = (things: Thing[]) : ITerminalMessage[] => {
         let messages: ITerminalMessage[] = [];
@@ -90,33 +102,44 @@ export const perceptionManager: IPerceptionManager = (() => {
      * @param thing: Thing to describe
      */
     const describeThing = (worldWebId: string, thing: Thing) : Promise<ITerminalMessage[]> => {
+        return describeScene(worldWebId, [thing]);
+    }
+
+    const postScene = (worldWebId: string, data: any) : Promise<AxiosResponse<any>> => {
+        return axios.post(worldWebId + MUDAPI.contentPath, data);
+    }
+
+    const describeScene = (worldWebId: string, things: Thing[]) : Promise<ITerminalMessage[]> => {
         // add a fast message with the name and description (and possibly image)
-        let newMessages: ITerminalMessage[] = getPrimaryContent([thing]);
-        const uri = asUrl(thing as ThingPersisted);
+        let newMessages: ITerminalMessage[] = getPrimaryContent(things);
+
+        // remember previous descriptions and don't repeat
+        for(let thing of things) recentUris.push(asUrl(thing as ThingPersisted));
 
         // search for content online
         return new Promise<ITerminalMessage[]>((resolve, reject) => {
-            //build the scene for the request data (build a dataset with the things in the scene)
-            getContentRequest(worldWebId + MUDAPI.contentPath, uri).then((response) => {
-            if(response && response.data != null) {
 
-                parseContent(response.data).then((messages) => {
-                    for(let message of messages) {
-                        newMessages.push(getITerminalMessage(message));
+            // build scene data
+            buildSceneTurtleData(things).then((requestData) => {
+                postScene(worldWebId, requestData).then((response) => {
+                    if(response && response.data != null) {
+
+                        parseContent(response.data).then((messages) => {
+                            for(let message of messages) {
+                                newMessages.push(getITerminalMessage(message));
+                            }
+        
+                            return resolve(newMessages);
+                        });
                     }
-
-                    // remember previous descriptions and don't repeat
-                    recentUris.push(uri);
-
-                    return resolve(newMessages);
                 });
-            }
-        });
+            });
         });
     }
 
     return {
         getITerminalMessage: getITerminalMessage,
-        describeThing: describeThing
+        describeThing: describeThing,
+        describeScene: describeScene
     };
 })();

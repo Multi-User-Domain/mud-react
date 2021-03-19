@@ -14,8 +14,9 @@ import { ITerminalMessage, IPerceptionManager } from "../../PerceptionManager";
 
 export interface ITerminalFeedContext {
     messages: ITerminalMessage[];
-    addMessage?: (string) => void;
-    describeThing?: (Thing) => void;
+    addMessage?: (message: string) => void;
+    describeThing?: (thing: Thing) => void;
+    describeScene?: (things: Thing[]) => void;
 }
 
 export interface ITerminalFeedProvider {
@@ -52,6 +53,12 @@ export const TerminalFeedProvider = ({
         });
     }
 
+    const describeScene = (things: Thing[]) : void => {
+        perceptionManager.describeScene(worldWebId, things).then((messages) => {
+            addMessages(messages);
+        });
+    }
+
     useEffect(() => {
         addMessage("Welcome to MUD!");
     }, []);
@@ -62,7 +69,8 @@ export const TerminalFeedProvider = ({
         value={{
             messages,
             addMessage,
-            describeThing
+            describeThing,
+            describeScene
         }}>
             {children}
         </TerminalFeedContext.Provider>

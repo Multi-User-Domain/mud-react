@@ -11,13 +11,15 @@ import {
     const {
       messages,
       addMessage,
-      describeThing
+      describeThing,
+      describeScene
     } = useContext(TerminalFeedContext);
   
     return {
         messages,
         addMessage,
-        describeThing
+        describeThing,
+        describeScene
     };
   }
   
