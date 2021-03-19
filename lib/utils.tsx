@@ -13,8 +13,6 @@ import {
 
 import {RDF, VCARD, FOAF} from "@inrupt/lit-generated-vocab-common";
 
-import axios from 'axios';
-
 /**
  * @returns All Things from a given dataset if they are of parameterised type
  */
@@ -119,17 +117,4 @@ export const getThingName = (thing: Thing): string => {
         if(name != null) return name;
     }
     return null;
-}
-
-/**
- * @param uri: the URI of the Thing which I want to describe 
- * @returns content returned from the server (should be a plain text string). Null if the server had no content
-*/
-export const getContentRequest = async (contentServerURL: string, uri: string) : Promise<any> => {
-    /*let url = new URL(contentServerURL)
-    let params = [['uri', uri]]
-    url.search = new URLSearchParams(params).toString();*/
-
-    //return getSolidDataset(contentServerURL, );
-    return await axios.get(contentServerURL, { params: { uri: uri } });
 }
