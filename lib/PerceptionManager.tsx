@@ -4,12 +4,14 @@ import {
     getUrl, 
     asUrl,
     ThingPersisted,
-    getThingAll
+    getThingAll,
+    SolidDataset,
+    createSolidDataset,
+    setThing
 } from '@inrupt/solid-client';
 
-import { VCARD } from "@inrupt/lit-generated-vocab-common";
 import { MUD, MUDAPI, MUD_CONTENT } from "./MUD";
-import { getContentRequest, parseTurtleToSolidDataset, getThingName } from "./utils";
+import { parseTurtleToSolidDataset, getThingName, triplesToTurtle } from "./utils";
 
 /**
  * Perception Manager is responsible for choosing what to display to the user, i.e. for deciding when it has enough content and what
@@ -60,26 +62,41 @@ export const perceptionManager: IPerceptionManager = (() => {
     }
 
     /**
+     * 
+     * @param things 
+     */
+    const getPrimaryContent = (things: Thing[]) : ITerminalMessage[] => {
+        let messages: ITerminalMessage[] = [];
+        
+        for(let thing of things) {
+            const uri = asUrl(thing as ThingPersisted);
+            const imageUrl = getUrl(thing, MUD.primaryImageContent);
+
+            if(imageUrl && !recentUris.includes(uri)) {
+                messages.push(getITerminalMessage(<img src={imageUrl}></img>));
+            }
+    
+            const msg = (getThingName(thing) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
+            if(msg.length > 3) {
+                messages.push(getITerminalMessage(msg));
+            }
+        }
+
+        return messages;
+    }
+
+    /**
      * method describes parameterised Thing by adding relevant messages to the feed
      * @param thing: Thing to describe
      */
-    const describeThing = (worldWebId, thing: Thing) : Promise<ITerminalMessage[]> => {
+    const describeThing = (worldWebId: string, thing: Thing) : Promise<ITerminalMessage[]> => {
         // add a fast message with the name and description (and possibly image)
+        let newMessages: ITerminalMessage[] = getPrimaryContent([thing]);
         const uri = asUrl(thing as ThingPersisted);
-        const imageUrl = getUrl(thing, MUD.primaryImageContent);
-        let newMessages: ITerminalMessage[] = [];
-
-        if(imageUrl && !recentUris.includes(uri)) {
-            newMessages.push(getITerminalMessage(<img src={imageUrl}></img>));
-        }
-
-        const msg = (getThingName(thing) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
-        if(msg.length > 3) {
-            newMessages.push(getITerminalMessage(msg));
-        }
 
         // search for content online
         return new Promise<ITerminalMessage[]>((resolve, reject) => {
+            //build the scene for the request data (build a dataset with the things in the scene)
             getContentRequest(worldWebId + MUDAPI.contentPath, uri).then((response) => {
             if(response && response.data != null) {
 
