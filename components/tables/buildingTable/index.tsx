@@ -48,11 +48,11 @@ function Building({thing, selectHandler} : IRowComponent): React.ReactElement {
 export default function BuildingTable(
     {settlement, goBack} : {settlement: Thing, goBack: () => void}): React.ReactElement {
 
-    const [ buildingThings, setBuildingThings ] = useState(null);
-    const [ selectedBuilding, setSelectedBuilding ] = useState(null);
+    const [ buildingThings, setBuildingThings ] = useState<Thing[]>(null);
+    const [ selectedBuilding, setSelectedBuilding ] = useState<Thing>(null);
     const { settlementDataSet, worldWebId } = useMudWorld();
     const { characters, postTransitTask } = useMudAccount();
-    const { describeThing } = useTerminalFeed();
+    const { describeScene } = useTerminalFeed();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const thingIsIdleFilter = (things: Thing[]): Thing[] => {
@@ -76,7 +76,7 @@ export default function BuildingTable(
         postTransitTask(worldWebId, thing, selectedBuilding);
 
         //log to Terminal feed the building description
-        describeThing(selectedBuilding);
+        describeScene(characters.concat([selectedBuilding]));
     }
 
     /**
