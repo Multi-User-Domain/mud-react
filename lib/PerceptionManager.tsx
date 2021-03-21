@@ -88,7 +88,8 @@ export const perceptionManager: IPerceptionManager = (() => {
                 messages.push(getITerminalMessage(<img src={imageUrl}></img>));
             }
     
-            const msg = (getThingName(thing) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
+            const isPresent = value => Boolean(value);
+            const msg = [getThingName(thing), getStringNoLocale(thing, MUD.primaryTextContent)].filter(isPresent).join(". ");
             if(msg.length > 3) {
                 messages.push(getITerminalMessage(msg));
             }
