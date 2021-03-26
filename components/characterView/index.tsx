@@ -13,7 +13,7 @@ export default function CharacterView(): React.ReactElement {
     const [editing, setEditing] = useState(false);
 
     return (
-        <Container fixed>
+        <Container>
             <Box>
             <Box>
                 <Heading textAlign="center" marginBottom="15px">Characters</Heading>

@@ -11,7 +11,7 @@ export default function WorldView(): React.ReactElement {
     const [ view, setView ] = useState(<SettlementTable />);
     
     return (
-        <Container fixed maxWidth="85%">
+        <Container maxWidth="85%">
             <Box>
             <Box textAlign="center">
                 {view}

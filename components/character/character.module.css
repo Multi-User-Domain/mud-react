@@ -8,10 +8,6 @@
     vertical-align: middle;
 }
 
-.profilePic {
-    width:100%;
-}
-
 .profilePic > img {
     height: 100px;
     width: 100%;

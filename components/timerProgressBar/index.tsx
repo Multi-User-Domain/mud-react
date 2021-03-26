@@ -11,8 +11,8 @@ interface ITimerProgressBar {
 };
 
 const defaultContainerStyles = {
-    height: 20,
-    width: "inherit",
+    height: 40,
+    width: 80,
     backgroundColor: "#c5bfd4",
     borderRadius: "10%",
     margin: 50,
@@ -28,7 +28,6 @@ export default function TimerProgressBar({startTime, endTime, barColor="#68D391"
     const [id, setId] = useState(null); // an ID assigned randomly when the input parameters are changed (to reset the timer)
 
     const tick = (uuid: string) => {
-        console.log("uuid " + uuid + ", id " + id);
         if(uuid != id) return; // cancel if a new timer has been set
 
         //set the completed value to be the percentage between startTime and endTime
@@ -39,10 +38,8 @@ export default function TimerProgressBar({startTime, endTime, barColor="#68D391"
             //calculate percentage of timeDiff met
             const timeDiff = endTime - startTime;
             const percentageDone = timeSinceStart / timeDiff * 100;
-            console.log(percentageDone + "%");
             setCompleted(Math.min(percentageDone, 100));
             if(percentageDone >= 100) {
-                console.log("timer done!");
                 return; // timer done
             }
         }
@@ -54,7 +51,6 @@ export default function TimerProgressBar({startTime, endTime, barColor="#68D391"
     // if startTime or endTime has changed then re-initialize the bar
     useEffect(() => {
         const uuid = uuidv4();
-        console.log(uuid);
         setTimeout(() => setId(uuid), 1000);
     }, [startTime, endTime]);
 
@@ -64,12 +60,12 @@ export default function TimerProgressBar({startTime, endTime, barColor="#68D391"
     }, [id]);
 
     //TODO: include task description
-    const label: string = completed >= 100 ? "DONE" : "BUSY";
+    const label: string = completed >= 100 ? "DONE" : "";
 
     return (
         <Box style={containerStyles}>
             <Box backgroundColor={barColor} width={completed + "%"} height="100%" borderRadius="inherit" transition="width 1s ease-in-out">
-                <Text color="white" overflow="hidden" padding="10%" zIndex="1">{label}</Text>
+                <Text color="white" overflow="hidden" padding="10%" zIndex="1" w="100%" h="100%">{label}</Text>
             </Box>
         </Box>
     );
