@@ -13,7 +13,7 @@ interface ITimerProgressBar {
 const defaultContainerStyles = {
     height: 20,
     width: "inherit",
-    backgroundColor: "#e0e0de",
+    backgroundColor: "#c5bfd4",
     borderRadius: "10%",
     margin: 50,
 };
@@ -22,7 +22,7 @@ const defaultContainerStyles = {
  * A component which displays the progress of the current system time between startTime and endTime
  * @param barColor: optional background color for the bar
  */
-export default function TimerProgressBar({startTime, endTime, barColor="#000000", containerStyles=defaultContainerStyles, updateFrequencyMillis=1000} : ITimerProgressBar) : React.ReactElement {
+export default function TimerProgressBar({startTime, endTime, barColor="#68D391", containerStyles=defaultContainerStyles, updateFrequencyMillis=1000} : ITimerProgressBar) : React.ReactElement {
 
     const [completed, setCompleted] = useState(0); // % completion
     const [id, setId] = useState(null); // an ID assigned randomly when the input parameters are changed (to reset the timer)
