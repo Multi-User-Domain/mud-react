@@ -11,8 +11,9 @@ import { Grid, GridItem, Text, useDisclosure } from "@chakra-ui/react";
 
 import {
   Box,
-  Typography
-} from "@material-ui/core";
+  Heading,
+  Container
+} from "@chakra-ui/react";
 
 import {
     Button
@@ -103,9 +104,8 @@ export default function BuildingTable(
         if(buildingThings.length > 0) {
             tableContent = (
             <>
-                <Typography gutterBottom variant="h6" component="h3">
-                    {getThingName(settlement)}
-                </Typography>
+                <Heading textAlign="center" marginBottom="15px" >{getThingName(settlement)}</Heading>
+
                 <ThingList things={buildingThings} rowComponent={Building} selectThing={selectBuilding} />
                 <hr/>
             </>
@@ -119,11 +119,14 @@ export default function BuildingTable(
 
     return (
     <>
-        <Box>
-            <Button onClick={goBack}>
-                Go Back
-            </Button>
-        </Box>
+        <Grid>
+            <GridItem colSpan={1}>
+                <Button onClick={goBack} maxW="60ch">
+                    Go Back
+                </Button>
+            </GridItem>
+            <GridItem colSpan={10}></GridItem>
+        </Grid>
         <Box>
             {tableContent}
         </Box>

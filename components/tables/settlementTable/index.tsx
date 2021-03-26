@@ -5,8 +5,7 @@ import {
     Thing
 } from "@inrupt/solid-client";
 
-import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
-import { Typography } from "@material-ui/core";
+import { Grid, GridItem, Center, Text, Heading } from "@chakra-ui/react";
 import { MUD } from "../../../lib/MUD";
 
 import useMudWorld from "../../../lib/hooks/useMudWorld";
@@ -53,9 +52,7 @@ export default function SettlementTable(): React.ReactElement {
 
     return  (
         <>
-        <Typography gutterBottom variant="h6" component="h3">
-            Settlements
-        </Typography>
+        <Heading textAlign="center" marginBottom="15px">Settlements</Heading>
         <ThingList things={settlements} rowComponent={Settlement} selectThing={(thing: Thing) => {setSelectedSettlement(thing);}} />
         <hr/>
         </>
