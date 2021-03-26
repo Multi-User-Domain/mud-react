@@ -31,17 +31,17 @@ export default function Home(): React.ReactElement {
   }
 
   const header = (
-    <Container style={{ marginBottom: 16, textAlign: "left" }}>
+    <Container marginBottom="16px" textAlign="left">
       <Button colorScheme="teal" onClick={onOpen}>Open Action Menu</Button>
       <ActionMenu isOpen={isOpen} onClose={onClose} />
 
-      <div style={{float: "right", textAlign: "right"}}>
+      <Box float="right" textAlign="right">
         <LogoutButton>
           <Button variant="contained">
               Log&nbsp;out
           </Button>
         </LogoutButton>
-      </div>
+      </Box>
     </Container>
   );
 
@@ -50,12 +50,14 @@ export default function Home(): React.ReactElement {
     <MudWorldProvider worldWebId="http://localhost:8080/">
       <MudAccountProvider webId={webId} actionManager={actionManager}>
         <TerminalFeedProvider perceptionManager={perceptionManager}>
-          {header}
-          <Container style={{marginBottom: "20px"}}>
-            <GameWindow />
-          </Container>
           <Container>
-            <Terminal />
+            {header}
+            <Container marginBottom="20px">
+              <GameWindow />
+            </Container>
+            <Container>
+              <Terminal />
+            </Container>
           </Container>
         </TerminalFeedProvider>
       </MudAccountProvider>
