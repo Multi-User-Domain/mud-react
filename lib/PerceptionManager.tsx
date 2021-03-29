@@ -55,9 +55,11 @@ export const perceptionManager: IPerceptionManager = (() => {
         return parseTurtleToSolidDataset(data).then((dataset) => {
             let values: string[] = [];
 
-            getThingAll(dataset).forEach((thing) => {
-                const value: string = getStringNoLocale(thing, MUD_CONTENT.sight);
-                if(value) values.push(value);
+            getThingAll(dataset).forEach((content) => {
+                // TODO: now would be the time to value the content
+                const value: string = getStringNoLocale(content, MUD_CONTENT.sight);
+                
+                if(value && !values.includes(value)) values.push(value);
             });
 
             return values;
@@ -125,6 +127,7 @@ export const perceptionManager: IPerceptionManager = (() => {
                 postScene(worldWebId, requestData).then((response) => {
                     if(response && response.data != null) {
 
+                        // parseContent has turned the content graph into an array of messages
                         parseContent(response.data).then((messages) => {
                             for(let message of messages) {
                                 newMessages.push(getITerminalMessage(message));
