@@ -9,7 +9,8 @@ import {
     getThingAll,
     SolidDataset,
     createSolidDataset,
-    setThing
+    setThing,
+    getThing,
 } from '@inrupt/solid-client';
 
 import { MUD, MUDAPI, MUD_CONTENT } from "./MUD";
@@ -55,11 +56,17 @@ export const perceptionManager: IPerceptionManager = (() => {
         return parseTurtleToSolidDataset(data).then((dataset) => {
             let values: string[] = [];
 
-            getThingAll(dataset).forEach((content) => {
-                // TODO: now would be the time to value the content
-                const value: string = getStringNoLocale(content, MUD_CONTENT.sight);
+            getThingAll(dataset).forEach((perspective) => {
+                // TODO: now would be the time to perform selection on the content
+                // TODO: https://github.com/inrupt/solid-client-js/issues/948
+                let sees: string = getUrl(perspective, MUD_CONTENT.sees);
+                if(sees) {
+                    const contentThing: Thing = getThing(dataset, sees);
+                    const value: string = getStringNoLocale(contentThing, MUD_CONTENT.hasText);
+
+                    if(value && !values.includes(value)) values.push(value);
+                }
                 
-                if(value && !values.includes(value)) values.push(value);
             });
 
             return values;
@@ -67,10 +74,10 @@ export const perceptionManager: IPerceptionManager = (() => {
     }
 
     const buildSceneTurtleData = (things: Thing[]): Promise<string> => {
-        const scene: SolidDataset = createSolidDataset();
+        let scene: SolidDataset = createSolidDataset();
 
         for(let thing of things) {
-            setThing(scene, thing);
+            scene = setThing(scene, thing);
         }
 
         return triplesToTurtle(Array.from(scene));
