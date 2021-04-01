@@ -28,8 +28,11 @@ export const MUD_CHARACTER = {
 }
 
 export const MUD_CONTENT = {
-    content: MUD_CONTENT_BASE_URL + "#content",
-    sight: MUD_CONTENT_BASE_URL + "#sight",
+    Content: MUD_CONTENT_BASE_URL + "#Content",
+    sees: MUD_CONTENT_BASE_URL + "#sees",
+    describes: MUD_CONTENT_BASE_URL + "#describes",
+    hasText: MUD_CONTENT_BASE_URL + "#hasText",
+    hasImage: MUD_CONTENT_BASE_URL + "#hasImage",
 }
 
 export const MUD_LOGIC = {
