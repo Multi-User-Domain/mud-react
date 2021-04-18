@@ -1,4 +1,5 @@
 import {useState} from "react";
+import isURL from 'validator/lib/isURL';
 
 import { 
     Container, Box, Input, Button
@@ -12,11 +13,7 @@ import {
     const [webId, setWebId] = useState("http://localhost:8080/");
 
     const onSubmit = () => {
-        if(!webId) return;
-
-        //TODO: validate input is valid URL
-        //TODO: fetch MUD configuration
-
+        if(!webId || !isURL(webId)) return;
         foundWebId(webId);
     }
 
