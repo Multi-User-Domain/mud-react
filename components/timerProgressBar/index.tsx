@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import { Box, Text } from "@chakra-ui/react"
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
 interface ITimerProgressBar {
     startTime: number;
