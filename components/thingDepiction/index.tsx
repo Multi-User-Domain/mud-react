@@ -12,5 +12,5 @@ export default function ThingDepiction({thing, ...childrenProps}): React.ReactEl
     const imageUrl = getUrl(thing, FOAF.depiction);
 
     if(imageUrl) return <Image src={imageUrl} {...childrenProps}></Image>;
-    return <Center h="100%"><Circle bg="tomato" w="20px" h="20px" {...childrenProps}></Circle></Center>;
+    return <Center h="100%"><Circle bg="tomato" w={5} h={5} {...childrenProps}></Circle></Center>;
 }

@@ -16,7 +16,7 @@ export default function CharacterView(): React.ReactElement {
         <Container>
             <Box>
             <Box>
-                <Heading textAlign="center" marginBottom="15px">Characters</Heading>
+                <Heading textAlign="center" marginBottom={4}>Characters</Heading>
 
                 <CharacterTable edit={editing}/>
             </Box>

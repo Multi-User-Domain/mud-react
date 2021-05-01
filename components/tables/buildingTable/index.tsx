@@ -38,7 +38,7 @@ function Building({thing, selectHandler} : IRowComponent): React.ReactElement {
     return (
         <>
         <hr/>
-        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} marginBottom="10px" paddingTop="10px">
+        <Grid templateColumns="repeat(5, 1fr)" w="100%" gap={1} marginBottom={3} paddingTop={3}>
           <GridItem w="100%" colSpan={5} tag="a" onClick={onRowSelect} style={{ cursor: "pointer" }}>
             <Text>{getThingName(thing)}</Text>
           </GridItem>
@@ -104,7 +104,7 @@ export default function BuildingTable(
         if(buildingThings.length > 0) {
             tableContent = (
             <>
-                <Heading textAlign="center" marginBottom="15px" >{getThingName(settlement)}</Heading>
+                <Heading textAlign="center" marginBottom={4} >{getThingName(settlement)}</Heading>
 
                 <ThingList things={buildingThings} rowComponent={Building} selectThing={selectBuilding} />
                 <hr/>

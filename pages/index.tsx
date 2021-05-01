@@ -31,7 +31,7 @@ export default function Home(): React.ReactElement {
   }
 
   const header = (
-    <Container marginBottom="16px" textAlign="left">
+    <Container marginBottom={4} textAlign="left">
       <Button colorScheme="teal" onClick={onOpen}>Open Action Menu</Button>
       <ActionMenu isOpen={isOpen} onClose={onClose} />
 
@@ -52,7 +52,7 @@ export default function Home(): React.ReactElement {
         <TerminalFeedProvider perceptionManager={perceptionManager}>
           <Container>
             {header}
-            <Container marginBottom="20px">
+            <Container marginBottom={5}>
               <GameWindow />
             </Container>
             <Container>

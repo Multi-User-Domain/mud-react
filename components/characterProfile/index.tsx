@@ -27,7 +27,7 @@ export default function CharacterProfile(
 
                 <DrawerBody>
                     <Container>
-                        <Box w="100%" marginTop="20px" marginBottom="20px">
+                        <Box w="100%" marginTop={5} marginBottom={5}>
                             <Center>
                                 <ThingDepiction thing={character} maxHeight="10vh" />
                             </Center>
