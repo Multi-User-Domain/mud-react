@@ -1,8 +1,8 @@
+import {useState} from "react";
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import {
   Button,
-  Box,
   Container,
   useDisclosure
 } from "@chakra-ui/react";
@@ -19,15 +19,21 @@ import LoginForm from "../components/loginForm";
 import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
 import GameWindow from "../components/gameWindow";
+import WorldFinder from "../components/worldFinder";
 import { actionManager } from "../lib/ActionManager";
 
 export default function Home(): React.ReactElement {
+  const [ worldWebId, setWorldWebId ] = useState(null);
   const { session } = useSession();
   const { webId } = session.info;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (!session.info.isLoggedIn) {
     return <LoginForm />;
+  }
+
+  if(!worldWebId) {
+    return <WorldFinder foundWebId={setWorldWebId} />
   }
 
   const header = (
@@ -46,8 +52,7 @@ export default function Home(): React.ReactElement {
   );
 
   return (
-    //TODO: select the worldWebId from a WorldFinder component
-    <MudWorldProvider worldWebId="http://localhost:8080/">
+    <MudWorldProvider worldWebId={worldWebId}>
       <MudAccountProvider webId={webId} actionManager={actionManager}>
         <TerminalFeedProvider perceptionManager={perceptionManager}>
           <Container>

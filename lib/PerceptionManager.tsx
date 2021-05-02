@@ -1,15 +1,20 @@
+import axios, { AxiosResponse } from 'axios';
+
 import { 
     Thing,
     getStringNoLocale,
     getUrl, 
     asUrl,
     ThingPersisted,
-    getThingAll
+    getThingAll,
+    SolidDataset,
+    createSolidDataset,
+    setThing,
+    getThing,
 } from '@inrupt/solid-client';
 
-import { VCARD } from "@inrupt/lit-generated-vocab-common";
 import { MUD, MUDAPI, MUD_CONTENT } from "./MUD";
-import { getContentRequest, parseTurtleToSolidDataset, getThingName } from "./utils";
+import { parseTurtleToSolidDataset, getThingName, triplesToTurtle } from "./utils";
 
 /**
  * Perception Manager is responsible for choosing what to display to the user, i.e. for deciding when it has enough content and what
@@ -32,6 +37,7 @@ export interface ITerminalMessage {
 export interface IPerceptionManager {
     getITerminalMessage: (content: string | React.ReactElement) => ITerminalMessage;
     describeThing: (worldWebId: string, thing: Thing) => Promise<ITerminalMessage[]>;
+    describeScene: (worldWebId: string, things: Thing[]) => Promise<ITerminalMessage[]>;
 };
 
 export const perceptionManager: IPerceptionManager = (() => {
@@ -50,56 +56,101 @@ export const perceptionManager: IPerceptionManager = (() => {
         return parseTurtleToSolidDataset(data).then((dataset) => {
             let values: string[] = [];
 
-            getThingAll(dataset).forEach((thing) => {
-                const value: string = getStringNoLocale(thing, MUD_CONTENT.sight);
-                if(value) values.push(value);
+            getThingAll(dataset).forEach((perspective) => {
+                // TODO: now would be the time to perform selection on the content
+                // TODO: https://github.com/inrupt/solid-client-js/issues/948
+                let sees: string = getUrl(perspective, MUD_CONTENT.sees);
+                if(sees) {
+                    const contentThing: Thing = getThing(dataset, sees);
+                    const value: string = getStringNoLocale(contentThing, MUD_CONTENT.hasText);
+
+                    if(value && !values.includes(value)) values.push(value);
+                }
+                
             });
 
             return values;
         });
     }
 
+    const buildSceneTurtleData = (things: Thing[]): Promise<string> => {
+        let scene: SolidDataset = createSolidDataset();
+
+        for(let thing of things) {
+            scene = setThing(scene, thing);
+        }
+
+        return triplesToTurtle(Array.from(scene));
+    }
+
+    /**
+     * builds a list of ITerminalMessage objects by getting the primary content data from parameterised things
+     */
+    const getPrimaryContent = (things: Thing[]) : ITerminalMessage[] => {
+        let messages: ITerminalMessage[] = [];
+        
+        for(let thing of things) {
+            const uri = asUrl(thing as ThingPersisted);
+            const imageUrl = getUrl(thing, MUD.primaryImageContent);
+
+            if(imageUrl && !recentUris.includes(uri)) {
+                messages.push(getITerminalMessage(<img src={imageUrl}></img>));
+            }
+    
+            const isPresent = value => Boolean(value);
+            const msg = [getThingName(thing), getStringNoLocale(thing, MUD.primaryTextContent)].filter(isPresent).join(". ");
+            if(msg.length > 3) {
+                messages.push(getITerminalMessage(msg));
+            }
+        }
+
+        return messages;
+    }
+
     /**
      * method describes parameterised Thing by adding relevant messages to the feed
      * @param thing: Thing to describe
      */
-    const describeThing = (worldWebId, thing: Thing) : Promise<ITerminalMessage[]> => {
+    const describeThing = (worldWebId: string, thing: Thing) : Promise<ITerminalMessage[]> => {
+        return describeScene(worldWebId, [thing]);
+    }
+
+    const postScene = (worldWebId: string, data: any) : Promise<AxiosResponse<any>> => {
+        return axios.post(worldWebId + MUDAPI.contentPath, data);
+    }
+
+    const describeScene = (worldWebId: string, things: Thing[]) : Promise<ITerminalMessage[]> => {
         // add a fast message with the name and description (and possibly image)
-        const uri = asUrl(thing as ThingPersisted);
-        const imageUrl = getUrl(thing, MUD.primaryImageContent);
-        let newMessages: ITerminalMessage[] = [];
+        let newMessages: ITerminalMessage[] = getPrimaryContent(things);
 
-        if(imageUrl && !recentUris.includes(uri)) {
-            newMessages.push(getITerminalMessage(<img src={imageUrl}></img>));
-        }
-
-        const msg = (getThingName(thing) + ". " || "") + (getStringNoLocale(thing, MUD.primaryTextContent) || "");
-        if(msg.length > 3) {
-            newMessages.push(getITerminalMessage(msg));
-        }
+        // remember previous descriptions and don't repeat
+        for(let thing of things) recentUris.push(asUrl(thing as ThingPersisted));
 
         // search for content online
         return new Promise<ITerminalMessage[]>((resolve, reject) => {
-            getContentRequest(worldWebId + MUDAPI.contentPath, uri).then((response) => {
-            if(response && response.data != null) {
 
-                parseContent(response.data).then((messages) => {
-                    for(let message of messages) {
-                        newMessages.push(getITerminalMessage(message));
+            // build scene data
+            buildSceneTurtleData(things).then((requestData) => {
+                postScene(worldWebId, requestData).then((response) => {
+                    if(response && response.data != null) {
+
+                        // parseContent has turned the content graph into an array of messages
+                        parseContent(response.data).then((messages) => {
+                            for(let message of messages) {
+                                newMessages.push(getITerminalMessage(message));
+                            }
+        
+                            return resolve(newMessages);
+                        });
                     }
-
-                    // remember previous descriptions and don't repeat
-                    recentUris.push(uri);
-
-                    return resolve(newMessages);
                 });
-            }
-        });
+            });
         });
     }
 
     return {
         getITerminalMessage: getITerminalMessage,
-        describeThing: describeThing
+        describeThing: describeThing,
+        describeScene: describeScene
     };
 })();
