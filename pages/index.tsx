@@ -2,6 +2,7 @@ import {useState} from "react";
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import {
+  Box,
   Button,
   Container,
   useDisclosure
