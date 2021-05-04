@@ -2,6 +2,7 @@ import {useState} from "react";
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import {
+  Flex,
   Box,
   Button,
   Container,
@@ -39,16 +40,22 @@ export default function Home(): React.ReactElement {
 
   const header = (
     <Container marginBottom={4} textAlign="left">
-      <Button colorScheme="teal" onClick={onOpen}>Open Action Menu</Button>
-      <ActionMenu isOpen={isOpen} onClose={onClose} />
+      <Flex>
+        <Box alignSelf="flex-start">
+          <Button colorScheme="teal" onClick={onOpen}>Open Action Menu</Button>
+          <ActionMenu isOpen={isOpen} onClose={onClose} />
+        </Box>
 
-      <Box float="right" textAlign="right">
-        <LogoutButton>
-          <Button variant="contained">
-              Log&nbsp;out
-          </Button>
-        </LogoutButton>
-      </Box>
+        <Box w="100vw"></Box>
+
+        <Box alignSelf="flex-end">
+          <LogoutButton>
+            <Button variant="contained">
+                Log&nbsp;out
+            </Button>
+          </LogoutButton>
+        </Box>
+      </Flex>
     </Container>
   );
 
