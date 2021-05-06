@@ -14,42 +14,42 @@ interface ITimerProgressBar {
  * A component which displays the progress of the current system time between startTime and endTime
  * @param barColor: optional background color for the bar
  */
-export default function TimerProgressBar({startTime, endTime, updateFrequencyMillis=1000} : ITimerProgressBar) : React.ReactElement {
+export default function TimerProgressBar({startTime, endTime, updateFrequencyMillis=100} : ITimerProgressBar) : React.ReactElement {
 
-    const [completed, setCompleted] = useState(0); // % completion
-    const [id, setId] = useState(null); // an ID assigned randomly when the input parameters are changed (to reset the timer)
+    const [lastUpdateTime, setLastUpdateTime] = useState(new Date().getTime());
 
-    const tick = (uuid: string) => {
-        if(uuid != id) return; // cancel if a new timer has been set
+    useEffect(() => {
+        setLastUpdateTime(new Date().getTime());
+    
+        const updateLastUpdateTime = setInterval(() => {
+          const newLastUpdateTime = new Date().getTime();
+          setLastUpdateTime(newLastUpdateTime);
+    
+          if (newLastUpdateTime > endTime) {
+            clearInterval(updateLastUpdateTime);
+          }
+        }, updateFrequencyMillis);
+    
+        return () => clearInterval(updateLastUpdateTime);
 
-        //set the completed value to be the percentage between startTime and endTime
-        const now = new Date().getTime();
-        const timeSinceStart = now - startTime;
-        if(timeSinceStart >= 0 && endTime > 0) {
+    }, [startTime, endTime, updateFrequencyMillis, setLastUpdateTime]);
 
-            //calculate percentage of timeDiff met
-            const timeDiff = endTime - startTime;
-            const percentageDone = timeSinceStart / timeDiff * 100;
-            setCompleted(Math.min(percentageDone, 100));
-            if(percentageDone >= 100) {
-                return; // timer done
-            }
+    const calculatePercentage = () => {
+        const timeSinceStart = lastUpdateTime - startTime;
+
+        if (timeSinceStart === 0) {
+            return 0;
         }
 
-        //reschedule self
-        setTimeout(() => tick(uuid), updateFrequencyMillis);
+        if (endTime === 0) {
+            return 100;
+        }
+
+        const timeDiff = endTime - startTime;
+        return Math.min(timeSinceStart / timeDiff, 1) * 100;
     }
 
-    // if startTime or endTime has changed then re-initialize the bar
-    useEffect(() => {
-        const uuid = uuidv4();
-        setTimeout(() => setId(uuid), 1000);
-    }, [startTime, endTime]);
-
-    useEffect(() => {
-        if(id == null) return;
-        setTimeout(() => tick(id), updateFrequencyMillis);
-    }, [id]);
+    const completed = calculatePercentage();
 
     //TODO: include task description.. underneath?
     //const label: string = completed >= 100 ? "DONE" : "";
