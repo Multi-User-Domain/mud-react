@@ -8,7 +8,7 @@ import styles from "./terminal.module.css";
 
 import { WindupChildren, OnChar } from "windups";
 import VisuallyHidden from "@reach/visually-hidden";
-import { ITerminalMessage } from "../../lib/context/terminalFeedContext";
+import { ITerminalMessage } from "../../lib/PerceptionManager";
 import { useRef } from "react";
 
 export function TerminalMessage({message, children} : {message: ITerminalMessage, children: any}) : React.ReactElement {

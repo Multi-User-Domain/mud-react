@@ -2,6 +2,8 @@ import {useState} from "react";
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import {
+  Flex,
+  Box,
   Button,
   Container,
   useDisclosure
@@ -37,17 +39,23 @@ export default function Home(): React.ReactElement {
   }
 
   const header = (
-    <Container style={{ marginBottom: 16, textAlign: "left" }}>
-      <Button colorScheme="teal" onClick={onOpen}>Open Action Menu</Button>
-      <ActionMenu isOpen={isOpen} onClose={onClose} />
+    <Container marginBottom={4} textAlign="left">
+      <Flex>
+        <Box alignSelf="flex-start">
+          <Button colorScheme="teal" onClick={onOpen}>Open Action Menu</Button>
+          <ActionMenu isOpen={isOpen} onClose={onClose} />
+        </Box>
 
-      <div style={{float: "right", textAlign: "right"}}>
-        <LogoutButton>
-          <Button variant="contained">
-              Log&nbsp;out
-          </Button>
-        </LogoutButton>
-      </div>
+        <Box w="100vw"></Box>
+
+        <Box alignSelf="flex-end">
+          <LogoutButton>
+            <Button variant="contained">
+                Log&nbsp;out
+            </Button>
+          </LogoutButton>
+        </Box>
+      </Flex>
     </Container>
   );
 
@@ -55,12 +63,14 @@ export default function Home(): React.ReactElement {
     <MudWorldProvider worldWebId={worldWebId}>
       <MudAccountProvider webId={webId} actionManager={actionManager}>
         <TerminalFeedProvider perceptionManager={perceptionManager}>
-          {header}
-          <Container style={{marginBottom: "20px"}}>
-            <GameWindow />
-          </Container>
           <Container>
-            <Terminal />
+            {header}
+            <Container marginBottom={5}>
+              <GameWindow />
+            </Container>
+            <Container>
+              <Terminal />
+            </Container>
           </Container>
         </TerminalFeedProvider>
       </MudAccountProvider>

@@ -2,11 +2,8 @@ import {useState} from 'react';
 
 import {
     Box,
-    Button,
-    Card,
-    CardContent,
     Container,
-  } from "@material-ui/core";
+} from "@chakra-ui/react";
 
 import SettlementTable from '../tables/settlementTable';
 
@@ -14,12 +11,12 @@ export default function WorldView(): React.ReactElement {
     const [ view, setView ] = useState(<SettlementTable />);
     
     return (
-        <Container fixed>
-            <Card style={{ maxWidth: 480 }}>
-            <CardContent>
+        <Container maxWidth="85%">
+            <Box>
+            <Box textAlign="center">
                 {view}
-            </CardContent>
-            </Card>
+            </Box>
+            </Box>
         </Container>
     );
 }

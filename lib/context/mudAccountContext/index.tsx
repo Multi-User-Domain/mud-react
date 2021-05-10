@@ -53,13 +53,14 @@ export const MudAccountProvider = ({
     const [ characterDataSet, setCharacterDataSet ] = useState(null);
     const [ characters, setCharacters ] = useState(null);
 
-    const saveDataset = async (newThing, datasetToUpdate) => {
+    const saveCharacterDataset = async (newThing, datasetToUpdate) => {
         const savedDataset = await saveSolidDatasetAt(
           getFetchedFrom(datasetToUpdate),
           setThing(datasetToUpdate, newThing),
           { fetch }
         );
         setCharacterDataSet(savedDataset);
+        setCharacters(getFilteredThings(savedDataset, MUD_CHARACTER.Character));
       };
 
     //TODO: should with agents which are not Characters. Currently uses an implicit assumption that the subject is of the Character Dataset
@@ -71,7 +72,7 @@ export const MudAccountProvider = ({
                 //set hasTask on the agent conducting it
                 //get the task from the response header
                 subjectThing = setUrl(subjectThing, MUD_CHARACTER.hasTask, response.headers['location']);
-                saveDataset(subjectThing, characterDataSet);
+                saveCharacterDataset(subjectThing, characterDataSet);
 
                 //TODO: schedule the task completion
             }
@@ -91,7 +92,7 @@ export const MudAccountProvider = ({
             characterDataSet,
             newCharacter
         );
-        await saveDataset(newCharacter, dataSetWithCharacter);
+        await saveCharacterDataset(newCharacter, dataSetWithCharacter);
         setCharacters(characters.concat(newCharacter));
     };
 

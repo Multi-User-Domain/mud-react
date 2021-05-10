@@ -1,15 +1,11 @@
 import { useState } from "react";
 
 import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardActionArea,
-  CardContent,
-  Container,
-  Typography,
-} from "@material-ui/core";
+    Box,
+    Button,
+    Container,
+    Heading
+} from "@chakra-ui/react";
 
 import CharacterTable from "../tables/characterTable";
 
@@ -17,16 +13,14 @@ export default function CharacterView(): React.ReactElement {
     const [editing, setEditing] = useState(false);
 
     return (
-        <Container fixed>
-            <Card style={{ maxWidth: 480 }}>
-            <CardContent>
-                <Typography gutterBottom variant="h6" component="h3">
-                Characters
-                </Typography>
+        <Container>
+            <Box>
+            <Box>
+                <Heading textAlign="center" marginBottom={4}>Characters</Heading>
 
                 <CharacterTable edit={editing}/>
-            </CardContent>
-            <CardActions>
+            </Box>
+            <Box>
                 <Button
                 size="small"
                 color="primary"
@@ -34,8 +28,8 @@ export default function CharacterView(): React.ReactElement {
                 >
                 Toggle Edit
                 </Button>
-            </CardActions>
-            </Card>
+            </Box>
+            </Box>
         </Container>
     );
 }
