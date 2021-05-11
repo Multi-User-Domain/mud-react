@@ -3,7 +3,8 @@ import axios, { AxiosResponse } from 'axios';
 import { 
     Thing,
     getStringNoLocale,
-    getUrl, 
+    getUrl,
+    getUrlAll, 
     asUrl,
     ThingPersisted,
     getThingAll,
@@ -59,13 +60,12 @@ export const perceptionManager: IPerceptionManager = (() => {
             getThingAll(dataset).forEach((perspective) => {
                 // TODO: now would be the time to perform selection on the content
                 // TODO: https://github.com/inrupt/solid-client-js/issues/948
-                let sees: string = getUrl(perspective, MUD_CONTENT.sees);
-                if(sees) {
-                    const contentThing: Thing = getThing(dataset, sees);
+                getUrlAll(perspective, MUD_CONTENT.sees).forEach((seenURL) => {
+                    const contentThing: Thing = getThing(dataset, seenURL);
                     const value: string = getStringNoLocale(contentThing, MUD_CONTENT.hasText);
 
                     if(value && !values.includes(value)) values.push(value);
-                }
+                });
                 
             });
 
