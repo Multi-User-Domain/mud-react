@@ -16,7 +16,7 @@ import {RDF, VCARD, FOAF} from "@inrupt/lit-generated-vocab-common";
 /**
  * @returns All Things from a given dataset if they are of parameterised type
  */
-export const getFilteredThings = (dataset, propertyType) => {
+export const getFilteredThings: (dataset: SolidDataset, propertyType: string) => Thing[] = (dataset, propertyType) => {
     let ret = [];
     getThingAll(dataset).forEach((thing) => {
         const TYPES = getUrlAll(thing, RDF.type);

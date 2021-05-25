@@ -10,6 +10,7 @@ import {
     Thing,
     SolidDataset,
     getSolidDataset,
+    getUrl,
   } from "@inrupt/solid-client";
 
 import { MUD } from "../../MUD";
@@ -24,39 +25,52 @@ import { getFilteredThings } from "../../utils";
 export const MUD_CONFIG_PATH: string = ".well-known/openid-configuration/";
 
 export interface IMudFederationContext {
-    
+    getFirstConfiguredEndpoint: (endpoint: string) => string
 }
 
-export const MudFederationContext = createContext<IMudFederationContext>({});
+export const MudFederationContext = createContext<IMudFederationContext>({getFirstConfiguredEndpoint: null});
 
 export const MudFederationProvider = ({
     worldWebId,
     children
 }: {worldWebId: string, children: ReactNode}): ReactElement => {
     // for now connected servers are just an array of configurations, prioritised only by FIFO
-    const [ configurations, setConfigurations ] = useState(null);
+    const [ configurations, setConfigurations ] = useState<Thing[]>(null);
 
-    const connect: (host: string) => void = (host: string) => {
+    /**
+     * @returns the first endpoint in the stored configurations which provides the parameterized endpoint, or null if none found
+     */
+    const getFirstConfiguredEndpoint: (endpoint: string) => string = (endpoint) => {
+        for(let i = 0; i < configurations.length; i++) {
+            let url: string = getUrl(configurations[i], endpoint);
+            if(url) return url;
+        }
+        return null;
+    }
 
+    const connect: (host: string) => void = (host) => {
+        // normalize connection input
+        if(!host.endsWith("/")) worldWebId += "/";
+
+        // read the MUD configuration of the world server and store it
+        const URL = host + MUD_CONFIG_PATH;
+        getSolidDataset(URL).then((dataset) => {
+            let priorConfigurations: Thing[] = configurations ? configurations : [];
+            setConfigurations(priorConfigurations.concat(getFilteredThings(dataset, MUD.Configuration)));
+        });
     }
 
     //TODO: method to disconnect from a server
 
     useEffect(() => {
-        // normalize the worldWebID input
-        if(!worldWebId.endsWith("/")) worldWebId += "/";
-
-        // read the MUD configuration of the world server and store it
-        const URL = worldWebId + MUD_CONFIG_PATH;
-        getSolidDataset(URL).then((dataset) => {
-            setConfigurations(getFilteredThings(dataset, MUD.Configuration));
-        });
+        connect(worldWebId);
+        //TODO: enforce that at least one world server is connected to (the main world server)
     }, []);
 
     return(
         <MudFederationContext.Provider
             value={{
-                
+                getFirstConfiguredEndpoint
             }}
         >
             {children}

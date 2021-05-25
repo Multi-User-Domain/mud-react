@@ -29,6 +29,10 @@ import { getFilteredThings } from "../../utils";
 import { MUD, MUD_CHARACTER } from "../../MUD";
 import { IActionManager } from "../../ActionManager";
 
+/**
+ * The source of truth for the player data, i.e. the connection to their Pod
+ */
+
 export interface IMudAccountContext {
     characters: Thing[];
     characterDataSet: SolidDataset;
