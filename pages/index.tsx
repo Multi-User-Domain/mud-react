@@ -13,7 +13,9 @@ import {
   LogoutButton,
 } from "@inrupt/solid-ui-react";
 
-import { perceptionManager } from "../lib/PerceptionManager";
+import { MudFederationProvider } from "../lib/context/mudFederationContext";
+import { MudContentProvider } from "../lib/context/mudContentContext";
+import { MudActionProvider } from "../lib/context/mudActionContext";
 import { MudWorldProvider } from "../lib/context/mudWorldContext";
 import { MudAccountProvider } from "../lib/context/mudAccountContext";
 import { TerminalFeedProvider } from "../lib/context/terminalFeedContext";
@@ -22,7 +24,6 @@ import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
 import GameWindow from "../components/gameWindow";
 import WorldFinder from "../components/worldFinder";
-import { actionManager } from "../lib/ActionManager";
 
 export default function Home(): React.ReactElement {
   const [ worldWebId, setWorldWebId ] = useState(null);
@@ -60,20 +61,27 @@ export default function Home(): React.ReactElement {
   );
 
   return (
-    <MudWorldProvider worldWebId={worldWebId}>
-      <MudAccountProvider webId={webId} actionManager={actionManager}>
-        <TerminalFeedProvider perceptionManager={perceptionManager}>
-          <Container>
-            {header}
-            <Container marginBottom={5}>
-              <GameWindow />
-            </Container>
-            <Container>
-              <Terminal />
-            </Container>
-          </Container>
-        </TerminalFeedProvider>
-      </MudAccountProvider>
-    </MudWorldProvider>
+    
+    <MudFederationProvider worldWebId={worldWebId}>
+      <MudWorldProvider>
+        <MudContentProvider>
+          <MudActionProvider>
+            <MudAccountProvider webId={webId}>
+              <TerminalFeedProvider>
+                <Container>
+                  {header}
+                  <Container marginBottom={5}>
+                    <GameWindow />
+                  </Container>
+                  <Container>
+                    <Terminal />
+                  </Container>
+                </Container>
+              </TerminalFeedProvider>
+            </MudAccountProvider>
+          </MudActionProvider>
+        </MudContentProvider>
+      </MudWorldProvider>
+    </MudFederationProvider>
     );
 }
