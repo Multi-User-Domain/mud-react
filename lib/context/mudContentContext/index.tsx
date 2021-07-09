@@ -1,3 +1,8 @@
+import {
+    ReactElement,
+    createContext,
+} from 'react';
+
 import axios, { AxiosResponse } from 'axios';
 
 import { 
@@ -14,34 +19,41 @@ import {
     getThing,
 } from '@inrupt/solid-client';
 
-import { MUD, MUDAPI, MUD_CONTENT } from "./MUD";
-import { parseTurtleToSolidDataset, getThingName, triplesToTurtle } from "./utils";
+import { MUD, MUD_CONTENT } from "../../MUD";
+import { parseTurtleToSolidDataset, getThingName, triplesToTurtle } from "../../utils";
+import useMudFederation from "../../hooks/useMudFederation";
 
 /**
- * Perception Manager is responsible for choosing what to display to the user, i.e. for deciding when it has enough content and what
- * content should be displayed to the user, separated from the TerminalContext which is responsible for managing the feed and the
- * Terminal component which is responsible for rendering it
+ * The Content Context leverages the Federation to serve Content describing the users' perspective
  * 
- * PM: what and why
+ * This class: what and why
  * Context: where
  * Component: how
  * 
  * TODO: when? Maybe a message scehduler, informed by user settings and the PM?
  */
 
+// TODO: inject the logic which serializes a graph into content
 export interface ITerminalMessage {
     id: string;
     read?: boolean;
     content: string | React.ReactElement;
 }
 
-export interface IPerceptionManager {
-    getITerminalMessage: (content: string | React.ReactElement) => ITerminalMessage;
-    describeThing: (worldWebId: string, thing: Thing) => Promise<ITerminalMessage[]>;
-    describeScene: (worldWebId: string, things: Thing[]) => Promise<ITerminalMessage[]>;
+export interface IMUDContentContext {
+    getITerminalMessage?: (content: string | React.ReactElement) => ITerminalMessage;
+    getThingDescription?: (thing: Thing) => Promise<ITerminalMessage[]>;
+    getSceneDescription?: (things: Thing[]) => Promise<ITerminalMessage[]>;
 };
 
-export const perceptionManager: IPerceptionManager = (() => {
+export const MudContentContext = createContext<IMUDContentContext>({});
+
+export const MudContentProvider = ({
+    children
+}): ReactElement => {
+
+    const { getFirstConfiguredEndpoint } = useMudFederation();
+
     let recentUris = [];
 
     const getITerminalMessage = (content: string | React.ReactElement) : ITerminalMessage => {
@@ -111,15 +123,15 @@ export const perceptionManager: IPerceptionManager = (() => {
      * method describes parameterised Thing by adding relevant messages to the feed
      * @param thing: Thing to describe
      */
-    const describeThing = (worldWebId: string, thing: Thing) : Promise<ITerminalMessage[]> => {
-        return describeScene(worldWebId, [thing]);
+    const getThingDescription = (thing: Thing) : Promise<ITerminalMessage[]> => {
+        return getSceneDescription([thing]);
     }
 
-    const postScene = (worldWebId: string, data: any) : Promise<AxiosResponse<any>> => {
-        return axios.post(worldWebId + MUDAPI.contentPath, data);
+    const postScene = (data: any) : Promise<AxiosResponse<any>> => {
+        return axios.post(getFirstConfiguredEndpoint(MUD_CONTENT.sceneDescriptionEndpoint), data);
     }
 
-    const describeScene = (worldWebId: string, things: Thing[]) : Promise<ITerminalMessage[]> => {
+    const getSceneDescription = (things: Thing[]) : Promise<ITerminalMessage[]> => {
         // add a fast message with the name and description (and possibly image)
         let newMessages: ITerminalMessage[] = getPrimaryContent(things);
 
@@ -131,7 +143,7 @@ export const perceptionManager: IPerceptionManager = (() => {
 
             // build scene data
             buildSceneTurtleData(things).then((requestData) => {
-                postScene(worldWebId, requestData).then((response) => {
+                postScene(requestData).then((response) => {
                     if(response && response.data != null) {
 
                         // parseContent has turned the content graph into an array of messages
@@ -148,9 +160,15 @@ export const perceptionManager: IPerceptionManager = (() => {
         });
     }
 
-    return {
-        getITerminalMessage: getITerminalMessage,
-        describeThing: describeThing,
-        describeScene: describeScene
-    };
-})();
+    return(
+        <MudContentContext.Provider
+            value={{
+                getITerminalMessage,
+                getThingDescription,
+                getSceneDescription
+            }}
+        >
+            {children}
+        </MudContentContext.Provider>
+    );
+};

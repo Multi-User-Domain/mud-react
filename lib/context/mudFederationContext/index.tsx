@@ -8,7 +8,6 @@ import {
 
 import {
     Thing,
-    SolidDataset,
     getSolidDataset,
     getUrl,
   } from "@inrupt/solid-client";
@@ -22,7 +21,7 @@ import { getFilteredThings } from "../../utils";
  * These two features together constitute the federation of MUD services
  */
 
-export const MUD_CONFIG_PATH: string = ".well-known/openid-configuration/";
+export const MUD_CONFIG_PATH: string = ".well-known/mud-configuration/";
 
 export interface IMudFederationContext {
     getFirstConfiguredEndpoint: (endpoint: string) => string
