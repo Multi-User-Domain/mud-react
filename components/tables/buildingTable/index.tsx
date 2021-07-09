@@ -51,8 +51,8 @@ export default function BuildingTable(
 
     const [ buildingThings, setBuildingThings ] = useState<Thing[]>(null);
     const [ selectedBuilding, setSelectedBuilding ] = useState<Thing>(null);
-    const { settlementDataSet, worldWebId } = useMudWorld();
-    const { characters, postTransitTask } = useMudAccount();
+    const { settlementDataSet } = useMudWorld();
+    const { characters, transitCharacter } = useMudAccount();
     const { describeScene } = useTerminalFeed();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -74,7 +74,7 @@ export default function BuildingTable(
         onClose();
 
         //schedule the Transit task
-        postTransitTask(worldWebId, thing, selectedBuilding);
+        transitCharacter(thing, selectedBuilding);
 
         //log to Terminal feed the building description
         describeScene(characters.concat([selectedBuilding]));
