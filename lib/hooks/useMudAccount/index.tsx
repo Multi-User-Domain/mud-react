@@ -11,14 +11,14 @@ export default function useMudAccount() : IMudAccountContext {
   const {
     characterDataSet,
     characters,
-    postTransitTask,
+    transitCharacter,
     addCharacter
   } = useContext(MudAccountContext);
 
   return {
     characterDataSet,
     characters,
-    postTransitTask,
+    transitCharacter,
     addCharacter
   };
 }
