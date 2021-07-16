@@ -26,17 +26,13 @@ import GameWindow from "../components/gameWindow";
 import WorldFinder from "../components/worldFinder";
 
 export default function Home(): React.ReactElement {
-  const [ worldWebId, setWorldWebId ] = useState(null);
+  const [ worldConnection, setWorldConnection ] = useState(null);
   const { session } = useSession();
   const { webId } = session.info;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (!session.info.isLoggedIn) {
     return <LoginForm />;
-  }
-
-  if(!worldWebId) {
-    return <WorldFinder foundWebId={setWorldWebId} />
   }
 
   const header = (
@@ -60,9 +56,12 @@ export default function Home(): React.ReactElement {
     </Container>
   );
 
-  return (
-    
-    <MudFederationProvider worldWebId={worldWebId}>
+  let inner = null;
+
+  if(!worldConnection) inner = <WorldFinder foundWebId={setWorldConnection} />;
+  // display the full MUD game UI when the initial world connection has been made
+  else {
+    inner = (
       <MudWorldProvider>
         <MudContentProvider>
           <MudActionProvider>
@@ -82,6 +81,10 @@ export default function Home(): React.ReactElement {
           </MudActionProvider>
         </MudContentProvider>
       </MudWorldProvider>
-    </MudFederationProvider>
     );
+  }
+
+  return <MudFederationProvider>
+    {inner}
+  </MudFederationProvider>;
 }
