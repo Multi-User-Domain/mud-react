@@ -21,7 +21,7 @@ export default function App(props: IApp): React.ReactElement {
 
   return (
     <ChakraProvider theme={theme}>
-      <SessionProvider sessionId="react-sdk-example-project">
+      <SessionProvider sessionId="mud-react">
         <Component {...pageProps} />
       </SessionProvider>
     </ChakraProvider>
