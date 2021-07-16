@@ -5,11 +5,14 @@ import {
     Container, Box, Input, Button, Text
 } from "@chakra-ui/react";
 
+import useMudFederation from "../../lib/hooks/useMudFederation";
+
 /**
  * The WorldFinder component provides a form to select a World server
  */
 
  export default function WorldFinder({foundWebId} : {foundWebId: (string) => any}): React.ReactElement {
+    const { connect } = useMudFederation();
     const [webId, setWebId] = useState("http://localhost:8080/");
     const [error, setError] = useState(null);
 
@@ -20,7 +23,15 @@ import {
             return;
         }
 
-        foundWebId(webId);
+        // connect to the webId, only succeed when able to get the configuration
+        // and the configuration contains at least the world server endpoint
+        connect(webId).then((dataset) => {
+          foundWebId(webId);
+        })
+        .catch((err) => {
+          console.trace(err);
+          setError("Error with response from this server. Please try another");
+        });
     }
 
     return (
