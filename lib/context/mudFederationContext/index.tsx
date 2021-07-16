@@ -3,13 +3,13 @@ import {
     ReactNode,
     createContext,
     useState,
-    useEffect,
 } from 'react';
 
 import {
     Thing,
     getSolidDataset,
     getUrl,
+    SolidDataset,
   } from "@inrupt/solid-client";
 
 import { MUD } from "../../MUD";
@@ -24,15 +24,23 @@ import { getFilteredThings } from "../../utils";
 export const MUD_CONFIG_PATH: string = ".well-known/mud-configuration/";
 
 export interface IMudFederationContext {
-    getFirstConfiguredEndpoint: (endpoint: string) => string
+    connect: (host: string) => Promise<SolidDataset>,
+    getFirstConfiguredEndpoint: (endpoint: string) => string,
+    worldWebId: string,
+    setWorldWebId: (worldWebId: string) => void
 }
 
-export const MudFederationContext = createContext<IMudFederationContext>({getFirstConfiguredEndpoint: null});
+export const MudFederationContext = createContext<IMudFederationContext>({
+    connect: null,
+    getFirstConfiguredEndpoint: null,
+    worldWebId: null,
+    setWorldWebId: null
+});
 
 export const MudFederationProvider = ({
-    worldWebId,
     children
-}: {worldWebId: string, children: ReactNode}): ReactElement => {
+}: {children: ReactNode}): ReactElement => {
+    const [ worldWebId, setWorldWebId ] = useState(null);
     // for now connected servers are just an array of configurations, prioritised only by FIFO
     const [ configurations, setConfigurations ] = useState<Thing[]>(null);
 
@@ -47,29 +55,31 @@ export const MudFederationProvider = ({
         return null;
     }
 
-    const connect: (host: string) => void = (host) => {
+    const connect: (host: string) => Promise<SolidDataset> = (host) => {
         // normalize connection input
-        if(!host.endsWith("/")) worldWebId += "/";
+        if(!host.endsWith("/")) host += "/";
 
         // read the MUD configuration of the world server and store it
         const URL = host + MUD_CONFIG_PATH;
-        getSolidDataset(URL).then((dataset) => {
+        return new Promise<SolidDataset>((resolve, reject) => getSolidDataset(URL).then((dataset) => {
             let priorConfigurations: Thing[] = configurations ? configurations : [];
             setConfigurations(priorConfigurations.concat(getFilteredThings(dataset, MUD.Configuration)));
-        });
+            return resolve(dataset);
+        })
+        .catch((err) => {
+            return reject(err);
+        }));
     }
 
     //TODO: method to disconnect from a server
 
-    useEffect(() => {
-        connect(worldWebId);
-        //TODO: enforce that at least one world server is connected to (the main world server)
-    }, []);
-
     return(
         <MudFederationContext.Provider
             value={{
-                getFirstConfiguredEndpoint
+                connect,
+                getFirstConfiguredEndpoint,
+                worldWebId,
+                setWorldWebId
             }}
         >
             {children}

@@ -9,11 +9,17 @@ import {
 
 export default function useMudFederation() : IMudFederationContext {
     const {
-        getFirstConfiguredEndpoint
+        connect,
+        getFirstConfiguredEndpoint,
+        worldWebId,
+        setWorldWebId
     } = useContext(MudFederationContext);
 
     return {
-        getFirstConfiguredEndpoint
+        connect,
+        getFirstConfiguredEndpoint,
+        worldWebId,
+        setWorldWebId
     };
 }
   
