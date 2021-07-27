@@ -27,12 +27,16 @@ import { useSession } from "@inrupt/solid-ui-react/dist";
 
 import { getFilteredThings } from "../../utils";
 import { MUD, MUD_CHARACTER } from "../../MUD";
-import { IActionManager } from "../../ActionManager";
+import useMudAction from '../../hooks/useMudAction';
+
+/**
+ * The source of truth for the player data, i.e. the connection to their Pod
+ */
 
 export interface IMudAccountContext {
     characters: Thing[];
     characterDataSet: SolidDataset;
-    postTransitTask?: (worldWebId: string, subjectThing: Thing, destinationLocatable: Thing) => Promise<any>;
+    transitCharacter?: (subjectThing: Thing, destinationLocatable: Thing) => Promise<any>;
     addCharacter?: (string) => void;
 }
 
@@ -40,18 +44,17 @@ export const MudAccountContext = createContext<IMudAccountContext>({characters: 
 
 interface IMudAccountProvider {
     webId: string;
-    actionManager: IActionManager;
     children: ReactNode;
 };
 
 export const MudAccountProvider = ({
     webId,
-    actionManager,
     children
 }: IMudAccountProvider ): ReactElement => {
     const { fetch } = useSession();
     const [ characterDataSet, setCharacterDataSet ] = useState(null);
     const [ characters, setCharacters ] = useState(null);
+    const { postTransitTask } = useMudAction();
 
     const saveCharacterDataset = async (newThing, datasetToUpdate) => {
         const savedDataset = await saveSolidDatasetAt(
@@ -65,8 +68,8 @@ export const MudAccountProvider = ({
 
     //TODO: should with agents which are not Characters. Currently uses an implicit assumption that the subject is of the Character Dataset
     //TODO: should be able to post a transit task to multiple agents at once
-    const postTransitTask = (worldWebId: string, subjectThing: Thing, destinationLocatable: Thing) : Promise<any> => {
-        return actionManager.postTransitTask(worldWebId, subjectThing, destinationLocatable).then((response) => {
+    const transitCharacter = (subjectThing: Thing, destinationLocatable: Thing) : Promise<any> => {
+        return postTransitTask(subjectThing, destinationLocatable).then((response) => {
 
             if(response) {
                 //set hasTask on the agent conducting it
@@ -122,7 +125,7 @@ export const MudAccountProvider = ({
             value={{
                 characterDataSet,
                 characters,
-                postTransitTask,
+                transitCharacter,
                 addCharacter
             }}
         >

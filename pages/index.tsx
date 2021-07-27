@@ -13,7 +13,9 @@ import {
   LogoutButton,
 } from "@inrupt/solid-ui-react";
 
-import { perceptionManager } from "../lib/PerceptionManager";
+import { MudFederationProvider } from "../lib/context/mudFederationContext";
+import { MudContentProvider } from "../lib/context/mudContentContext";
+import { MudActionProvider } from "../lib/context/mudActionContext";
 import { MudWorldProvider } from "../lib/context/mudWorldContext";
 import { MudAccountProvider } from "../lib/context/mudAccountContext";
 import { TerminalFeedProvider } from "../lib/context/terminalFeedContext";
@@ -22,20 +24,15 @@ import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
 import GameWindow from "../components/gameWindow";
 import WorldFinder from "../components/worldFinder";
-import { actionManager } from "../lib/ActionManager";
 
 export default function Home(): React.ReactElement {
-  const [ worldWebId, setWorldWebId ] = useState(null);
+  const [ worldConnection, setWorldConnection ] = useState(null);
   const { session } = useSession();
   const { webId } = session.info;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (!session.info.isLoggedIn) {
     return <LoginForm />;
-  }
-
-  if(!worldWebId) {
-    return <WorldFinder foundWebId={setWorldWebId} />
   }
 
   const header = (
@@ -59,21 +56,35 @@ export default function Home(): React.ReactElement {
     </Container>
   );
 
-  return (
-    <MudWorldProvider worldWebId={worldWebId}>
-      <MudAccountProvider webId={webId} actionManager={actionManager}>
-        <TerminalFeedProvider perceptionManager={perceptionManager}>
-          <Container>
-            {header}
-            <Container marginBottom={5}>
-              <GameWindow />
-            </Container>
-            <Container>
-              <Terminal />
-            </Container>
-          </Container>
-        </TerminalFeedProvider>
-      </MudAccountProvider>
-    </MudWorldProvider>
+  let inner = null;
+
+  if(!worldConnection) inner = <WorldFinder foundWebId={setWorldConnection} />;
+  // display the full MUD game UI when the initial world connection has been made
+  else {
+    inner = (
+      <MudWorldProvider>
+        <MudContentProvider>
+          <MudActionProvider>
+            <MudAccountProvider webId={webId}>
+              <TerminalFeedProvider>
+                <Container>
+                  {header}
+                  <Container marginBottom={5}>
+                    <GameWindow />
+                  </Container>
+                  <Container>
+                    <Terminal />
+                  </Container>
+                </Container>
+              </TerminalFeedProvider>
+            </MudAccountProvider>
+          </MudActionProvider>
+        </MudContentProvider>
+      </MudWorldProvider>
     );
+  }
+
+  return <MudFederationProvider>
+    {inner}
+  </MudFederationProvider>;
 }

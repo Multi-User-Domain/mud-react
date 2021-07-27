@@ -8,9 +8,13 @@ import {
     useState,
     useEffect
 } from 'react';
-import useMudWorld from "../../hooks/useMudWorld";
 
-import { ITerminalMessage, IPerceptionManager } from "../../PerceptionManager";
+import { ITerminalMessage } from "../../context/mudContentContext";
+import useMudContent from '../../hooks/useMudContent';
+
+/**
+ * The source of truth for messages in the terminal (the content displayed to the player) and provides methods to add to it
+ */
 
 export interface ITerminalFeedContext {
     messages: ITerminalMessage[];
@@ -21,21 +25,19 @@ export interface ITerminalFeedContext {
 
 export interface ITerminalFeedProvider {
     children: ReactNode;
-    perceptionManager: IPerceptionManager;
 };
 
 export const TerminalFeedContext = createContext<ITerminalFeedContext>({messages: null});
 
 export const TerminalFeedProvider = ({
-    children,
-    perceptionManager
+    children
 }: ITerminalFeedProvider): ReactElement => {
-    const { worldWebId } = useMudWorld();
+    const { getITerminalMessage, getThingDescription, getSceneDescription } = useMudContent();
     const [ messages, setMessages ] = useState<ITerminalMessage[]>([]);
 
     // a method for adding a string directly
     const addMessage = (content: string | React.ReactElement) : void => {
-        let message: ITerminalMessage = perceptionManager.getITerminalMessage(content);
+        let message: ITerminalMessage = getITerminalMessage(content);
         setMessages(messages.concat(message));
     }
 
@@ -48,13 +50,13 @@ export const TerminalFeedProvider = ({
      * @param thing: Thing to describe
      */
     const describeThing = (thing: Thing) : void => {
-        perceptionManager.describeThing(worldWebId, thing).then((messages) => {
+        getThingDescription(thing).then((messages) => {
             addMessages(messages);
         });
     }
 
     const describeScene = (things: Thing[]) : void => {
-        perceptionManager.describeScene(worldWebId, things).then((messages) => {
+        getSceneDescription(things).then((messages) => {
             addMessages(messages);
         });
     }

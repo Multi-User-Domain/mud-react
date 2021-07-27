@@ -8,6 +8,10 @@ const MUD_CHARACTER_BASE_URL = "https://raw.githubusercontent.com/Multi-User-Dom
 export const MUD = {
     account: MUD_BASE_URL + '#Account',
     charactersList: MUD_BASE_URL + '#CharacterList',
+
+    Configuration: MUD_BASE_URL + "#Configuration",
+    worldEndpoint: MUD_BASE_URL + "#worldEndpoint",
+    sceneGenerationEndpoint: MUD_BASE_URL + "#sceneGenerationEndpoint",
     
     owner: MUD_BASE_URL + '#ownedBy',
 
@@ -28,6 +32,9 @@ export const MUD_CHARACTER = {
 }
 
 export const MUD_CONTENT = {
+    sceneDescriptionEndpoint: MUD_CONTENT_BASE_URL + "#sceneDescriptionEndpoint",
+    simpleObjectDescriptionEndpoint: MUD_CONTENT_BASE_URL + "#simpleObjectDescriptionEndpoint",
+
     Content: MUD_CONTENT_BASE_URL + "#Content",
     sees: MUD_CONTENT_BASE_URL + "#sees",
     describes: MUD_CONTENT_BASE_URL + "#describes",
@@ -36,13 +43,9 @@ export const MUD_CONTENT = {
 }
 
 export const MUD_LOGIC = {
+    actionDiscoveryEndpoint: MUD_LOGIC_BASE_URL + "#actionDiscoveryEndpoint",
+
     Task: MUD_LOGIC_BASE_URL + "#Task",
     Transit: MUD_LOGIC_BASE_URL + "#Transit",
-}
-
-// TODO: https://github.com/calummackervoy/mud-react/issues/4
-export const MUDAPI = {
-    worldPath: 'mud/world/',
-    contentPath: 'mud/content/',
-    taskPath: 'mud/act/task/',
+    actAt: MUD_LOGIC_BASE_URL + "#actAt",
 }

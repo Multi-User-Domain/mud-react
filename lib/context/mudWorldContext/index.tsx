@@ -11,26 +11,30 @@ import {
     getSolidDataset,
   } from "@inrupt/solid-client";
 
-import { MUD, MUDAPI } from "../../MUD";
+import { MUD } from "../../MUD";
 import { getFilteredThings } from "../../utils";
+import useMudFederation from '../../hooks/useMudFederation';
+
+/**
+ * The source of truth for data about the world which is currently connected by the player
+ */
 
 export interface IMudWorldContext {
-    worldWebId: string;
     settlements: [Thing];
     settlementDataSet: SolidDataset;
 }
 
-export const MudWorldContext = createContext<IMudWorldContext>({worldWebId: null, settlements: null, settlementDataSet: null});
+export const MudWorldContext = createContext<IMudWorldContext>({settlements: null, settlementDataSet: null});
 
 export const MudWorldProvider = ({
-    worldWebId,
     children
 }): ReactElement => {
+    const { getFirstConfiguredEndpoint } = useMudFederation();
     const [ settlementDataSet, setSettlementDataSet ] = useState(null);
     const [ settlements, setSettlements ] = useState(null);
 
     useEffect(() => {
-        const URL = worldWebId + MUDAPI.worldPath;
+        const URL = getFirstConfiguredEndpoint(MUD.worldEndpoint);
         getSolidDataset(URL).then((dataset) => {
             setSettlementDataSet(dataset);
             setSettlements(getFilteredThings(dataset, MUD.Settlement));
@@ -40,7 +44,6 @@ export const MudWorldProvider = ({
     return(
         <MudWorldContext.Provider
             value={{
-                worldWebId,
                 settlementDataSet,
                 settlements
             }}
