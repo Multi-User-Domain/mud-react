@@ -85,14 +85,26 @@ export const MudContentProvider = ({
         });
     }
 
-    const buildSceneTurtleData = (things: Thing[]): Promise<string> => {
-        let scene: SolidDataset = createSolidDataset();
+    const buildSceneTurtleData = (things: Thing[], postToWorldServer=true): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
+            let scene: SolidDataset = createSolidDataset();
 
-        for(let thing of things) {
-            scene = setThing(scene, thing);
-        }
+            // build the basic scene from parameterised things
+            for(let thing of things) {
+                scene = setThing(scene, thing);
+            }
 
-        return triplesToTurtle(Array.from(scene));
+            triplesToTurtle(Array.from(scene)).then((sceneTurtle) => {
+                if(!postToWorldServer) return resolve(sceneTurtle);
+
+                // post it to the scene building endpoint
+                axios.post(getFirstConfiguredEndpoint(MUD.sceneGenerationEndpoint), sceneTurtle).then((response) => {
+
+                    let result = (response && response.data != null) ? response.data : sceneTurtle;
+                    return resolve(result);
+                }).catch((err) => reject(err));
+            });
+        });
     }
 
     /**
