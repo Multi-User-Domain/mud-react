@@ -19,7 +19,7 @@ import { MudActionProvider } from "../lib/context/mudActionContext";
 import { MudWorldProvider } from "../lib/context/mudWorldContext";
 import { MudAccountProvider } from "../lib/context/mudAccountContext";
 import { TerminalFeedProvider } from "../lib/context/terminalFeedContext";
-import LoginForm from "../components/loginForm";
+import { LoginForm } from "@multi-user-domain/mud-lib";
 import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
 import GameWindow from "../components/gameWindow";
