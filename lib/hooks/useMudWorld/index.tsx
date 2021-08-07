@@ -7,7 +7,7 @@ import {
     MudWorldContext
   } from '../../context/mudWorldContext';
   
-  export default function useMudAccount() : IMudWorldContext {
+  export default function useMudWorld() : IMudWorldContext {
     const {
         settlementDataSet,
         settlements

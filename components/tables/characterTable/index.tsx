@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import useMudAccount from '../../../lib/hooks/useMudAccount';
 import { Box, Button, Input, useDisclosure } from "@chakra-ui/react";
-import { ThingList } from "@multi-user-domain/mud-lib";
+import { 
+  ThingList,
+  useMudAccount
+} from "@multi-user-domain/mud-lib";
 
 import styles from "./characterTable.module.css";
 import Character from "../../character";

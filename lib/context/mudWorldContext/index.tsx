@@ -11,8 +11,7 @@ import {
     getSolidDataset,
   } from "@inrupt/solid-client";
 
-import { MUD } from "../../MUD";
-import { getFilteredThings } from "../../utils";
+import { MUD, getFilteredThings } from "@multi-user-domain/mud-lib";
 import useMudFederation from '../../hooks/useMudFederation';
 
 /**
