@@ -10,8 +10,8 @@ import {
     DrawerCloseButton,
     Center, } from "@chakra-ui/react";
 import { Thing } from "@inrupt/solid-client";
-import { getThingName } from "../../lib/utils";
-import ThingDepiction from "../thingDepiction";
+import { ThingDepiction, getThingName }  from "@multi-user-domain/mud-lib";
+
 import styles from "./characterProfile.module.css";
 
 export default function CharacterProfile(

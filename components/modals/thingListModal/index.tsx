@@ -12,7 +12,7 @@ import {
     Button
 } from "@chakra-ui/react";
 
-import {ThingList, IThingList} from "../../thingList";
+import {ThingList, IThingList} from "@multi-user-domain/mud-lib";
 
 export interface IThingListModal extends IThingList {
     headerContent?: ReactElement;

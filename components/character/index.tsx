@@ -1,10 +1,7 @@
-import { Grid, GridItem, Center, Text, Container } from "@chakra-ui/react";
-import { getThingName } from '../../lib/utils';
-import ThingDepiction from "../thingDepiction";
+import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
 import { getUrl } from '@inrupt/solid-client';
-import { IRowComponent } from "../thingList";
+import { IRowComponent, ThingDepiction, MUD_CHARACTER, getThingName } from "@multi-user-domain/mud-lib";
 import TimerProgressBar from "../timerProgressBar";
-import { MUD_CHARACTER } from "../../lib/MUD";
 import styles from "./character.module.css";
 
 export default function Character({thing, selectHandler} : IRowComponent): React.ReactElement {  
