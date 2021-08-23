@@ -22,7 +22,7 @@ export default function Character({thing, selectHandler} : IRowComponent): React
   }
   
   return (
-  <Grid templateColumns="repeat(6, 1fr)" w="80%" margin="auto" gap={1} className={styles.characterRow}>
+  <Grid templateColumns="repeat(6, 1fr)" w="80%" margin="auto" gap={1} marginBottom="10px">
     <GridItem w="100px" h="100px" colSpan={2} className={styles.profilePic}
         tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
       <ThingDepiction thing={thing} />
