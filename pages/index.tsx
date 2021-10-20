@@ -24,6 +24,7 @@ import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
 import GameWindow from "../components/gameWindow";
 import WorldFinder from "../components/worldFinder";
+import { MudSceneProvider } from "../lib/context/mudSceneContext";
 
 export default function Home(): React.ReactElement {
   const [ worldConnection, setWorldConnection ] = useState(null);
@@ -63,23 +64,25 @@ export default function Home(): React.ReactElement {
   else {
     inner = (
       <MudWorldProvider>
-        <MudContentProvider>
-          <MudActionProvider>
-            <MudAccountProvider webId={webId}>
-              <TerminalFeedProvider>
-                <Container>
-                  {header}
-                  <Container marginBottom={5}>
-                    <GameWindow />
-                  </Container>
+        <MudSceneProvider>
+          <MudContentProvider>
+            <MudActionProvider>
+              <MudAccountProvider webId={webId}>
+                <TerminalFeedProvider>
                   <Container>
-                    <Terminal />
+                    {header}
+                    <Container marginBottom={5}>
+                      <GameWindow />
+                    </Container>
+                    <Container>
+                      <Terminal />
+                    </Container>
                   </Container>
-                </Container>
-              </TerminalFeedProvider>
-            </MudAccountProvider>
-          </MudActionProvider>
-        </MudContentProvider>
+                </TerminalFeedProvider>
+              </MudAccountProvider>
+            </MudActionProvider>
+          </MudContentProvider>
+        </MudSceneProvider>
       </MudWorldProvider>
     );
   }
