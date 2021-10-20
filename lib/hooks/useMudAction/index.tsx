@@ -9,11 +9,11 @@ import {
 
 export default function useMudAction() : IMUDActionContext {
     const {
-        postTransitTask
+        discoverActions
     } = useContext(MudActionContext);
 
     return {
-        postTransitTask,
+        discoverActions,
     };
 }
   

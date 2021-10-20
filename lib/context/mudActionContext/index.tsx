@@ -8,10 +8,12 @@ import axios, { AxiosResponse } from 'axios';
 import { 
     Thing,
     createSolidDataset,
-    setThing
+    setThing,
+    getThingAll,
+    SolidDataset
 } from '@inrupt/solid-client';
 
-import { triplesToTurtle } from "../../utils";
+import { triplesToTurtle, parseTurtleToSolidDataset } from "../../utils";
 import { MUD_LOGIC } from "../../MUD";
 import useMudFederation from '../../hooks/useMudFederation';
 
@@ -21,7 +23,7 @@ import useMudFederation from '../../hooks/useMudFederation';
  */
 
 export interface IMUDActionContext {
-    postTransitTask?: (subjectThing: Thing, destinationLocatable: Thing) => Promise<any>;
+    discoverActions?: (scene: SolidDataset) => Promise<Thing[]>;
 };
 
 export const MudActionContext = createContext<IMUDActionContext>({});
@@ -37,8 +39,6 @@ export const MudActionProvider = ({
         const dataset = setThing(setThing(createSolidDataset(), subject), locatable);
         return triplesToTurtle(Array.from(dataset));
     }
-
-
     
     const postTask = (data: any, taskUri: String) : Promise<AxiosResponse<any>> => {
         let endpoint = getFirstConfiguredEndpoint(MUD_LOGIC.Transit);
@@ -61,10 +61,39 @@ export const MudActionProvider = ({
         });
     }
 
+    const parseContent: (data: string) => Promise<Thing[]> = (data) => {
+        return new Promise<Thing[]>((resolve, reject) => {
+            parseTurtleToSolidDataset(data).then((dataset) => {
+                return resolve(getThingAll(dataset));
+            });
+        });
+    }
+
+    /**
+     * Action discovery
+     */
+    const discoverActions = (scene: SolidDataset) : Promise<Thing[]> => {
+        return new Promise<Thing[]>((resolve, reject) => {
+
+            triplesToTurtle(Array.from(scene)).then((requestData) => {
+
+                axios.post(getFirstConfiguredEndpoint(MUD_LOGIC.actionDiscoveryEndpoint), requestData).then((response) => {
+                    if(response && response.data != null) {
+
+                        // parseContent will transform the Turtle dataset into a list of things
+                        parseContent(response.data).then((actions) => {
+                           return resolve(actions); 
+                        });
+                    }
+                });
+            });
+        });
+    }
+
     return(
         <MudActionContext.Provider
             value={{
-                postTransitTask
+                discoverActions
             }}
         >
             {children}
