@@ -13,15 +13,13 @@ import {
     asUrl,
     ThingPersisted,
     getThingAll,
-    SolidDataset,
-    createSolidDataset,
-    setThing,
     getThing,
 } from '@inrupt/solid-client';
 
 import { MUD, MUD_CONTENT } from "../../MUD";
 import { parseTurtleToSolidDataset, getThingName, triplesToTurtle } from "../../utils";
 import useMudFederation from "../../hooks/useMudFederation";
+import useMudScene from "../../hooks/useMudScene";
 
 /**
  * The Content Context leverages the Federation to serve Content describing the users' perspective
@@ -53,6 +51,7 @@ export const MudContentProvider = ({
 }): ReactElement => {
 
     const { getFirstConfiguredEndpoint } = useMudFederation();
+    const { buildScene } = useMudScene();
 
     let recentUris = [];
 
@@ -82,28 +81,6 @@ export const MudContentProvider = ({
             });
 
             return values;
-        });
-    }
-
-    const buildSceneTurtleData = (things: Thing[], postToWorldServer=true): Promise<string> => {
-        return new Promise<string>((resolve, reject) => {
-            let scene: SolidDataset = createSolidDataset();
-
-            // build the basic scene from parameterised things
-            for(let thing of things) {
-                scene = setThing(scene, thing);
-            }
-
-            triplesToTurtle(Array.from(scene)).then((sceneTurtle) => {
-                if(!postToWorldServer) return resolve(sceneTurtle);
-
-                // post it to the scene building endpoint
-                axios.post(getFirstConfiguredEndpoint(MUD.sceneGenerationEndpoint), sceneTurtle).then((response) => {
-
-                    let result = (response && response.data != null) ? response.data : sceneTurtle;
-                    return resolve(result);
-                }).catch((err) => reject(err));
-            });
         });
     }
 
@@ -154,19 +131,23 @@ export const MudContentProvider = ({
         return new Promise<ITerminalMessage[]>((resolve, reject) => {
 
             // build scene data
-            buildSceneTurtleData(things).then((requestData) => {
-                postScene(requestData).then((response) => {
-                    if(response && response.data != null) {
+            buildScene(things, true).then((scene) => {
 
-                        // parseContent has turned the content graph into an array of messages
-                        parseContent(response.data).then((messages) => {
-                            for(let message of messages) {
-                                newMessages.push(getITerminalMessage(message));
-                            }
-        
-                            return resolve(newMessages);
-                        });
-                    }
+                triplesToTurtle(Array.from(scene)).then((requestData) => {
+
+                    postScene(requestData).then((response) => {
+                        if(response && response.data != null) {
+    
+                            // parseContent has turned the content graph into an array of messages
+                            parseContent(response.data).then((messages) => {
+                                for(let message of messages) {
+                                    newMessages.push(getITerminalMessage(message));
+                                }
+            
+                                return resolve(newMessages);
+                            });
+                        }
+                    });
                 });
             });
         });
