@@ -11,7 +11,7 @@ import {
     getStringNoLocale
   } from "@inrupt/solid-client";
 
-import {RDF, VCARD, FOAF} from "@inrupt/lit-generated-vocab-common";
+import {RDF, VCARD, FOAF, RDFS} from "@inrupt/lit-generated-vocab-common";
 
 /**
  * @returns All Things from a given dataset if they are of parameterised type
@@ -110,7 +110,7 @@ export const parseTurtleToSolidDataset = async (turtle: string) : Promise<SolidD
  * @returns the name of a given Thing, or null if unable to find it
  */
 export const getThingName = (thing: Thing): string => {
-    const NAME_PROPERTIES = [VCARD.fn, FOAF.name];
+    const NAME_PROPERTIES = [VCARD.fn, FOAF.name, RDFS.label];
     for(let PROP of NAME_PROPERTIES) {
         const name = getStringNoLocale(thing, PROP);
 
