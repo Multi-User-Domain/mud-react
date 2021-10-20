@@ -1,6 +1,6 @@
 import { Grid, GridItem, Center, Text, Circle } from "@chakra-ui/react";
 import { getThingName } from '../../lib/utils';
-import { getUrl } from '@inrupt/solid-client';
+import { getUrl, getStringNoLocale } from '@inrupt/solid-client';
 import { IRowComponent } from "../thingList";
 import { MUD_LOGIC } from "../../lib/MUD";
 
@@ -27,7 +27,7 @@ export default function ActionRow({thing, selectHandler} : IRowComponent): React
 
     <GridItem colSpan={2} verticalAlign="middle" paddingTop={10} paddingBottom={10}
         tag="a" onClick={onRowSelect} style={{ cursor: "pointer" }}>
-      <Center h="100%"><Text>{getUrl(thing, MUD_LOGIC.actAt)}</Text></Center>
+      <Center h="100%"><Text>{getStringNoLocale(thing, MUD_LOGIC.actAt)}</Text></Center>
     </GridItem>
   </Grid>);
   }
