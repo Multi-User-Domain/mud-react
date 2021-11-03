@@ -16,11 +16,10 @@ import {
   getThing,
   getUrl,
   saveSolidDatasetAt,
-  getFetchedFrom,
   setThing,
   createThing,
   setUrl,
-  setStringUnlocalized
+  setStringNoLocale
 } from "@inrupt/solid-client";
 
 import { useSession } from "@inrupt/solid-ui-react/dist";
@@ -52,14 +51,15 @@ export const MudAccountProvider = ({
     children
 }: IMudAccountProvider ): ReactElement => {
     const { fetch } = useSession();
+    const [ charactersDataSetLocation, setCharactersDataSetLocation ] = useState(null); // a copy of the URL of the character collection which is stored on the user's solid pod and retrieved during init
     const [ characterDataSet, setCharacterDataSet ] = useState(null);
     const [ characters, setCharacters ] = useState(null);
     const { postTransitTask } = useMudAction();
 
     const saveCharacterDataset = async (newThing, datasetToUpdate) => {
         const savedDataset = await saveSolidDatasetAt(
-          getFetchedFrom(datasetToUpdate),
-          setThing(datasetToUpdate, newThing),
+            charactersDataSetLocation,
+            setThing(datasetToUpdate, newThing),
           { fetch }
         );
         setCharacterDataSet(savedDataset);
@@ -89,8 +89,8 @@ export const MudAccountProvider = ({
         // creates a new character Thing, sets properties to it
         let newCharacter = setUrl(createThing(), RDF.type, MUD_CHARACTER.Character);
         newCharacter = setUrl(newCharacter, MUD.owner, webId);
-        newCharacter = setStringUnlocalized(newCharacter, VCARD.fn, newCharName);
-        newCharacter = setStringUnlocalized(newCharacter, FOAF.name, newCharName);
+        newCharacter = setStringNoLocale(newCharacter, VCARD.fn, newCharName);
+        newCharacter = setStringNoLocale(newCharacter, FOAF.name, newCharName);
         const dataSetWithCharacter = setThing(
             characterDataSet,
             newCharacter
@@ -111,8 +111,9 @@ export const MudAccountProvider = ({
                 const accountThing = getThing(accountDataSet, accountUrl);
 
                 //get the character list dataset from the account
-                const charactersDataSetLocation = getStringNoLocale(accountThing, MUD.charactersList);
-                getSolidDataset(charactersDataSetLocation).then((dataset) => {
+                const charactersListUrl = getStringNoLocale(accountThing, MUD.charactersList);
+                getSolidDataset(charactersListUrl).then((dataset) => {
+                    setCharactersDataSetLocation(charactersListUrl);
                     setCharacterDataSet(dataset);
                     setCharacters(getFilteredThings(dataset, MUD_CHARACTER.Character));
                 });
