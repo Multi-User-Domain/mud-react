@@ -12,6 +12,7 @@ import {
   } from "@inrupt/solid-client";
 
 import {RDF, VCARD, FOAF} from "@inrupt/lit-generated-vocab-common";
+import { addRdfJsQuadToDataset } from "./rdfs.intern";
 
 /**
  * @returns All Things from a given dataset if they are of parameterised type
@@ -100,7 +101,7 @@ export async function turtleToTriples(
 export const parseTurtleToSolidDataset = async (turtle: string) : Promise<SolidDataset> => {
     const triples = await turtleToTriples(turtle);
     const resource = createSolidDataset();
-    triples.forEach((triple) => resource.add(triple));
+    triples.forEach((triple) => addRdfJsQuadToDataset(resource, triple));
 
     return resource;
 }
