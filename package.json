@@ -14,7 +14,7 @@
     "@emotion/styled": "^11.0.0",
     "@inrupt/lit-generated-vocab-common": "^0.3.11",
     "@inrupt/solid-client": "^1.15.0",
-    "@inrupt/solid-ui-react": "^2.5.0",
+    "@inrupt/solid-ui-react": "2.4.0",
     "@solid/lit-term": "^0.4.1",
     "axios": "^0.21.1",
     "framer-motion": "^3.2.1",
