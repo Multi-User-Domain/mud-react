@@ -5,7 +5,7 @@ import {
   useMudAccount
 } from "@multi-user-domain/mud-lib";
 
-import styles from "./characterTable.module.css";
+import "./characterTable.module.css";
 import Character from "../../character";
 import CharacterProfile from '../../characterProfile';
 import { Thing } from '@inrupt/solid-client';
@@ -32,7 +32,7 @@ export default function CharactersTable({edit} : {edit: boolean}) : React.ReactE
     if (edit) editContent = (
         <>
         <h3>Add New Character</h3>
-        <Box className={styles.newCharacterFields}>
+        <Box className="newCharacterFields">
           <Input
             label="Name"
             value={newCharName}

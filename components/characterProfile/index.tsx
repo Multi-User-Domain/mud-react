@@ -12,7 +12,7 @@ import {
 import { Thing } from "@inrupt/solid-client";
 import { ThingDepiction, getThingName }  from "@multi-user-domain/mud-lib";
 
-import styles from "./characterProfile.module.css";
+import "./characterProfile.module.css";
 
 export default function CharacterProfile(
     {character, isOpen, onClose=null} : {character: Thing, isOpen: boolean, onClose: () => void}): React.ReactElement {
@@ -32,7 +32,7 @@ export default function CharacterProfile(
                                 <ThingDepiction thing={character} maxHeight="10vh" />
                             </Center>
                         </Box>
-                        <Box w="100%" className={styles.profileName}>
+                        <Box w="100%" className="profileName">
                             <Center><h1>{getThingName(character)}</h1></Center>
                         </Box>
                         <hr/>

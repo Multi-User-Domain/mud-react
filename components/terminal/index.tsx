@@ -4,7 +4,7 @@ import {
     Container } from "@chakra-ui/react"
 
 import useTerminalFeed from "../../lib/hooks/useTerminalFeed";
-import styles from "./terminal.module.css";
+import "./terminal.module.css";
 
 import { WindupChildren, OnChar } from "windups";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -13,7 +13,7 @@ import { useRef } from "react";
 
 export function TerminalMessage({message, children} : {message: ITerminalMessage, children: any}) : React.ReactElement {
     return (
-        <li className={styles.message}>{children}</li>
+        <li className="message">{children}</li>
     );
 }
 
@@ -43,8 +43,8 @@ export default function Terminal(): React.ReactElement {
     // we duplicate it to display content differently visually and when accessing via screen reader
     return (
         <Container>
-            <VisuallyHidden><ul className={styles.messageFeed}>{messagesRead}{messagesUnread}</ul></VisuallyHidden>
-            <div aria-hidden className={styles.messageFeed}>
+            <VisuallyHidden><ul className="messageFeed">{messagesRead}{messagesUnread}</ul></VisuallyHidden>
+            <div aria-hidden className="messageFeed">
                 <ul>{messagesRead}</ul>
                 <WindupChildren>
                     <OnChar fn={scrollToBottom}>

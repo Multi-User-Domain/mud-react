@@ -1,5 +1,5 @@
 import {useState} from "react";
-import { useSession } from "@inrupt/solid-ui-react/dist";
+import { useSession } from "@inrupt/solid-ui-react";
 
 import {
   Flex,

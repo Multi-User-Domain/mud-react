@@ -2,7 +2,7 @@ import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
 import { getUrl } from '@inrupt/solid-client';
 import { IRowComponent, ThingDepiction, MUD_CHARACTER, getThingName } from "@multi-user-domain/mud-lib";
 import TimerProgressBar from "../timerProgressBar";
-import styles from "./character.module.css";
+import "./character.module.css";
 
 export default function Character({thing, selectHandler} : IRowComponent): React.ReactElement {  
   const onCharacterSelect = (event) => {
@@ -23,17 +23,17 @@ export default function Character({thing, selectHandler} : IRowComponent): React
   
   return (
   <Grid templateColumns="repeat(6, 1fr)" w="80%" margin="auto" gap={1} marginBottom="10px">
-    <GridItem w="100px" h="100px" colSpan={2} className={styles.profilePic}
+    <GridItem w="100px" h="100px" colSpan={2} className="profilePic"
         tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
       <ThingDepiction thing={thing} />
     </GridItem>
 
-    <GridItem colSpan={2} className={styles.characterField} 
+    <GridItem colSpan={2} className="characterField" 
         tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
       <Center h="100%"><Text>{getThingName(thing)}</Text></Center>
     </GridItem>
     
-    <GridItem colSpan={2} className={styles.characterField}>
+    <GridItem colSpan={2} className="characterField">
       <Center h="100%">{taskComponent}</Center>
     </GridItem>
   </Grid>);
