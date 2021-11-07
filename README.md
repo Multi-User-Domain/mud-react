@@ -21,4 +21,4 @@ Tech Stack:
 * Manually copy the contents of https://calum.inrupt.net/public/mudcard.ttl into your POD and change the value of the CharacterList to the location of the Character collection you just created. Sorry this is all manual, there is an [open issue](https://github.com/Multi-User-Domain/mud-react/issues/7) to automate it... open a PR please? :)
 * Add a link to your MUD-Card in your profile card. See mine for an example https://calum.inrupt.net/profile/
 * Clone this repository locally
-* run `yarn install` to install the dependencies and run `npm run dev` to give it a go. Make sure your local Tomcat server is running at `http://localhost:8080/` and then you can log in via your POD and get started! The app will run and auto-update at `https://localhost:3000/`. The HTTPS isn't a typo
+* run `yarn install` to install the dependencies and run `yarn run start` to give it a go. Make sure your local Tomcat server is running at `http://localhost:8080/` and then you can log in via your POD and get started! The app will run and auto-update at `http://localhost:3000/`
