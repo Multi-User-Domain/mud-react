@@ -96,7 +96,7 @@ export const MudContentProvider = ({
             scene = setThing(scene, thing);
         }
 
-        return triplesToTurtle(Array.from(scene));
+        return triplesToTurtle(Array.from(scene[0]));
     }
 
     /**
@@ -106,7 +106,7 @@ export const MudContentProvider = ({
         let messages: ITerminalMessage[] = [];
         
         for(let thing of things) {
-            const uri = asUrl(thing as ThingPersisted);
+            const uri = asUrl(thing, thing.url);
             const imageUrl = getUrl(thing, MUD.primaryImageContent);
 
             if(imageUrl && !recentUris.includes(uri)) {
@@ -140,7 +140,7 @@ export const MudContentProvider = ({
         let newMessages: ITerminalMessage[] = getPrimaryContent(things);
 
         // remember previous descriptions and don't repeat
-        for(let thing of things) recentUris.push(asUrl(thing as ThingPersisted));
+        for(let thing of things) recentUris.push(asUrl(thing, thing.url));
 
         // search for content online
         return new Promise<ITerminalMessage[]>((resolve, reject) => {

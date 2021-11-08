@@ -35,7 +35,7 @@ export const MudActionProvider = ({
     const buildTransitPostData = (subject: Thing, locatable: Thing) : Promise<string> => {
         //should return a turtle file with just declarations for the locatable and the thing being given a location
         const dataset = setThing(setThing(createSolidDataset(), subject), locatable);
-        return triplesToTurtle(Array.from(dataset));
+        return triplesToTurtle(Array.from(dataset[0]));
     }
     
     const postTask = (data: any, taskUri: String) : Promise<AxiosResponse<any>> => {

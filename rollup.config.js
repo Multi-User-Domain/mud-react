@@ -50,14 +50,10 @@ export default {
     }),
     livereload({ watch: "dist" })
   ],
-  external: [
-    '@inrupt/solid-client',
-    '@inrupt/solid-client-authn-core',
-  ],
+  external: [],
   paths: {
     "react": "https://unpkg.com/react@17/umd/react.development.js",
     "react-dom": "https://unpkg.com/react-dom@17/umd/react-dom.development.js",
-    "@inrupt/solid-client": "https://unpkg.com/@inrupt/solid-client@1.13.3/dist/index.js",
   },
   output: {
     globals: {
