@@ -12,7 +12,7 @@ import {
     SolidDataset,
   } from "@inrupt/solid-client";
 
-import { MUD } from "../../MUD";
+import { MUD } from "@multi-user-domain/mud-lib";
 import { getFilteredThings } from "../../utils";
 
 /**

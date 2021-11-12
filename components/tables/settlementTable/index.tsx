@@ -6,7 +6,7 @@ import {
 } from "@inrupt/solid-client";
 
 import { Grid, GridItem, Center, Text, Heading } from "@chakra-ui/react";
-import { MUD } from "../../../lib/MUD";
+import { MUD } from "@multi-user-domain/mud-lib";
 
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 import BuildingTable from "../buildingTable";

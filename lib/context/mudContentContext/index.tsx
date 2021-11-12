@@ -19,7 +19,7 @@ import {
     getThing,
 } from '@inrupt/solid-client';
 
-import { MUD, MUD_CONTENT } from "../../MUD";
+import { MUD, MUD_CONTENT } from "@multi-user-domain/mud-lib";
 import { parseTurtleToSolidDataset, getThingName, triplesToTurtle } from "../../utils";
 import useMudFederation from "../../hooks/useMudFederation";
 

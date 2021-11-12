@@ -19,7 +19,7 @@ import {
     Button
 } from "@chakra-ui/react";
 
-import { MUD, MUD_CHARACTER } from "../../../lib/MUD";
+import { MUD, MUD_CHARACTER } from "@multi-user-domain/mud-lib";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 import useMudAccount from "../../../lib/hooks/useMudAccount";
 

@@ -4,7 +4,7 @@ import ThingDepiction from "../thingDepiction";
 import { getUrl } from '@inrupt/solid-client';
 import { IRowComponent } from "../thingList";
 import TimerProgressBar from "../timerProgressBar";
-import { MUD_CHARACTER } from "../../lib/MUD";
+import { MUD_CHARACTER } from "@multi-user-domain/mud-lib";
 import styles from "./character.module.css";
 
 export default function Character({thing, selectHandler} : IRowComponent): React.ReactElement {  

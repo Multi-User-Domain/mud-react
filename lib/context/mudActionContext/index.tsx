@@ -12,7 +12,7 @@ import {
 } from '@inrupt/solid-client';
 
 import { triplesToTurtle } from "../../utils";
-import { MUD_LOGIC } from "../../MUD";
+import { MUD_LOGIC } from "@multi-user-domain/mud-lib";
 import useMudFederation from '../../hooks/useMudFederation';
 
 /**
