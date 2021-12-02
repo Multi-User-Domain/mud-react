@@ -7,8 +7,7 @@ import {
   SolidDataset,
 } from "@inrupt/solid-client";
 
-import { MUD } from "@multi-user-domain/mud-lib";
-import { getFilteredThings } from "../../utils";
+import { MUD, getFilteredThings } from "@multi-user-domain/mud-lib";
 
 /**
  * Manages the connection to MUD services and their configuration - i.e. their capabilities and where to access them

@@ -11,8 +11,7 @@ import {
     setThing
 } from '@inrupt/solid-client';
 
-import { triplesToTurtle } from "../../utils";
-import { MUD_LOGIC } from "@multi-user-domain/mud-lib";
+import { MUD_LOGIC, triplesToTurtle } from "@multi-user-domain/mud-lib";
 import useMudFederation from '../../hooks/useMudFederation';
 
 /**

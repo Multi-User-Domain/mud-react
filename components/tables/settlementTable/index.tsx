@@ -6,11 +6,10 @@ import {
 } from "@inrupt/solid-client";
 
 import { Grid, GridItem, Center, Text, Heading } from "@chakra-ui/react";
-import { MUD } from "@multi-user-domain/mud-lib";
+import { MUD, getThingName } from "@multi-user-domain/mud-lib";
 
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 import BuildingTable from "../buildingTable";
-import {getThingName} from "../../../lib/utils";
 import {ThingList, IRowComponent} from "../../thingList";
 
 function Settlement({thing, selectHandler} : IRowComponent): React.ReactElement {

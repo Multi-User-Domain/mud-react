@@ -10,7 +10,7 @@ import {
     DrawerCloseButton,
     Center, } from "@chakra-ui/react";
 import { Thing } from "@inrupt/solid-client";
-import { getThingName } from "../../lib/utils";
+import { getThingName } from "@multi-user-domain/mud-lib";
 import ThingDepiction from "../thingDepiction";
 import styles from "./characterProfile.module.css";
 

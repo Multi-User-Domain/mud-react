@@ -19,12 +19,11 @@ import {
     Button
 } from "@chakra-ui/react";
 
-import { MUD, MUD_CHARACTER } from "@multi-user-domain/mud-lib";
+import { MUD, MUD_CHARACTER, getThingName } from "@multi-user-domain/mud-lib";
 import useMudWorld from "../../../lib/hooks/useMudWorld";
 import useMudAccount from "../../../lib/hooks/useMudAccount";
 
 import useTerminalFeed from "../../../lib/hooks/useTerminalFeed";
-import { getThingName } from "../../../lib/utils";
 import {ThingList, IRowComponent} from "../../thingList";
 import {ThingListModal} from "../../modals/thingListModal";
 import Character from "../../character";

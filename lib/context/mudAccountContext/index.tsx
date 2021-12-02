@@ -25,8 +25,7 @@ import {
 
 import { useSession } from "@inrupt/solid-ui-react/dist";
 
-import { getFilteredThings } from "../../utils";
-import { MUD, MUD_CHARACTER } from "@multi-user-domain/mud-lib";
+import { MUD, MUD_CHARACTER, getFilteredThings } from "@multi-user-domain/mud-lib";
 import useMudAction from '../../hooks/useMudAction';
 
 /**
