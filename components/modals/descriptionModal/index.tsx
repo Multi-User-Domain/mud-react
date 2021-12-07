@@ -19,7 +19,7 @@ import {
   } from "@chakra-ui/react";
 
   import { VCARD } from "@inrupt/lit-generated-vocab-common";
-  import { MUD } from "../../../lib/MUD";
+  import { MUD } from "@multi-user-domain/mud-lib";
 
 export default function DescriptionModal(
     {thing, headerProperty, footerContent, isOpen, onClose=null, ...modalProps} : {thing: Thing, headerProperty?, footerContent?: ReactElement, isOpen: boolean, onClose: () => void}): ReactElement {

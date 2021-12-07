@@ -11,23 +11,28 @@ import { Grid, GridItem, Text, useDisclosure } from "@chakra-ui/react";
 
 import {
   Box,
-  Heading,
-  Container
+  Heading
 } from "@chakra-ui/react";
 
 import {
     Button
 } from "@chakra-ui/react";
 
-import { MUD, MUD_CHARACTER } from "../../../lib/MUD";
+import { 
+    ThingList,
+    IRowComponent,
+    MUD,
+    MUD_CHARACTER,
+    getThingName,
+    useMudAccount
+} from "@multi-user-domain/mud-lib";
+
 import useMudWorld from "../../../lib/hooks/useMudWorld";
-import useMudAccount from "../../../lib/hooks/useMudAccount";
 
 import useTerminalFeed from "../../../lib/hooks/useTerminalFeed";
-import { getThingName } from "../../../lib/utils";
-import {ThingList, IRowComponent} from "../../thingList";
 import {ThingListModal} from "../../modals/thingListModal";
 import Character from "../../character";
+import useMudAction from "../../../lib/hooks/useMudAction";
 
 function Building({thing, selectHandler} : IRowComponent): React.ReactElement {
     //row event -> open detail
@@ -52,7 +57,8 @@ export default function BuildingTable(
     const [ buildingThings, setBuildingThings ] = useState<Thing[]>(null);
     const [ selectedBuilding, setSelectedBuilding ] = useState<Thing>(null);
     const { settlementDataSet } = useMudWorld();
-    const { characters, transitCharacter } = useMudAccount();
+    const { characters } = useMudAccount();
+    const { postTransitTask } = useMudAction();
     const { describeScene } = useTerminalFeed();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -74,7 +80,7 @@ export default function BuildingTable(
         onClose();
 
         //schedule the Transit task
-        transitCharacter(thing, selectedBuilding);
+        postTransitTask(thing, selectedBuilding);
 
         //log to Terminal feed the building description
         describeScene(characters.concat([selectedBuilding]));

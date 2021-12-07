@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import useMudAccount from '../../../lib/hooks/useMudAccount';
-import { Box, Button, Input, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Input, useDisclosure } from "@chakra-ui/react";
+import { 
+  ThingList,
+  useMudAccount
+} from "@multi-user-domain/mud-lib";
+
 import styles from "./characterTable.module.css";
 import Character from "../../character";
 import CharacterProfile from '../../characterProfile';
-import {ThingList} from "../../thingList";
 import { Thing } from '@inrupt/solid-client';
 
 export default function CharactersTable({edit} : {edit: boolean}) : React.ReactElement {

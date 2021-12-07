@@ -11,8 +11,7 @@ import {
     setThing
 } from '@inrupt/solid-client';
 
-import { triplesToTurtle } from "../../utils";
-import { MUD_LOGIC } from "../../MUD";
+import { triplesToTurtle, MUD_LOGIC, useMudAccount } from "@multi-user-domain/mud-lib";
 import useMudFederation from '../../hooks/useMudFederation';
 
 /**
@@ -31,24 +30,24 @@ export const MudActionProvider = ({
 }): ReactElement => {
 
     const { getFirstConfiguredEndpoint } = useMudFederation();
+    const { setTask } = useMudAccount();
 
     const buildTransitPostData = (subject: Thing, locatable: Thing) : Promise<string> => {
         //should return a turtle file with just declarations for the locatable and the thing being given a location
         const dataset = setThing(setThing(createSolidDataset(), subject), locatable);
         return triplesToTurtle(Array.from(dataset));
     }
-
-
     
     const postTask = (data: any, taskUri: String) : Promise<AxiosResponse<any>> => {
         let endpoint = getFirstConfiguredEndpoint(MUD_LOGIC.Transit);
-        console.log("found endpoint " + endpoint);
         return axios.post(endpoint, data, { params: { taskUri: taskUri } });
     }
     
     /**
      * creates a Transit task for the parameterised thing to the parameterised mud:Locatable
      */
+    //TODO: using shapes in Action Discovery to avoid needing to define this explicitly
+    //  https://github.com/Multi-User-Domain/mud-jena/issues/44
     const postTransitTask = (subjectThing: Thing, destinationLocatable: Thing) : Promise<any> => {
         return new Promise<any>((resolve, reject) => {
             //get turtle POST data for transit
@@ -56,7 +55,13 @@ export const MudActionProvider = ({
                 
                 //make POST request using axios
                 //caller is responsible for handling beginning and endState of the task
-                postTask(postData, MUD_LOGIC.Transit).then((res) => resolve(res));
+                postTask(postData, MUD_LOGIC.Transit).then((res) => {
+                    if(res) {
+                        setTask(subjectThing, res.headers['location'])
+                    }
+
+                    resolve(res)
+                });
             });
         });
     }

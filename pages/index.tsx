@@ -13,13 +13,16 @@ import {
   LogoutButton,
 } from "@inrupt/solid-ui-react";
 
+import { 
+  LoginForm,
+  MudAccountProvider
+} from "@multi-user-domain/mud-lib";
+
 import { MudFederationProvider } from "../lib/context/mudFederationContext";
 import { MudContentProvider } from "../lib/context/mudContentContext";
 import { MudActionProvider } from "../lib/context/mudActionContext";
 import { MudWorldProvider } from "../lib/context/mudWorldContext";
-import { MudAccountProvider } from "../lib/context/mudAccountContext";
 import { TerminalFeedProvider } from "../lib/context/terminalFeedContext";
-import LoginForm from "../components/loginForm";
 import ActionMenu from "../components/actionMenu";
 import Terminal from "../components/terminal";
 import GameWindow from "../components/gameWindow";
@@ -63,9 +66,9 @@ export default function Home(): React.ReactElement {
   else {
     inner = (
       <MudWorldProvider>
-        <MudContentProvider>
-          <MudActionProvider>
-            <MudAccountProvider webId={webId}>
+        <MudAccountProvider webId={webId}>
+          <MudContentProvider>
+            <MudActionProvider>
               <TerminalFeedProvider>
                 <Container>
                   {header}
@@ -76,10 +79,10 @@ export default function Home(): React.ReactElement {
                     <Terminal />
                   </Container>
                 </Container>
-              </TerminalFeedProvider>
-            </MudAccountProvider>
-          </MudActionProvider>
-        </MudContentProvider>
+              </TerminalFeedProvider> 
+            </MudActionProvider>
+          </MudContentProvider>
+        </MudAccountProvider>
       </MudWorldProvider>
     );
   }

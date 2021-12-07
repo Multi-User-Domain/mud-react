@@ -1,10 +1,7 @@
-import { Grid, GridItem, Center, Text, Container } from "@chakra-ui/react";
-import { getThingName } from '../../lib/utils';
-import ThingDepiction from "../thingDepiction";
+import { Grid, GridItem, Center, Text } from "@chakra-ui/react";
 import { getUrl } from '@inrupt/solid-client';
-import { IRowComponent } from "../thingList";
+import { IRowComponent, ThingDepiction, MUD_CHARACTER, getThingName } from "@multi-user-domain/mud-lib";
 import TimerProgressBar from "../timerProgressBar";
-import { MUD_CHARACTER } from "../../lib/MUD";
 import styles from "./character.module.css";
 
 export default function Character({thing, selectHandler} : IRowComponent): React.ReactElement {  
@@ -25,7 +22,7 @@ export default function Character({thing, selectHandler} : IRowComponent): React
   }
   
   return (
-  <Grid templateColumns="repeat(6, 1fr)" w="80%" margin="auto" gap={1} className={styles.characterRow}>
+  <Grid templateColumns="repeat(6, 1fr)" w="80%" margin="auto" gap={1} marginBottom="10px">
     <GridItem w="100px" h="100px" colSpan={2} className={styles.profilePic}
         tag="a" onClick={onCharacterSelect} style={{ cursor: "pointer" }}>
       <ThingDepiction thing={thing} />

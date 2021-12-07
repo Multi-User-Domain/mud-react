@@ -9,18 +9,20 @@
     "start": "next start"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.1.5",
+    "@chakra-ui/react": "1.1.5",
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
     "@inrupt/lit-generated-vocab-common": "^0.3.11",
     "@inrupt/solid-client": "^0.4.0",
     "@inrupt/solid-ui-react": "^1.2.1",
+    "@multi-user-domain/mud-lib": "^1.0.0",
     "@solid/lit-term": "^0.4.1",
     "axios": "^0.21.1",
     "framer-motion": "^3.2.1",
-    "next": "9.5.2",
+    "next": "9.5.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "solid-auth-client": "^2.5.6",
     "uuid": "^8.3.2",
     "validator": "^13.5.2",
     "windups": "^1.1.6"
